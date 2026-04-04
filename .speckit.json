@@ -2,8 +2,8 @@
   "specify": {
     "init_here": true,
     "ai": {
-      "provider": "Trae",
-      "note": "Configured to use Trae as the preferred AI assistant for spec-kit workflows"
+      "provider": "agy",
+      "note": "Configured to use agy as the preferred AI assistant for spec-kit workflows"
     }
   }
 }

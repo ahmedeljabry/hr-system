@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\User;
+use App\Models\Employee;
 
 class Client extends Model
 {
@@ -40,5 +41,19 @@ class Client extends Model
     public function isExpired(): bool
     {
         return $this->status === 'expired';
+    }
+
+    public function employees()
+    {
+        return $this->hasMany(Employee::class);
+    }
+
+    public function isNearExpiry(int $days = 7): bool
+    {
+        if (!$this->subscription_end) {
+            return false;
+        }
+        return $this->subscription_end->isFuture()
+            && now()->diffInDays($this->subscription_end, false) <= $days;
     }
 }

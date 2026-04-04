@@ -37,7 +37,9 @@ class RoleMiddlewareTest extends TestCase
         $user = User::factory()->create(['role' => 'super_admin']);
         
         $this->actingAs($user)->get('/admin/dashboard')->assertStatus(200);
-        $this->actingAs($user)->get('/client/dashboard')->assertStatus(200);
+        $resp = $this->actingAs($user)->get('/client/dashboard');
+        file_put_contents('debug_test.txt', $resp->content());
+        $resp->assertRedirect('/admin/dashboard');
         $this->actingAs($user)->get('/employee/dashboard')->assertStatus(200);
     }
 

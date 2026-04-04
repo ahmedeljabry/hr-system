@@ -15,7 +15,7 @@
 
 **Purpose**: Install the Laravel-Excel package dependency required for US2.
 
-- [ ] T001 Install Maatwebsite/Laravel-Excel package by running `composer require maatwebsite/excel` in the project root `d:\freelance\login system`. After installation, verify the package is listed in `composer.json` under `require`. Publish the config by running `php artisan vendor:publish --provider="Maatwebsite\Excel\ExcelServiceProvider" --tag=config`. This creates `config/excel.php`.
+- [X] T001 Install Maatwebsite/Laravel-Excel package by running `composer require maatwebsite/excel` in the project root `d:\freelance\login system`. After installation, verify the package is listed in `composer.json` under `require`. Publish the config by running `php artisan vendor:publish --provider="Maatwebsite\Excel\ExcelServiceProvider" --tag=config`. This creates `config/excel.php`.
 
 ---
 
@@ -27,7 +27,7 @@
 
 ### Migration
 
-- [ ] T002 Create the `employees` table migration. Run `php artisan make:migration create_employees_table`. Then open the generated file at `database/migrations/xxxx_xx_xx_xxxxxx_create_employees_table.php` and set the `up()` method to:
+- [X] T002 Create the `employees` table migration. Run `php artisan make:migration create_employees_table`. Then open the generated file at `database/migrations/xxxx_xx_xx_xxxxxx_create_employees_table.php` and set the `up()` method to:
 
 ```php
 Schema::create('employees', function (Blueprint $table) {
@@ -53,7 +53,7 @@ The `down()` method should be `Schema::dropIfExists('employees');`. After writin
 
 ### Employee Model
 
-- [ ] T003 Create the Employee model at `app/Models/Employee.php`. The file must contain:
+- [X] T003 Create the Employee model at `app/Models/Employee.php`. The file must contain:
 
 ```php
 <?php
@@ -99,7 +99,7 @@ class Employee extends Model
 
 ### Update Client Model
 
-- [ ] T004 Update the existing `app/Models/Client.php` file. Add an `employees()` relationship method AND a helper to check near-expiry. Add this import at the top: `use App\Models\Employee;`. Then add these two methods inside the class body (after the existing `isExpired()` method):
+- [X] T004 Update the existing `app/Models/Client.php` file. Add an `employees()` relationship method AND a helper to check near-expiry. Add this import at the top: `use App\Models\Employee;`. Then add these two methods inside the class body (after the existing `isExpired()` method):
 
 ```php
 public function employees()
@@ -119,7 +119,7 @@ public function isNearExpiry(int $days = 7): bool
 
 ### Employee Service
 
-- [ ] T005 Create the EmployeeService at `app/Services/EmployeeService.php`. This service handles ALL employee business logic and enforces tenant isolation. Every method receives `$clientId` explicitly:
+- [X] T005 Create the EmployeeService at `app/Services/EmployeeService.php`. This service handles ALL employee business logic and enforces tenant isolation. Every method receives `$clientId` explicitly:
 
 ```php
 <?php
@@ -198,7 +198,7 @@ class EmployeeService
 
 ### Form Request Validation
 
-- [ ] T006 [P] Create the form request class at `app/Http/Requests/StoreEmployeeRequest.php`. Run `php artisan make:request StoreEmployeeRequest`, then replace the contents with:
+- [X] T006 [P] Create the form request class at `app/Http/Requests/StoreEmployeeRequest.php`. Run `php artisan make:request StoreEmployeeRequest`, then replace the contents with:
 
 ```php
 <?php
@@ -248,7 +248,7 @@ class StoreEmployeeRequest extends FormRequest
 
 ### Localization Keys
 
-- [ ] T007 [P] Add employee-related translation keys to `lang/en/messages.php`. Open the file and add these keys to the existing array (before the closing `];`):
+- [X] T007 [P] Add employee-related translation keys to `lang/en/messages.php`. Open the file and add these keys to the existing array (before the closing `];`):
 
 ```php
     // Employee Management (Phase 2)
@@ -285,7 +285,7 @@ class StoreEmployeeRequest extends FormRequest
     'edit' => 'Edit',
 ```
 
-- [ ] T008 [P] Add employee-related translation keys to `lang/ar/messages.php`. Open the file and add these keys to the existing array (before the closing `];`):
+- [X] T008 [P] Add employee-related translation keys to `lang/ar/messages.php`. Open the file and add these keys to the existing array (before the closing `];`):
 
 ```php
     // Employee Management (Phase 2)
@@ -336,7 +336,7 @@ class StoreEmployeeRequest extends FormRequest
 
 > **Write these FIRST. They MUST fail before implementation.**
 
-- [ ] T009 [US1] Create the feature test file at `tests/Feature/Client/EmployeeTest.php`. This file tests the entire employee CRUD lifecycle and tenant isolation. Paste the following complete test class:
+- [X] T009 [US1] Create the feature test file at `tests/Feature/Client/EmployeeTest.php`. This file tests the entire employee CRUD lifecycle and tenant isolation. Paste the following complete test class:
 
 ```php
 <?php
@@ -459,7 +459,7 @@ class EmployeeTest extends TestCase
 }
 ```
 
-- [ ] T010 [P] [US1] Create the Employee factory at `database/factories/EmployeeFactory.php`. Run `php artisan make:factory EmployeeFactory --model=Employee`. Replace the `definition()` method with:
+- [X] T010 [P] [US1] Create the Employee factory at `database/factories/EmployeeFactory.php`. Run `php artisan make:factory EmployeeFactory --model=Employee`. Replace the `definition()` method with:
 
 ```php
 public function definition(): array
@@ -493,7 +493,7 @@ And verify `database/factories/UserFactory.php` exists (it ships with Laravel). 
 
 ### Implementation for User Story 1
 
-- [ ] T011 [US1] Create the EmployeeController at `app/Http/Controllers/Client/EmployeeController.php`:
+- [X] T011 [US1] Create the EmployeeController at `app/Http/Controllers/Client/EmployeeController.php`:
 
 ```php
 <?php
@@ -573,7 +573,7 @@ class EmployeeController extends Controller
 }
 ```
 
-- [ ] T012 [US1] Update the client routes file at `routes/client.php`. Replace the entire file contents with:
+- [X] T012 [US1] Update the client routes file at `routes/client.php`. Replace the entire file contents with:
 
 ```php
 <?php
@@ -597,7 +597,7 @@ Route::middleware(['auth', 'role:client', 'check_subscription'])->prefix('client
 });
 ```
 
-- [ ] T013 [US1] Create the employee list view at `resources/views/client/employees/index.blade.php`. This view must:
+- [X] T013 [US1] Create the employee list view at `resources/views/client/employees/index.blade.php`. This view must:
   - Extend `@extends('layouts.app')` (the existing app layout).
   - Show a search form (`GET /client/employees?search=...`) at the top.
   - Show a paginated HTML table with columns: Name, Position, National ID Number, Basic Salary, Hire Date, Actions (View | Edit | Delete).
@@ -609,7 +609,7 @@ Route::middleware(['auth', 'role:client', 'check_subscription'])->prefix('client
   - Display any flash `success` message from the session at the top.
   - Style using the existing project CSS classes (dark/blue theme from Phase 1).
 
-- [ ] T014 [P] [US1] Create the add employee form view at `resources/views/client/employees/create.blade.php`. This view must:
+- [X] T014 [P] [US1] Create the add employee form view at `resources/views/client/employees/create.blade.php`. This view must:
   - Extend `@extends('layouts.app')`.
   - Contain a `<form method="POST" action="/client/employees" enctype="multipart/form-data">@csrf`.
   - Include input fields for: name (text, required), position (text, required), national_id_number (text, required), basic_salary (number, step=0.01, required), hire_date (date, required), national_id_image (file, optional), contract_image (file, optional).
@@ -617,7 +617,7 @@ Route::middleware(['auth', 'role:client', 'check_subscription'])->prefix('client
   - All labels MUST use `{{ __('messages.key') }}`.
   - Include a "Save" submit button and a "Cancel" link back to `/client/employees`.
 
-- [ ] T015 [P] [US1] Create the edit employee form view at `resources/views/client/employees/edit.blade.php`. This view must:
+- [X] T015 [P] [US1] Create the edit employee form view at `resources/views/client/employees/edit.blade.php`. This view must:
   - Extend `@extends('layouts.app')`.
   - Contain a `<form method="POST" action="/client/employees/{{ $employee->id }}" enctype="multipart/form-data">@csrf @method('PUT')`.
   - Pre-fill all input fields with `{{ old('field', $employee->field) }}`.
@@ -625,7 +625,7 @@ Route::middleware(['auth', 'role:client', 'check_subscription'])->prefix('client
   - All labels MUST use `{{ __('messages.key') }}`.
   - Include an "Update" submit button and a "Cancel" link back to `/client/employees`.
 
-- [ ] T016 [P] [US1] Create the employee detail view at `resources/views/client/employees/show.blade.php`. This view must:
+- [X] T016 [P] [US1] Create the employee detail view at `resources/views/client/employees/show.blade.php`. This view must:
   - Extend `@extends('layouts.app')`.
   - Display all employee fields in a card layout: Name, Position, National ID Number, Basic Salary (formatted as number with 2 decimals), Hire Date (formatted as `d/m/Y`).
   - If `$employee->national_id_image` is not null, show a link/button to download the file (links to `/files/employees/{{ $employee->id }}/national_id`).
@@ -633,7 +633,7 @@ Route::middleware(['auth', 'role:client', 'check_subscription'])->prefix('client
   - Include "Edit" and "Back to List" buttons.
   - All labels MUST use `{{ __('messages.key') }}`.
 
-- [ ] T017 [US1] Run the test suite: `php artisan test --filter=EmployeeTest`. All 7 tests from T009 MUST pass. If any fail, debug and fix the specific controller/service/route issue until all pass. Do NOT modify the tests.
+- [X] T017 [US1] Run the test suite: `php artisan test --filter=EmployeeTest`. All 7 tests from T009 MUST pass. If any fail, debug and fix the specific controller/service/route issue until all pass. Do NOT modify the tests.
 
 **Checkpoint**: Employee CRUD is fully functional. Client can add, view, edit, soft-delete employees. Tenant isolation verified by test.
 
@@ -647,7 +647,7 @@ Route::middleware(['auth', 'role:client', 'check_subscription'])->prefix('client
 
 ### Tests for User Story 2
 
-- [ ] T018 [US2] Create the import test file at `tests/Feature/Client/EmployeeImportTest.php`:
+- [X] T018 [US2] Create the import test file at `tests/Feature/Client/EmployeeImportTest.php`:
 
 ```php
 <?php
@@ -705,7 +705,7 @@ class EmployeeImportTest extends TestCase
 
 ### Implementation for User Story 2
 
-- [ ] T019 [US2] Create the import class at `app/Imports/EmployeesImport.php`:
+- [X] T019 [US2] Create the import class at `app/Imports/EmployeesImport.php`:
 
 ```php
 <?php
@@ -760,7 +760,7 @@ class EmployeesImport implements ToModel, WithHeadingRow, WithValidation, SkipsO
 }
 ```
 
-- [ ] T020 [US2] Add the import methods to the EmployeeController at `app/Http/Controllers/Client/EmployeeController.php`. Add these two methods at the bottom of the class (before the closing `}`):
+- [X] T020 [US2] Add the import methods to the EmployeeController at `app/Http/Controllers/Client/EmployeeController.php`. Add these two methods at the bottom of the class (before the closing `}`):
 
 ```php
     public function importForm()
@@ -798,7 +798,7 @@ Also add these import routes to `routes/client.php` BEFORE the `{employee}` rout
     Route::post('/employees/import', [EmployeeController::class, 'import'])->name('employees.import');
 ```
 
-- [ ] T021 [US2] Create the import form view at `resources/views/client/employees/import.blade.php`. This view must:
+- [X] T021 [US2] Create the import form view at `resources/views/client/employees/import.blade.php`. This view must:
   - Extend `@extends('layouts.app')`.
   - Show a `<form method="POST" action="/client/employees/import" enctype="multipart/form-data">@csrf`.
   - Include a file input for the `.xlsx` file with label `{{ __('messages.upload_excel') }}`.
@@ -807,7 +807,7 @@ Also add these import routes to `routes/client.php` BEFORE the `{employee}` rout
   - Show a short instruction paragraph explaining the expected columns: Name, Position, National ID Number, Basic Salary, Hire Date.
   - All labels MUST use `{{ __('messages.key') }}`.
 
-- [ ] T022 [US2] Run the import tests: `php artisan test --filter=EmployeeImportTest`. All 3 tests MUST pass.
+- [X] T022 [US2] Run the import tests: `php artisan test --filter=EmployeeImportTest`. All 3 tests MUST pass.
 
 **Checkpoint**: Bulk import is functional. Client can upload Excel files and see results.
 
@@ -821,7 +821,7 @@ Also add these import routes to `routes/client.php` BEFORE the `{employee}` rout
 
 ### Tests for User Story 3
 
-- [ ] T023 [US3] Create the dashboard test file at `tests/Feature/Client/DashboardTest.php`:
+- [X] T023 [US3] Create the dashboard test file at `tests/Feature/Client/DashboardTest.php`:
 
 ```php
 <?php
@@ -880,7 +880,7 @@ class DashboardTest extends TestCase
 
 ### Implementation for User Story 3
 
-- [ ] T024 [US3] Create the DashboardController at `app/Http/Controllers/Client/DashboardController.php`:
+- [X] T024 [US3] Create the DashboardController at `app/Http/Controllers/Client/DashboardController.php`:
 
 ```php
 <?php
@@ -914,7 +914,7 @@ class DashboardController extends Controller
 }
 ```
 
-- [ ] T025 [US3] Update `routes/client.php` to use the DashboardController instead of the inline closure. Replace the existing dashboard route line:
+- [X] T025 [US3] Update `routes/client.php` to use the DashboardController instead of the inline closure. Replace the existing dashboard route line:
 
 **Replace this:**
 ```php
@@ -928,7 +928,7 @@ class DashboardController extends Controller
     Route::get('/dashboard', [\App\Http\Controllers\Client\DashboardController::class, 'index'])->name('dashboard');
 ```
 
-- [ ] T026 [US3] Update the client dashboard view at `resources/views/client/dashboard.blade.php`. The view must:
+- [X] T026 [US3] Update the client dashboard view at `resources/views/client/dashboard.blade.php`. The view must:
   - Extend `@extends('layouts.app')`.
   - If `$showExpiryWarning` is true, display a prominent orange/yellow warning banner at the top containing `{{ __('messages.subscription_expiry_warning', ['days' => $daysUntilExpiry]) }}`.
   - Display a metrics card showing `{{ $employeeCount }}` as a large number with the label `{{ __('messages.total_employees') }}`.
@@ -936,7 +936,7 @@ class DashboardController extends Controller
   - Use the existing dark/blue premium CSS theme from Phase 1.
   - All text strings MUST use `{{ __('messages.key') }}` for bilingual support.
 
-- [ ] T027 [US3] Run the dashboard tests: `php artisan test --filter=DashboardTest`. All 3 tests MUST pass.
+- [X] T027 [US3] Run the dashboard tests: `php artisan test --filter=DashboardTest`. All 3 tests MUST pass.
 
 **Checkpoint**: Dashboard shows metrics and expiry warnings. All 3 user stories are independently functional.
 
@@ -946,7 +946,7 @@ class DashboardController extends Controller
 
 **Purpose**: Serve private employee files (national ID, contract) securely via a controller that checks tenant ownership.
 
-- [ ] T028 Create a file controller at `app/Http/Controllers/Client/EmployeeFileController.php`:
+- [X] T028 Create a file controller at `app/Http/Controllers/Client/EmployeeFileController.php`:
 
 ```php
 <?php
@@ -980,7 +980,7 @@ class EmployeeFileController extends Controller
 }
 ```
 
-- [ ] T029 Add the file serving route to `routes/web.php`. Add this line inside the `Route::middleware('auth')` group (after the logout route):
+- [X] T029 Add the file serving route to `routes/web.php`. Add this line inside the `Route::middleware('auth')` group (after the logout route):
 
 ```php
     Route::get('/files/employees/{employee}/{type}', [\App\Http\Controllers\Client\EmployeeFileController::class, 'show'])->name('files.employee');
@@ -992,7 +992,7 @@ class EmployeeFileController extends Controller
 
 **Purpose**: Final integration, full test run, and cleanup.
 
-- [ ] T030 [P] Ensure the private storage disk is configured. Open `config/filesystems.php` and verify that a disk named `private` exists in the `disks` array. If it does NOT exist, add:
+- [X] T030 [P] Ensure the private storage disk is configured. Open `config/filesystems.php` and verify that a disk named `private` exists in the `disks` array. If it does NOT exist, add:
 
 ```php
 'private' => [
@@ -1003,7 +1003,7 @@ class EmployeeFileController extends Controller
 ],
 ```
 
-- [ ] T031 Run the FULL test suite: `php artisan test`. ALL tests from Phase 1 AND Phase 2 must pass. The expected tests include:
+- [X] T031 Run the FULL test suite: `php artisan test`. ALL tests from Phase 1 AND Phase 2 must pass. The expected tests include:
   - `EmployeeTest` (7 tests)
   - `EmployeeImportTest` (3 tests)
   - `DashboardTest` (3 tests)
@@ -1011,7 +1011,7 @@ class EmployeeFileController extends Controller
 
   Fix any failures. Do NOT modify test files — fix the source code instead.
 
-- [ ] T032 [P] Review all Blade views for consistent styling: dark/blue theme, RTL support via `dir="{{ app()->getLocale() == 'ar' ? 'rtl' : 'ltr' }}"` on the `<html>` tag, responsive layout on mobile screens, proper use of `{{ __('messages.key') }}` for every visible string.
+- [X] T032 [P] Review all Blade views for consistent styling: dark/blue theme, RTL support via `dir="{{ app()->getLocale() == 'ar' ? 'rtl' : 'ltr' }}"` on the `<html>` tag, responsive layout on mobile screens, proper use of `{{ __('messages.key') }}` for every visible string.
 
 ---
 

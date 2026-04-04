@@ -2,8 +2,8 @@
   "specify": {
     "init_here": true,
     "ai": {
-      "provider": "GitHub Copilot",
-      "note": "Configured to use GitHub Copilot as the preferred AI assistant for speckit workflows"
+      "provider": "Trae",
+      "note": "Configured to use Trae as the preferred AI assistant for spec-kit workflows"
     }
   }
 }

@@ -12,4 +12,6 @@ Route::middleware(['auth', 'role:super_admin'])->prefix('admin')->name('admin.')
     Route::get('/clients', [ClientController::class, 'index'])->name('clients.index');
     Route::patch('/clients/{client}/status', [ClientController::class, 'updateStatus'])->name('clients.status');
     Route::patch('/clients/{client}/subscription', [ClientController::class, 'updateSubscription'])->name('clients.subscription');
+
+    Route::resource('/reminder-phrases', \App\Http\Controllers\Admin\ReminderPhraseController::class)->except(['show', 'destroy']);
 });

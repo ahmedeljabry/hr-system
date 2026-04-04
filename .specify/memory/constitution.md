@@ -1,50 +1,50 @@
-# [PROJECT_NAME] Constitution
-<!-- Example: Spec Constitution, TaskFlow Constitution, etc. -->
+# Multi-tenant HR Management System Constitution
+
+<!--
+Sync Impact Report: Initialized
+Version change: 0.0.0 → 1.0.0
+Modified principles: 
+  - [PRINCIPLE_1_NAME] → I. Strict Multi-Tenant Isolation
+  - [PRINCIPLE_2_NAME] → II. TDD-First
+  - [PRINCIPLE_3_NAME] → III. Thin Controllers, Fat Services
+  - [PRINCIPLE_4_NAME] → IV. Bilingual UI First
+  - [PRINCIPLE_5_NAME] → V. Eloquent Database Interactions
+Added sections: None
+Removed sections: None
+Templates requiring updates: ✅ plan-template.md verified, ✅ spec-template.md verified, ✅ tasks-template.md verified
+-->
 
 ## Core Principles
 
-### [PRINCIPLE_1_NAME]
-<!-- Example: I. Library-First -->
-[PRINCIPLE_1_DESCRIPTION]
-<!-- Example: Every feature starts as a standalone library; Libraries must be self-contained, independently testable, documented; Clear purpose required - no organizational-only libraries -->
+### I. Strict Multi-Tenant Isolation
+All business logic, database queries, and route interactions MUST definitively scope data to the current tenant via `client_id` (or the equivalent authenticated relationship). Under no circumstances should cross-tenant data access be possible.
 
-### [PRINCIPLE_2_NAME]
-<!-- Example: II. CLI Interface -->
-[PRINCIPLE_2_DESCRIPTION]
-<!-- Example: Every library exposes functionality via CLI; Text in/out protocol: stdin/args → stdout, errors → stderr; Support JSON + human-readable formats -->
+### II. TDD-First (Test-Driven Development)
+All new features, models, services, and endpoints MUST be accompanied by comprehensive tests before or in tandem with implementation. The Red-Green-Refactor cycle is mandatory. Code coverage should ensure 100% test passing ratios.
 
-### [PRINCIPLE_3_NAME]
-<!-- Example: III. Test-First (NON-NEGOTIABLE) -->
-[PRINCIPLE_3_DESCRIPTION]
-<!-- Example: TDD mandatory: Tests written → User approved → Tests fail → Then implement; Red-Green-Refactor cycle strictly enforced -->
+### III. Thin Controllers, Fat Services
+Controllers MUST ONLY handle HTTP request validations, authorization checks, and returning views or JSON responses. All complex business rules, mathematical computations (e.g., payroll aggregation), and state mutations MUST exist in distinct dedicated Service layer classes.
 
-### [PRINCIPLE_4_NAME]
-<!-- Example: IV. Integration Testing -->
-[PRINCIPLE_4_DESCRIPTION]
-<!-- Example: Focus areas requiring integration tests: New library contract tests, Contract changes, Inter-service communication, Shared schemas -->
+### IV. Bilingual UI First
+All visible text strings in views MUST use localization keys (`__('messages.key')`) from the very beginning. The user interface MUST support both Arabic (RTL) and English (LTR) layouts cleanly out-of-the-box, leveraging Tailwind CSS conditional styling if necessary.
 
-### [PRINCIPLE_5_NAME]
-<!-- Example: V. Observability, VI. Versioning & Breaking Changes, VII. Simplicity -->
-[PRINCIPLE_5_DESCRIPTION]
-<!-- Example: Text I/O ensures debuggability; Structured logging required; Or: MAJOR.MINOR.BUILD format; Or: Start simple, YAGNI principles -->
+### V. Eloquent Database Interactions
+Database operations MUST use the Laravel Eloquent ORM. Raw SQL is strictly forbidden to ensure cross-database compatibility (SQLite testing, MySQL production) and native security.
 
-## [SECTION_2_NAME]
-<!-- Example: Additional Constraints, Security Requirements, Performance Standards, etc. -->
+## Additional Constraints
 
-[SECTION_2_CONTENT]
-<!-- Example: Technology stack requirements, compliance standards, deployment policies, etc. -->
+The technology stack is strict: Laravel 11 (PHP 8.3), MySQL 8 (production), SQLite (in-memory tests), Tailwind CSS, Alpine.js, and Blade templates. No superfluous packages should be added unless they are heavily justified (e.g., PDF generation).
 
-## [SECTION_3_NAME]
-<!-- Example: Development Workflow, Review Process, Quality Gates, etc. -->
+## Development Workflow
 
-[SECTION_3_CONTENT]
-<!-- Example: Code review requirements, testing gates, deployment approval process, etc. -->
+1. Design specifications (via `spec.md` and `plan.md`) must be reviewed and approved prior to generation of `tasks.md`.
+2. Tasks must follow a strict modular delivery sequence, prioritizing setup migrations, followed by foundational models, then specific isolated User Stories.
+3. Every test branch must explicitly verify multi-tenant isolation.
+4. Any failure in automated tests (`php artisan test`) during development immediately halts progress; it MUST be triaged and resolved before proceeding to subsequent tasks. 
 
 ## Governance
-<!-- Example: Constitution supersedes all other practices; Amendments require documentation, approval, migration plan -->
 
-[GOVERNANCE_RULES]
-<!-- Example: All PRs/reviews must verify compliance; Complexity must be justified; Use [GUIDANCE_FILE] for runtime development guidance -->
+This Constitution supersedes all ad-hoc architecture guidelines or practices. Any deviations require an amendment to this document alongside a proper migration or refactoring plan.
+All pull requests must undergo automated review to verify alignment with these core principles (specifically verifying tenant isolation).
 
-**Version**: [CONSTITUTION_VERSION] | **Ratified**: [RATIFICATION_DATE] | **Last Amended**: [LAST_AMENDED_DATE]
-<!-- Example: Version: 2.1.1 | Ratified: 2025-06-13 | Last Amended: 2025-07-16 -->
+**Version**: 1.0.0 | **Ratified**: 2026-04-05 | **Last Amended**: 2026-04-05

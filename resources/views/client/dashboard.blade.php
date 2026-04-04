@@ -14,7 +14,7 @@
                         </svg>
                     </div>
                     <div class="ml-4">
-                        <h3 class="text-sm font-bold text-amber-900 tracking-tight">{{ __('messages.subscription_expiry_warning', ['days' => $daysUntilExpiry]) }}</h3>
+                        <h3 class="text-sm font-bold text-amber-900 tracking-tight">{{ app(\App\Services\ReminderPhraseService::class)->getParsedMessage(\App\Enums\NotificationEvent::SUBSCRIPTION_EXPIRING, ['days' => $daysUntilExpiry]) }}</h3>
                         <p class="mt-1 text-xs text-amber-700 opacity-80">{{ __('messages.contact_admin_to_renew') }}</p>
                     </div>
                 </div>
@@ -75,10 +75,16 @@
                     <span class="text-sm font-bold text-gray-400 uppercase tracking-widest">{{ __('messages.total') }}</span>
                 </div>
 
-                <div class="mt-8 pt-6 border-t border-gray-50">
+                <div class="mt-8 pt-6 border-t border-gray-50 flex flex-col space-y-4">
                     <a href="{{ route('client.employees.index') }}" class="flex items-center justify-between group-hover:text-indigo-600 transition-colors">
                         <span class="text-sm font-bold uppercase tracking-tight">{{ __('messages.manage_employees') }}</span>
                         <svg class="w-5 h-5 transition-transform group-hover:translate-x-1 {{ app()->getLocale() == 'ar' ? 'rotate-180 group-hover:-translate-x-1' : '' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+                        </svg>
+                    </a>
+                    <a href="{{ route('client.payroll.index') }}" class="flex items-center justify-between hover:text-indigo-600 transition-colors">
+                        <span class="text-sm font-bold uppercase tracking-tight">{{ __('messages.manage_payroll') }}</span>
+                        <svg class="w-5 h-5 transition-transform hover:translate-x-1 {{ app()->getLocale() == 'ar' ? 'rotate-180 hover:-translate-x-1' : '' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
                         </svg>
                     </a>

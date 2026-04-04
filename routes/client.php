@@ -20,6 +20,24 @@ Route::middleware(['auth', 'role:client', 'check_subscription'])->prefix('client
     Route::put('/employees/{employee}', [EmployeeController::class, 'update'])->name('employees.update');
     Route::delete('/employees/{employee}', [EmployeeController::class, 'destroy'])->name('employees.destroy');
 
+    // Salary Components
+    Route::get('/employees/{employee}/salary-components', [\App\Http\Controllers\Client\SalaryComponentController::class, 'index'])->name('salary-components.index');
+    Route::post('/employees/{employee}/salary-components', [\App\Http\Controllers\Client\SalaryComponentController::class, 'store'])->name('salary-components.store');
+    Route::put('/employees/{employee}/salary-components/{component}', [\App\Http\Controllers\Client\SalaryComponentController::class, 'update'])->name('salary-components.update');
+    Route::delete('/employees/{employee}/salary-components/{component}', [\App\Http\Controllers\Client\SalaryComponentController::class, 'destroy'])->name('salary-components.destroy');
+
+    // Payroll
+    Route::get('/payroll', [\App\Http\Controllers\Client\PayrollController::class, 'index'])->name('payroll.index');
+    Route::get('/payroll/run', [\App\Http\Controllers\Client\PayrollController::class, 'create'])->name('payroll.create');
+    Route::post('/payroll/run', [\App\Http\Controllers\Client\PayrollController::class, 'store'])->name('payroll.store');
+    Route::get('/payroll/{payrollRun}', [\App\Http\Controllers\Client\PayrollController::class, 'show'])->name('payroll.show');
+    Route::post('/payroll/{payrollRun}/confirm', [\App\Http\Controllers\Client\PayrollController::class, 'confirm'])->name('payroll.confirm');
+
+    // Employee Account Creation
+    Route::get('/employees/{employee}/create-account', [\App\Http\Controllers\Client\EmployeeAccountController::class, 'create'])->name('employees.create-account');
+    Route::post('/employees/{employee}/create-account', [\App\Http\Controllers\Client\EmployeeAccountController::class, 'store'])->name('employees.store-account');
+
     // Secure file serving (tenant-scoped)
     Route::get('/files/employees/{employee}/{type}', [EmployeeFileController::class, 'show'])->name('files.employee');
 });
+

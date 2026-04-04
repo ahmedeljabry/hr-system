@@ -36,4 +36,15 @@ class Employee extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function salaryComponents()
+    {
+        return $this->hasMany(SalaryComponent::class);
+    }
+
+    public function payslips()
+    {
+        return $this->hasMany(Payslip::class);
+    }
 }
+

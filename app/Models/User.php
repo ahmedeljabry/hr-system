@@ -48,6 +48,11 @@ class User extends Authenticatable
         ];
     }
 
+    public function employee()
+    {
+        return $this->hasOne(\App\Models\Employee::class);
+    }
+
     public function client()
     {
         return $this->belongsTo(Client::class);

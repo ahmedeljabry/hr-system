@@ -1,0 +1,158 @@
+
+Deprecated: Method ReflectionMethod::setAccessible() is deprecated since 8.5, as it has no effect since PHP 8.1 in D:\freelance\login system\vendor\nunomaduro\collision\src\Adapters\Phpunit\ConfigureIO.php on line 37
+PHP Deprecated:  Method ReflectionMethod::setAccessible() is deprecated since 8.5, as it has no effect since PHP 8.1 in D:\freelance\login system\vendor\nunomaduro\collision\src\Adapters\Phpunit\ConfigureIO.php on line 37
+
+   FAIL  Tests\Feature\Employee\PayslipTest
+  ✓ employee can view payslip list       0.34s  
+  ⨯ employee can view own payslip detai… 0.04s  
+  ✓ employee cannot view other payslip   0.02s  
+  ────────────────────────────────────────────  
+   FAILED  Tests\Feature\Employee\PayslipTes…   
+  Expected: <!DOCTYPE html>\n
+<html lang="ar" dir="rtl">\n
+<head>\n
+    <meta charset="utf-8">\n
+    <meta name="viewport" content="width=device-width, initial-scale=1">\n
+    <meta name="csrf-token" content="7f6wx8sLrgFrgWouQhnfBXUPp81DjYvBqxIMvmNc">\n
+\n
+    <title>Laravel</title>\n
+\n
+    <!-- Fonts -->\n
+    <link rel="preconnect" href="https://fonts.googleapis.com">\n
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>\n
+            <link href="https://fonts.googleapis.com/css2?family=Noto+Kufi+Arabic:wght@100..900&display=swap" rel="stylesheet">\n
+        <style>body { font-family: 'Noto Kufi Arabic', sans-serif; }</style>\n
+    \n
+    <!-- Alpine.js -->\n
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>\n
+\n
+    <!-- Styles -->\n
+    <script src="https://cdn.tailwindcss.com"></script>\n
+    <style>\n
+        [x-cloak] { display: none !important; }\n
+        \n
+        /* Logical property fallback/enhancement if Tailwind isn't enough */\n
+        .ms-4 { margin-inline-start: 1rem; }\n
+        .pe-4 { padding-inline-end: 1rem; }\n
+    </style>\n
+</head>\n
+<body class="bg-gray-50 text-gray-900 antialiased min-h-screen flex flex-col">\n
+\n
+    <nav class="bg-white border-b border-gray-100 py-4 px-6 mb-8 shadow-sm">\n
+        <div class="max-w-7xl mx-auto flex justify-between items-center">\n
+            <!-- Brand -->\n
+            <div class="flex items-center space-x-4 space-x-reverse">\n
+                <a href="/" class="text-xl font-bold text-blue-600 tracking-tight">\n
+                    Laravel\n
+                </a>\n
+            </div>\n
+\n
+            <!-- Nav Links & Switcher -->\n
+            <div class="flex items-center space-x-6 space-x-reverse">\n
+                \n
+                <!-- Role-based links (simple placeholders for now) -->\n
+                                                        \n
+                    <form method="POST" action="/logout" class="inline">\n
+                        <input type="hidden" name="_token" value="7f6wx8sLrgFrgWouQhnfBXUPp81DjYvBqxIMvmNc" autocomplete="off">                        <button type="submit" class="text-sm font-medium text-red-500 hover:text-red-600 transition-colors">\n
+                            تسجيل الخروج\n
+                        </button>\n
+                    </form>\n
+                \n
+                <!-- Lang Switcher -->\n
+                <div class="flex items-center border-s border-gray-200 ps-6 space-x-reverse">\n
+                                            <a href="/lang/en" class="text-xs uppercase font-bold text-gray-400 hover:text-blue-600 transition-colors">EN</a>\n
+                                    </div>\n
+            </div>\n
+        </div>\n
+    </nav>\n
+\n
+    <main class="flex-grow max-w-7xl mx-auto px-6 w-full">\n
+        <div class="max-w-4xl mx-auto space-y-6">\n
+    <div class="flex justify-between items-center bg-gray-900 border border-gray-800 p-6 rounded-2xl shadow-xl">\n
+        <div>\n
+            <h1 class="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-indigo-400">\n
+                تفاصيل القسيمة\n
+            </h1>\n
+            <p class="text-gray-400 mt-1">March 2026</p>\n
+        </div>\n
+        <a href="http://localhost/employee/payslips" class="text-gray-400 hover:text-white transition-colors duration-200">\n
+            رجوع\n
+        </a>\n
+    </div>\n
+\n
+    <div class="bg-gray-900 border border-gray-800 rounded-2xl shadow-xl overflow-hidden p-6 space-y-8">\n
+        <!-- Header info -->\n
+        <div class="flex justify-between items-end border-b border-gray-800 pb-6">\n
+            <div>\n
+                <h2 class="text-2xl font-semibold text-white">عبدالجليل اشرف اياس الحميد</h2>\n
+                <p class="text-gray-400 mt-1">molestiae</p>\n
+            </div>\n
+            <div class="text-right">\n
+                <p class="text-sm text-gray-400">الراتب الأساسي</p>\n
+                <p class="text-xl font-mono text-gray-200">5,805.51</p>\n
+            </div>\n
+        </div>\n
+\n
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">\n
+            <!-- Allowances -->\n
+            <div class="space-y-4">\n
+                <h3 class="text-lg font-medium text-green-400 border-b border-gray-800 pb-2">Allowances</h3>\n
+                <ul class="space-y-3">\n
+                                            <li class="flex justify-between text-gray-300">\n
+                            <span>Housing</span>\n
+                            <span class="font-mono text-green-400">+1,500.00</span>\n
+                        </li>\n
+                                    </ul>\n
+                <div class="flex justify-between pt-2 border-t border-gray-800 font-medium">\n
+                    <span class="text-gray-400">إجمالي البدلات</span>\n
+                    <span class="text-green-400 font-mono">1,313.80</span>\n
+                </div>\n
+            </div>\n
+\n
+            <!-- Deductions -->\n
+            <div class="space-y-4">\n
+                <h3 class="text-lg font-medium text-red-400 border-b border-gray-800 pb-2">Deductions</h3>\n
+                <ul class="space-y-3">\n
+                                            <li class="text-gray-500 italic text-sm">No deductions</li>\n
+                                    </ul>\n
+                <div class="flex justify-between pt-2 border-t border-gray-800 font-medium">\n
+                    <span class="text-gray-400">إجمالي الخصومات</span>\n
+                    <span class="text-red-400 font-mono">673.77</span>\n
+                </div>\n
+            </div>\n
+        </div>\n
+\n
+        <!-- Net Salary -->\n
+        <div class="bg-gray-800/50 rounded-xl p-6 mt-8 flex justify-between items-center border border-gray-700/50">\n
+            <span class="text-xl font-medium text-gray-300">صافي الراتب</span>\n
+            <span class="text-3xl font-bold text-blue-400 font-mono">6,445.54</span>\n
+        </div>\n
+    </div>\n
+</div>\n
+    </main>\n
+\n
+    <footer class="mt-12 py-8 bg-white border-t border-gray-50 text-center text-sm text-gray-400">\n
+        <p>&copy; 2026 Laravel. جميع الحقوق محفوظة.</p>\n
+    </footer>\n
+\n
+</body>\n
+</html>\n
+
+
+  To contain: 1500
+
+  at tests\Feature\Employee\PayslipTest.php:62
+     58▕ 
+     59▕         $response = $this->actingAs($this->employeeUser)->get("/employee/payslips/{$payslip->id}");
+     60▕         $response->assertStatus(200);
+     61▕         $response->assertSee('Housing');
+  ➜  62▕         $response->assertSee('1500');
+     63▕     }
+     64▕ 
+     65▕     public function test_employee_cannot_view_other_payslip(): void
+     66▕     {
+
+
+  Tests:    1 failed, 2 passed (5 assertions)
+  Duration: 0.55s
+

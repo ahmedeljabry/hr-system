@@ -8,6 +8,14 @@
             <p class="mt-2 text-sm text-gray-500">{{ __('messages.back') }} <a href="{{ route('client.employees.index') }}" class="text-blue-600 hover:text-blue-500 underline font-medium">{{ __('messages.employees') }}</a></p>
         </div>
         <div class="flex items-center gap-3">
+            @if(is_null($employee->user_id))
+                <a href="{{ route('client.employees.create-account', $employee) }}" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-lg text-white bg-indigo-600 hover:bg-indigo-700 transition-all">
+                    {{ __('messages.create_account') }}
+                </a>
+            @endif
+            <a href="{{ route('client.salary-components.index', $employee) }}" class="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-lg text-gray-700 bg-white hover:bg-gray-50 transition-all">
+                {{ __('messages.salary_components') }}
+            </a>
             <a href="{{ route('client.employees.edit', $employee) }}" class="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-lg text-gray-700 bg-white hover:bg-gray-50 transition-all">
                 <svg class="-ml-1 mr-2 h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />

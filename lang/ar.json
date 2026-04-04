@@ -1,0 +1,17 @@
+{
+    "Reminder Phrases": "عبارات التذكير",
+    "Manage system-wide notification templates.": "إدارة قوالب التنبيهات على مستوى النظام.",
+    "Add Phrase": "إضافة عبارة",
+    "Event": "الحدث",
+    "English": "الإنجليزية",
+    "Arabic": "العربية",
+    "No reminder phrases configured.": "لم يتم إعداد عبارات تذكير.",
+    "Create Reminder Phrase": "إنشاء عبارة تذكير",
+    "Select an event...": "اختر حدثاً...",
+    "Available Variables (Cheat Sheet)": "المتغيرات المتاحة (الدليل المرجعي)",
+    "You can use the following variables in your phrases. Wrap them in brackets, e.g., {variable_name}.": "يمكنك استخدام المتغيرات التالية في عباراتك. ضعها بين أقواس، مثل {variable_name}.",
+    "English Template": "القالب الإنجليزي",
+    "Arabic Template": "القالب العربي",
+    "Subscription Expiring Warning": "تحذير انتهاء الاشتراك",
+    "Save": "حفظ"
+}

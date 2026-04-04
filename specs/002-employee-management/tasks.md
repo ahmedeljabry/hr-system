@@ -700,6 +700,18 @@ class EmployeeImportTest extends TestCase
         ]);
         $response->assertSessionHasErrors('file');
     }
+
+    public function test_successful_import_creates_employees(): void
+    {
+        $file = UploadedFile::fake()->create('employees.xlsx', 100, 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        
+        $response = $this->actingAs($this->clientUser)->post('/client/employees/import', [
+            'file' => $file,
+        ]);
+
+        $response->assertRedirect('/client/employees');
+        $response->assertSessionHas('success');
+    }
 }
 ```
 
@@ -980,9 +992,10 @@ class EmployeeFileController extends Controller
 }
 ```
 
-- [X] T029 Add the file serving route to `routes/web.php`. Add this line inside the `Route::middleware('auth')` group (after the logout route):
+- [X] T029 Add the file serving route to `routes/client.php`. Add this line inside the `Route::middleware(['auth', 'role:client', 'check_subscription'])` group (at the bottom of the group):
 
 ```php
+    // Secure file serving (tenant-scoped)
     Route::get('/files/employees/{employee}/{type}', [\App\Http\Controllers\Client\EmployeeFileController::class, 'show'])->name('files.employee');
 ```
 

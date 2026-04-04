@@ -56,4 +56,10 @@ class Client extends Model
         return $this->subscription_end->isFuture()
             && now()->diffInDays($this->subscription_end, false) <= $days;
     }
+
+    public function payrollRuns()
+    {
+        return $this->hasMany(PayrollRun::class);
+    }
 }
+

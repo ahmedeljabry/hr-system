@@ -64,3 +64,22 @@ If you discover a security vulnerability within Laravel, please send an e-mail t
 ## License
 
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+
+## Speckit + Copilot
+
+This repository includes a minimal `speckit` initialization to integrate with editor AI helper workflows.
+
+- `.speckit.json` — local speckit configuration (declares the AI provider).
+- `speckit-init.php` — small script to verify the speckit configuration.
+- `composer speckit:init` — composer script that runs the init check.
+
+Recommended VS Code setup is included in `.vscode/` to suggest the GitHub Copilot extension and enable inline suggestions.
+
+Quick checks:
+
+```bash
+php speckit-init.php
+composer speckit:init
+```
+
+If you'd like me to wire CI hooks or store provider keys securely (GitHub Secrets / environment variables), tell me which CI provider you use.

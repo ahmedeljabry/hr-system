@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             $table->foreignId('client_id')->nullable()->constrained('clients')->nullOnDelete();
-            $table->string('role')->default('client')->index();
+            $table->enum('role', ['super_admin', 'client', 'employee'])->default('client')->index();
         });
     }
 

@@ -47,6 +47,8 @@
             "@php -r \"file_exists('database/database.sqlite') || touch('database/database.sqlite');\"",
             "@php artisan migrate --ansi"
         ]
+        ,
+        "speckit:init": "php speckit-init.php"
     },
     "extra": {
         "branch-alias": {

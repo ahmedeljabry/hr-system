@@ -52,4 +52,19 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Client::class);
     }
+
+    public function isSuperAdmin(): bool
+    {
+        return $this->role === 'super_admin';
+    }
+
+    public function isClient(): bool
+    {
+        return $this->role === 'client';
+    }
+
+    public function isEmployee(): bool
+    {
+        return $this->role === 'employee';
+    }
 }

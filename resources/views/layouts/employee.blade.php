@@ -23,6 +23,8 @@
 
     <!-- Styles -->
     <script src="https://cdn.tailwindcss.com"></script>
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @stack('styles')
     <style>
         [x-cloak] { display: none !important; }
         
@@ -38,13 +40,16 @@
         <a href="{{ route('employee.dashboard') }}" class="text-xl font-bold text-blue-600 tracking-tight">
             {{ config('app.name', 'HR System') }}
         </a>
-        <button @click="open = !open" class="p-2 text-gray-500 hover:text-gray-700">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
-        </button>
+        <div class="flex items-center gap-2">
+            <x-notification-bell :count="$employee_notifications_count ?? 0" />
+            <button @click="open = !open" class="p-2 text-gray-500 hover:text-gray-700">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+            </button>
+        </div>
     </div>
 
     <!-- Sidebar -->
-    <aside :class="open ? 'translate-x-0' : (document.documentElement.dir === 'rtl' ? 'translate-x-full' : '-translate-x-full')" class="fixed md:sticky top-0 inset-y-0 z-30 w-64 bg-white border-{{ app()->getLocale() == 'ar' ? 'l' : 'r' }} border-gray-100 min-h-screen flex flex-col transition-transform duration-300 md:translate-x-0 {{ app()->getLocale() == 'ar' ? 'right-0' : 'left-0' }}">
+    <aside :class="open ? 'translate-x-0' : (document.documentElement.dir === 'rtl' ? 'translate-x-full' : '-translate-x-full')" class="fixed md:sticky top-0 inset-y-0 z-30 w-64 bg-white border-{{ app()->getLocale() == 'ar' ? 'l' : 'r' }} border-gray-100 min-h-screen flex flex-col transition-transform duration-300 md:translate-x-0 hide-on-mobile hidden md:flex {{ app()->getLocale() == 'ar' ? 'right-0' : 'left-0' }}">
         
         <div class="p-6 hidden md:block">
             <a href="{{ route('employee.dashboard') }}" class="text-xl font-bold text-blue-600 tracking-tight block text-center mb-0">
@@ -106,11 +111,16 @@
     <div x-show="open" @click="open = false" class="fixed inset-0 bg-black bg-opacity-25 z-20 md:hidden" x-cloak></div>
 
     <!-- Main Content Area -->
-    <main class="flex-1 w-full mt-16 md:mt-0 p-6 {{ app()->getLocale() == 'ar' ? 'mr-0' : 'ml-0' }}">
+    <main class="flex-1 w-full mt-16 md:mt-0 p-6 {{ app()->getLocale() == 'ar' ? 'mr-0' : 'ml-0' }} pb-24 md:pb-6">
         <div class="max-w-6xl mx-auto">
+            <div class="hidden md:flex justify-end mb-6">
+                <x-notification-bell :count="$employee_notifications_count ?? 0" />
+            </div>
             @yield('content')
         </div>
     </main>
 
+    <x-mobile-nav />
+    <x-notification-panel />
 </body>
 </html>

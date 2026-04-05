@@ -82,9 +82,19 @@
                                 </div>
                             </a>
                         @else
-                            <div class="flex items-center p-3 border border-gray-50 rounded-lg bg-gray-25 italic">
-                                <span class="text-xs text-gray-400">{{ __('messages.no_file') }}</span>
-                            </div>
+                            <div class="mt-2 text-xs italic text-gray-500 mb-2">No file uploaded yet.</div>
+                            <x-drop-zone 
+                                action="{{ route('client.employees.update', $employee->id) }}"
+                                method="PUT"
+                                name="national_id_image"
+                                :additionalData="[
+                                    'name' => $employee->name,
+                                    'position' => $employee->position,
+                                    'national_id_number' => $employee->national_id_number,
+                                    'basic_salary' => $employee->basic_salary,
+                                    'hire_date' => $employee->hire_date->format('Y-m-d')
+                                ]"
+                            />
                         @endif
                     </div>
 
@@ -104,9 +114,19 @@
                                 </div>
                             </a>
                         @else
-                            <div class="flex items-center p-3 border border-gray-50 rounded-lg bg-gray-25 italic">
-                                <span class="text-xs text-gray-400">{{ __('messages.no_file') }}</span>
-                            </div>
+                            <div class="mt-2 text-xs italic text-gray-500 mb-2">No file uploaded yet.</div>
+                            <x-drop-zone 
+                                action="{{ route('client.employees.update', $employee->id) }}"
+                                method="PUT"
+                                name="contract_image"
+                                :additionalData="[
+                                    'name' => $employee->name,
+                                    'position' => $employee->position,
+                                    'national_id_number' => $employee->national_id_number,
+                                    'basic_salary' => $employee->basic_salary,
+                                    'hire_date' => $employee->hire_date->format('Y-m-d')
+                                ]"
+                            />
                         @endif
                     </div>
                 </div>

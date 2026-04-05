@@ -1,0 +1,26 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    :root {
+        /* Premium Blue HSL: 221 83% 53% */
+        --primary: 221 83% 53%;
+        /* Pure Surface HSL: 0 0% 100% */
+        --surface: 0 0% 100%;
+        /* Dark Navy Text: 222 47% 11% */
+        --text-main: 222 47% 11%;
+    }
+
+    .dark {
+        --primary: 217 91% 60%;
+        --surface: 222 47% 11%;
+        --text-main: 210 40% 98%;
+    }
+}
+
+[x-cloak] {
+    display: none !important;
+}
+
+@import "print.css";

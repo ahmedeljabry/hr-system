@@ -38,4 +38,22 @@ class DashboardService
             'leave_balance' => $totalLeaveRemaining,
         ];
     }
+
+    public function getTrendData(string $metric, int $days = 7): array
+    {
+        $data = [];
+        for ($i = $days; $i >= 0; $i--) {
+            $date = now()->subDays($i)->format('Y-m-d');
+            $count = 0;
+            if ($metric === 'users') {
+                $count = \App\Models\User::whereDate('created_at', '<=', $date)->count();
+            } elseif ($metric === 'clients') {
+                $count = \App\Models\Client::whereDate('created_at', '<=', $date)->count();
+            } elseif ($metric === 'employees') {
+                $count = Employee::whereDate('created_at', '<=', $date)->count();
+            }
+            $data[] = $count;
+        }
+        return $data;
+    }
 }

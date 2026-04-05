@@ -24,10 +24,22 @@ class ClientController extends Controller
         $sort = in_array($request->get('sort'), $sortable) ? $request->get('sort') : 'name';
         $dir = $request->get('dir') === 'desc' ? 'desc' : 'asc';
 
-        $clients = Client::withCount('employees')
-            ->orderBy($sort, $dir)
-            ->paginate(15)
-            ->withQueryString();
+        $query = Client::withCount('employees')
+            ->orderBy($sort, $dir);
+
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                  ->orWhere('id', $search);
+            });
+        }
+
+        $clients = $query->paginate(15)->withQueryString();
+
+        if ($request->wantsJson()) {
+            return response()->json($clients);
+        }
 
         return view('admin.clients.index', compact('clients', 'sort', 'dir'));
     }

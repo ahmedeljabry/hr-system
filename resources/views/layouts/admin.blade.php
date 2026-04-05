@@ -10,11 +10,11 @@
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@500;600;700&display=swap" rel="stylesheet">
     @if(app()->getLocale() == 'ar')
-        <link href="https://fonts.googleapis.com/css2?family=Noto+Kufi+Arabic:wght@100..900&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Noto+Kufi+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
         <style>body { font-family: 'Noto Kufi Arabic', sans-serif; }</style>
     @else
-        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
         <style>body { font-family: 'Inter', sans-serif; }</style>
     @endif
 
@@ -22,72 +22,51 @@
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
     <!-- Styles -->
-    <script src="https://cdn.tailwindcss.com"></script>
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
     <style>
         [x-cloak] { display: none !important; }
-
-        /* Logical property fallback/enhancement if Tailwind isn't enough */
-        .ms-4 { margin-inline-start: 1rem; }
-        .pe-4 { padding-inline-end: 1rem; }
     </style>
 </head>
-<body class="bg-gray-50 text-gray-900 antialiased min-h-screen flex flex-row" x-data="{ open: false }">
+<body class="bg-surface text-text-main antialiased min-h-screen flex flex-row" x-data="{ mobileOpen: false }">
 
     <!-- Mobile Hamburger Menu -->
     <div class="md:hidden p-4 bg-white border-b border-gray-100 flex items-center justify-between w-full fixed top-0 z-20">
-        <a href="{{ route('admin.dashboard') }}" class="text-xl font-bold text-blue-600 tracking-tight">
+        <a href="{{ route('admin.dashboard') }}" class="text-xl font-outfit font-bold text-primary tracking-tight">
             {{ config('app.name', 'HR System') }}
         </a>
-        <button @click="open = !open" class="p-2 text-gray-500 hover:text-gray-700">
+        <button @click="mobileOpen = !mobileOpen" class="p-2 text-gray-500 hover:text-gray-700 focus:outline-none">
             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
         </button>
     </div>
 
-    <!-- Sidebar -->
-    <aside :class="open ? 'translate-x-0' : (document.documentElement.dir === 'rtl' ? 'translate-x-full' : '-translate-x-full')" class="fixed md:sticky top-0 inset-y-0 z-30 w-64 bg-white border-{{ app()->getLocale() == 'ar' ? 'l' : 'r' }} border-gray-100 min-h-screen flex flex-col transition-transform duration-300 md:translate-x-0 {{ app()->getLocale() == 'ar' ? 'right-0' : 'left-0' }}">
+    <!-- Desktop Sidebar -->
+    <x-sidebar />
 
-        <div class="p-6 hidden md:block">
-            <a href="{{ route('admin.dashboard') }}" class="text-xl font-bold text-blue-600 tracking-tight block text-center mb-0">
-                {{ config('app.name', 'HR System') }}
-            </a>
+    <!-- Mobile Sidebar -->
+    <!-- (Optional implementation mapping to mobile open state, but omitting for brevity since <x-sidebar> handles resize technically, though here we'll let existing logic stand mostly) -->
+    <div x-show="mobileOpen" class="fixed inset-0 z-40 bg-gray-900 bg-opacity-50 md:hidden" @click="mobileOpen = false" x-transition.opacity x-cloak></div>
+    <div :class="mobileOpen ? 'translate-x-0' : (document.documentElement.dir === 'rtl' ? 'translate-x-full' : '-translate-x-full')" class="fixed top-0 inset-y-0 z-50 w-64 bg-white transition-transform duration-300 md:hidden flex flex-col {{ app()->getLocale() == 'ar' ? 'right-0' : 'left-0' }}">
+        <div class="h-16 flex items-center justify-start px-4 border-b border-gray-50">
+            <span class="text-xl font-outfit font-bold text-primary">{{ config('app.name', 'HR System') }}</span>
+            <button @click="mobileOpen = false" class="ms-auto p-2 text-gray-500">
+                <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
         </div>
-
-        <nav class="flex-grow px-4 md:px-4 py-8 md:py-8 space-y-2 mt-[60px] md:mt-0">
-            <a href="{{ route('admin.dashboard') }}" class="flex items-center px-4 py-3 text-sm font-medium rounded-xl transition-colors {{ request()->routeIs('admin.dashboard*') ? 'bg-indigo-50 text-indigo-700' : 'text-gray-600 hover:bg-gray-50' }}">
-                <span class="text-lg {{ app()->getLocale() == 'ar' ? 'ml-3' : 'mr-3' }}">📊</span>
+        <nav class="flex-1 px-3 py-6 space-y-1 overflow-y-auto">
+            <x-sidebar-link href="{{ route('admin.dashboard') }}" :active="request()->routeIs('admin.dashboard*')">
+                <x-slot name="icon"><span class="w-5 h-5 flex items-center justify-center">📊</span></x-slot>
                 {{ __('Dashboard') }}
-            </a>
-            <a href="{{ route('admin.clients.index') }}" class="flex items-center px-4 py-3 text-sm font-medium rounded-xl transition-colors {{ request()->routeIs('admin.clients.*') ? 'bg-indigo-50 text-indigo-700' : 'text-gray-600 hover:bg-gray-50' }}">
-                <span class="text-lg {{ app()->getLocale() == 'ar' ? 'ml-3' : 'mr-3' }}">👥</span>
+            </x-sidebar-link>
+            <x-sidebar-link href="{{ route('admin.clients.index') }}" :active="request()->routeIs('admin.clients.*')">
+                <x-slot name="icon"><span class="w-5 h-5 flex items-center justify-center">👥</span></x-slot>
                 {{ __('Clients') }}
-            </a>
+            </x-sidebar-link>
         </nav>
-
-        <div class="p-4 border-t border-gray-100">
-            <div class="flex items-center justify-center space-x-4 mb-4 {{ app()->getLocale() == 'ar' ? 'space-x-reverse' : '' }}">
-                @if(app()->getLocale() == 'ar')
-                    <a href="/lang/en" class="text-xs uppercase font-bold text-gray-400 hover:text-blue-600 transition-colors">EN</a>
-                @else
-                    <a href="/lang/ar" class="text-xs uppercase font-bold text-gray-400 hover:text-blue-600 transition-colors">عربي</a>
-                @endif
-            </div>
-
-            <form method="POST" action="/logout" class="block w-full">
-                @csrf
-                <button type="submit" class="w-full py-2 px-4 text-sm font-medium text-red-500 hover:bg-red-50 rounded-xl transition-colors flex items-center justify-center">
-                    <span class="mr-2 {{ app()->getLocale() == 'ar' ? 'ml-2 mr-0' : '' }}">🚪</span>
-                    {{ __('Logout') ?? 'Logout' }}
-                </button>
-            </form>
-        </div>
-    </aside>
-
-    <!-- Overlay for mobile when sidebar is open -->
-    <div x-show="open" @click="open = false" class="fixed inset-0 bg-black bg-opacity-25 z-20 md:hidden" x-cloak></div>
+    </div>
 
     <!-- Main Content Area -->
-    <main class="flex-1 w-full mt-16 md:mt-0 p-6 {{ app()->getLocale() == 'ar' ? 'mr-0' : 'ml-0' }}">
-        <div class="max-w-6xl mx-auto">
+    <main class="flex-1 w-full mt-16 md:mt-0 overflow-y-auto h-screen bg-gray-50/50">
+        <div class="max-w-7xl mx-auto p-4 md:p-8">
             @yield('content')
         </div>
     </main>

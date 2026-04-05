@@ -13,6 +13,10 @@ Auto-generated from all feature plans. Last updated: 2026-04-05
 - MySQL 8.0 (005-attendance-tasks-assets)
 - PHP 8.3 / Laravel 11 + Alpine.js, Tailwind CSS, Blade (006-employee-portal)
 - MySQL 8.0 (production), SQLite (testing) (006-employee-portal)
+- PHP 8.3 & HTML/Blade + TailwindCSS, Alpine.js (009-ui-design-system)
+- N/A (Presentation layer only) (009-ui-design-system)
+- PHP 8.3 & HTML/Blade, JavaScript (Alpine.js) + TailwindCSS, Alpine.js, Design System tokens from Phase 009 (013-ui-employee-portal)
+- MySQL 8 (existing employee data); potential new `notifications` table for read/unread state (013-ui-employee-portal)
 
 - PHP 8.3 (Laravel 11) + `Maatwebsite/Laravel-Excel`, Alpine.js, TailwindCSS (002-employee-management)
 
@@ -33,9 +37,9 @@ tests/
 PHP 8.3 (Laravel 11): Follow standard conventions
 
 ## Recent Changes
+- 013-ui-employee-portal: Added PHP 8.3 & HTML/Blade, JavaScript (Alpine.js) + TailwindCSS, Alpine.js, Design System tokens from Phase 009
+- 009-ui-design-system: Added PHP 8.3 & HTML/Blade + TailwindCSS, Alpine.js
 - 006-employee-portal: Added PHP 8.3 / Laravel 11 + Alpine.js, Tailwind CSS, Blade
-- 005-attendance-tasks-assets: Added PHP 8.3 / Laravel 11 + Alpine.js, Tailwind CSS
-- 004-reminder-phrases: Added [e.g., Python 3.11, Swift 5.9, Rust 1.75 or NEEDS CLARIFICATION] + [e.g., FastAPI, UIKit, LLVM or NEEDS CLARIFICATION]
 
 
 <!-- MANUAL ADDITIONS START -->

@@ -100,9 +100,7 @@
                 </div>
             </div>
         @empty
-            <div class="p-8 text-center text-gray-500">
-                {{ __('No announcements yet.') }}
-            </div>
+            <x-empty-state message="{{ __('No announcements yet.') }}" />
         @endforelse
     </div>
 </div>

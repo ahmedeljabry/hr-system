@@ -16,29 +16,21 @@
 
     <!-- Stats Grid -->
     <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6 mb-8">
-        <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
-            <div class="flex items-center justify-between">
-                <div>
-                    <p class="text-sm font-medium text-gray-600">{{ __('Total Clients') }}</p>
-                    <p class="text-3xl font-bold text-gray-900">{{ number_format($stats['total_clients']) }}</p>
-                </div>
-                <div class="bg-blue-50 p-3 rounded-xl">
-                    <span class="text-xl">👥</span>
-                </div>
-            </div>
-        </div>
+        <x-sparkline-card 
+            id="clients-sparkline"
+            title="{{ __('Total Clients') }}" 
+            value="{{ number_format($stats['total_clients']) }}"
+            data="{{ json_encode($trends['clients']) }}"
+            color="#3B82F6"
+        />
 
-        <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
-            <div class="flex items-center justify-between">
-                <div>
-                    <p class="text-sm font-medium text-gray-600">{{ __('Total Employees') }}</p>
-                    <p class="text-3xl font-bold text-gray-900">{{ number_format($stats['total_employees']) }}</p>
-                </div>
-                <div class="bg-green-50 p-3 rounded-xl">
-                    <span class="text-xl">👤</span>
-                </div>
-            </div>
-        </div>
+        <x-sparkline-card 
+            id="employees-sparkline"
+            title="{{ __('Total Employees') }}" 
+            value="{{ number_format($stats['total_employees']) }}"
+            data="{{ json_encode($trends['employees']) }}"
+            color="#10B981"
+        />
 
         <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
             <div class="flex items-center justify-between">

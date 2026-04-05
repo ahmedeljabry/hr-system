@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="py-12">
-    <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+    <div class="w-full">
         
         <!-- Premium Hero Section -->
         <div class="bg-secondary overflow-hidden shadow-2xl rounded-3xl p-10 text-white mb-10 relative group border border-primary/20">
@@ -63,10 +63,11 @@
                                 </td>
                                 <td class="px-8 py-6 whitespace-nowrap">
                                     <div class="flex items-center gap-2">
-                                        <div class="w-7 h-7 rounded-lg bg-primary/10 flex items-center justify-center text-[10px] font-black text-secondary">
-                                            {{ substr($task->employee?->name ?? '?', 0, 1) }}
-                                        </div>
-                                        <span class="text-sm font-bold text-gray-600">{{ $task->employee?->name ?: __('messages.unassigned') }}</span>
+                                        @php
+                                            $displayName = $task->employee ? (app()->getLocale() == 'ar' ? $task->employee->name_ar : ($task->employee->name_en ?? $task->employee->name_ar)) : null;
+                                        @endphp
+                                        <x-avatar :name="$displayName ?? '?'" size="xs" class="rounded-lg shadow-sm border border-gray-100" />
+                                        <span class="text-sm font-bold text-gray-600">{{ $displayName ?: __('messages.unassigned') }}</span>
                                     </div>
                                 </td>
                                 <td class="px-8 py-6 whitespace-nowrap">

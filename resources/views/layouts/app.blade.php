@@ -42,7 +42,7 @@
 <body class="bg-gray-50 text-gray-900 antialiased min-h-screen flex flex-col">
 
     <nav class="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-100 py-3 px-6 shadow-sm">
-        <div class="max-w-7xl mx-auto flex justify-between items-center">
+        <div class="max-w-full mx-auto px-4 sm:px-6 lg:px-10 flex justify-between items-center">
             <!-- Brand / Logo -->
             <div class="flex items-center">
                 <a href="/" class="group flex items-center gap-3">
@@ -95,12 +95,12 @@
         </div>
     </nav>
 
-    <main class="flex-grow max-w-7xl mx-auto px-6 w-full">
+    <main class="flex-grow max-w-full mx-auto px-4 sm:px-6 lg:px-10 w-full">
         @yield('content')
     </main>
 
     <footer class="mt-auto py-8 bg-white border-t border-gray-50 text-center text-sm text-gray-400">
-        <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-4">
+        <div class="max-w-full mx-auto px-4 sm:px-6 lg:px-10 flex flex-col md:flex-row justify-between items-center gap-4">
             <p>&copy; {{ date('Y') }} {{ __('messages.company_name_localized') }}. {{ __('messages.all_rights_reserved') }}</p>
             <div class="flex items-center gap-4">
                 <a href="#" class="hover:text-secondary transition-colors">{{ __('messages.privacy_policy') }}</a>

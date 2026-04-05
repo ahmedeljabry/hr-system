@@ -12,7 +12,9 @@ use Maatwebsite\Excel\Concerns\SkipsFailures;
 use Maatwebsite\Excel\Concerns\SkipsErrors;
 use Maatwebsite\Excel\Concerns\Importable;
 
-class EmployeesImport implements ToModel, WithHeadingRow, WithValidation, SkipsOnFailure, SkipsOnError
+use Maatwebsite\Excel\Concerns\WithStartRow;
+
+class EmployeesImport implements ToModel, WithValidation, SkipsOnFailure, SkipsOnError, WithStartRow
 {
     use SkipsFailures, SkipsErrors, Importable;
 
@@ -20,17 +22,28 @@ class EmployeesImport implements ToModel, WithHeadingRow, WithValidation, SkipsO
     {
     }
 
+    public function startRow(): int
+    {
+        return 2;
+    }
+
     public function model(array $row): ?Employee
     {
-        // Headers are sluggified by Maatwebsite\Excel: 
-        // e.g. "Employee Name" -> "employee_name", "National ID / Residency Number" -> "national_id_residency_number"
+        // Skip empty or mostly empty rows
+        if (empty(array_filter($row))) {
+            return null;
+        }
+
+        // $row is now a numeric array (Column A = $row[0], Column B = $row[1]...)
         
-        // Ensure user is created first
+        $email = $row[2];
+        if (!$email) return null;
+
         $user = \App\Models\User::firstOrCreate(
-            ['email' => $row['email_address']],
+            ['email' => $email], // Column C: Email Address
             [
-                'name' => $row['employee_name_english'],
-                'password' => $row['password'], 
+                'name' => $row[1] ?? $row[0], // Column B: Name (En)
+                'password' => $row[3], // Column D: Password
                 'role' => 'employee',
                 'client_id' => $this->clientId,
             ]
@@ -39,45 +52,66 @@ class EmployeesImport implements ToModel, WithHeadingRow, WithValidation, SkipsO
         return new Employee([
             'client_id' => $this->clientId,
             'user_id' => $user->id,
-            'name_ar' => $row['employee_name_arabic'],
-            'name_en' => $row['employee_name_english'],
-            'position' => $row['position'],
-            'national_id_number' => $row['national_id_residency_number'],
-            'phone' => $row['phone_number'] ?? null,
-            'emergency_phone' => $row['emergency_phone'] ?? null,
-            'bank_iban' => $row['bank_iban'] ?? null,
-            'basic_salary' => $row['basic_salary'],
-            'housing_allowance' => $row['housing_allowance'] ?? 0,
-            'transportation_allowance' => $row['transportation_allowance'] ?? 0,
-            'other_allowances' => $row['other_allowances'] ?? 0,
-            'date_of_birth' => \PhpOffice\PhpSpreadsheet\Shared\Date::isDateTimeFormatCode($row['date_of_birth']) ? \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($row['date_of_birth']) : $row['date_of_birth'] ?? null,
-            'hire_date' => \PhpOffice\PhpSpreadsheet\Shared\Date::isDateTimeFormatCode($row['hire_date']) ? \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($row['hire_date']) : $row['hire_date'],
+            'name_ar' => $row[0], // Column A
+            'name_en' => $row[1], // Column B
+            'email' => $row[2], // Column C
+            'position' => $row[4], // Column E: Position
+            'national_id_number' => $row[5], // Column F: National ID
+            'phone' => $row[6] ?? null, // Column G: Phone
+            'emergency_phone' => $row[7] ?? null, // Column H: Emergency
+            'bank_iban' => $row[8] ?? null, // Column I: IBAN
+            'basic_salary' => $this->sanitizeNumber($row[9]), // Column J: Basic Salary
+            'housing_allowance' => $this->sanitizeNumber($row[10]) ?? 0, // Column K
+            'transportation_allowance' => $this->sanitizeNumber($row[11]) ?? 0, // Column L
+            'other_allowances' => $this->sanitizeNumber($row[12]) ?? 0, // Column M
+            'date_of_birth' => $this->parseDate($row[13] ?? null), // Column N
+            'hire_date' => $this->parseDate($row[14] ?? null), // Column O
         ]);
+    }
+
+    private function sanitizeNumber($value)
+    {
+        if ($value === null || $value === '') return 0;
+        // Strip out anything that's not a digit or a decimal point
+        $cleanValue = preg_replace('/[^0-9.]/', '', strval($value));
+        return is_numeric($cleanValue) ? floatval($cleanValue) : 0;
+    }
+
+    private function parseDate($value)
+    {
+        if (!$value) return null;
+        if (\PhpOffice\PhpSpreadsheet\Shared\Date::isDateTimeFormatCode($value)) {
+            return \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($value);
+        }
+        return $value;
     }
 
     public function rules(): array
     {
         return [
-            'employee_name_arabic' => ['required', 'string', 'max:255'],
-            'employee_name_english' => ['required', 'string', 'max:255'],
-            'email_address' => ['required', 'email'],
-            'password' => ['required', 'min:8'],
-            'position' => ['required', 'string', 'max:255'],
-            'national_id_residency_number' => ['required', 'max:100'],
-            'basic_salary' => ['required', 'numeric', 'min:0'],
+            '0' => ['required', 'string', 'max:255'], // Employee Name (Arabic)
+            '1' => ['required', 'string', 'max:255'], // Employee Name (English)
+            '2' => ['required', 'email'], // Email Address
+            '3' => ['required', 'min:8'], // Password
+            '4' => ['required', 'string', 'max:255'], // Position
+            '5' => ['required', 'max:100'], // National ID
+            // We'll validate numeric fields but they might have currency strings, 
+            // the sanitizeNumber in model handles it, 
+            // but for rules, let's just make it loose or pre-clean.
+            '9' => ['required'], // Basic Salary
         ];
     }
 
     public function customValidationAttributes(): array
     {
         return [
-            'employee_name_arabic' => __('messages.name_ar'),
-            'employee_name_english' => __('messages.name_en'),
-            'email_address' => __('messages.email'),
-            'password' => __('messages.password'),
-            'position' => __('messages.position'),
-            'national_id_residency_number' => __('messages.national_id_number'),
-            'basic_salary' => __('messages.basic_salary'),
+            '0' => __('messages.name_ar'),
+            '1' => __('messages.name_en'),
+            '2' => __('messages.email'),
+            '3' => __('messages.password'),
+            '4' => __('messages.position'),
+            '5' => __('messages.national_id_number'),
+            '9' => __('messages.basic_salary'),
         ];
     }
 

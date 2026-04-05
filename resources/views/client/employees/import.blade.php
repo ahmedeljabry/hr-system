@@ -50,9 +50,34 @@
                     <svg class="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                     {{ __('messages.import_instructions') }}
                 </h2>
-                <div class="mt-4 flex flex-wrap gap-3">
-                    @foreach([__('messages.name_ar'), __('messages.name_en'), __('messages.email'), __('messages.password'), __('messages.position'), __('messages.national_id_number'), __('messages.phone_field'), __('messages.emergency_phone'), __('messages.bank_iban'), __('messages.basic_salary'), __('messages.housing_allowance'), __('messages.transportation_allowance'), __('messages.other_allowances'), __('messages.date_of_birth'), __('messages.hire_date')] as $col)
-                        <span class="px-4 py-2 bg-white border-2 border-gray-100 rounded-xl text-xs font-black text-secondary">{{ $col }}</span>
+                <div class="mt-4 flex flex-wrap gap-2">
+                    @php
+                        $cols = [
+                            ['col' => 'A', 'key' => 'Employee Name (Arabic)', 'label' => __('messages.name_ar')],
+                            ['col' => 'B', 'key' => 'Employee Name (English)', 'label' => __('messages.name_en')],
+                            ['col' => 'C', 'key' => 'Email Address', 'label' => __('messages.email')],
+                            ['col' => 'D', 'key' => 'Password', 'label' => __('messages.password')],
+                            ['col' => 'E', 'key' => 'Position', 'label' => __('messages.position')],
+                            ['col' => 'F', 'key' => 'National ID / Residency Number', 'label' => __('messages.national_id_number')],
+                            ['col' => 'G', 'key' => 'Phone Number', 'label' => __('messages.phone_field')],
+                            ['col' => 'H', 'key' => 'Emergency Phone', 'label' => __('messages.emergency_phone')],
+                            ['col' => 'I', 'key' => 'Bank IBAN', 'label' => __('messages.bank_iban')],
+                            ['col' => 'J', 'key' => 'Basic Salary', 'label' => __('messages.basic_salary')],
+                            ['col' => 'K', 'key' => 'Housing Allowance', 'label' => __('messages.housing_allowance')],
+                            ['col' => 'L', 'key' => 'Transportation Allowance', 'label' => __('messages.transportation_allowance')],
+                            ['col' => 'M', 'key' => 'Other Allowances', 'label' => __('messages.other_allowances')],
+                            ['col' => 'N', 'key' => 'Date of Birth', 'label' => __('messages.date_of_birth')],
+                            ['col' => 'O', 'key' => 'Hire Date', 'label' => __('messages.hire_date')],
+                        ];
+                    @endphp
+                    @foreach($cols as $col)
+                        <div class="flex flex-col bg-white border border-gray-100 rounded-xl p-3 shadow-sm hover:border-primary transition-all hover:scale-105">
+                            <div class="flex items-center gap-2 mb-1">
+                                <span class="w-6 h-6 rounded-lg bg-secondary text-white text-[10px] font-black flex items-center justify-center">{{ $col['col'] }}</span>
+                                <span class="text-xs font-black text-secondary select-all">{{ $col['key'] }}</span>
+                            </div>
+                            <span class="text-[10px] font-bold text-gray-400 ms-8">{{ $col['label'] }}</span>
+                        </div>
                     @endforeach
                 </div>
             </div>

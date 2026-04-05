@@ -23,7 +23,7 @@
         <div class="text-xs text-gray-400 font-bold uppercase tracking-wider">{{ $employee->hire_date->format('d/m/Y') }}</div>
     </td>
     <td class="px-8 py-6 whitespace-nowrap text-right rtl:text-left">
-        <div class="flex justify-end gap-3 opacity-0 group-hover:opacity-100 transition-all duration-300 translate-x-4 group-hover:translate-x-0">
+        <div class="flex justify-end gap-3 transition-all duration-300">
             <a href="{{ route('client.employees.show', $employee) }}" 
                class="p-2 text-gray-400 hover:text-white hover:bg-secondary rounded-xl transition-all duration-300" 
                title="{{ __('messages.view') }}">
@@ -39,6 +39,17 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                 </svg>
             </a>
+            <form action="{{ route('client.employees.destroy', $employee) }}" method="POST" onsubmit="return confirm('{{ __('messages.confirm_delete_employee') }}')">
+                @csrf
+                @method('DELETE')
+                <button type="submit" 
+                        class="p-2 text-red-500 hover:text-white hover:bg-red-500 rounded-xl transition-all duration-300" 
+                        title="{{ __('messages.delete') }}">
+                    <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                    </svg>
+                </button>
+            </form>
         </div>
     </td>
 </tr>

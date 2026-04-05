@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="py-12">
-    <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+    <div class="w-full">
         
         <!-- Premium Hero Section -->
         <div class="bg-secondary overflow-hidden shadow-2xl rounded-3xl p-10 text-white mb-10 relative group border border-primary/20">
@@ -64,6 +64,7 @@
                                 <th class="px-4 py-6 text-center text-[11px] font-black text-gray-400 uppercase tracking-[0.2em]">{{ __('messages.present') ?? __('Present') }}</th>
                                 <th class="px-4 py-6 text-center text-[11px] font-black text-gray-400 uppercase tracking-[0.2em]">{{ __('messages.late') ?? __('Late') }}</th>
                                 <th class="px-4 py-6 text-center text-[11px] font-black text-gray-400 uppercase tracking-[0.2em]">{{ __('messages.absent') ?? __('Absent') }}</th>
+                                <th class="px-4 py-6 text-center text-[11px] font-black text-gray-400 uppercase tracking-[0.2em]">{{ __('messages.leave') ?? __('Leave') }}</th>
                                 <th class="px-8 py-6 text-left text-[11px] font-black text-gray-400 uppercase tracking-[0.2em] {{ app()->getLocale() == 'ar' ? 'text-right' : '' }}">{{ __('messages.notes') ?? __('Notes') }}</th>
                             </tr>
                         </thead>
@@ -76,11 +77,12 @@
                                 <tr class="hover:bg-gray-50/50 transition-all duration-300">
                                     <td class="px-8 py-6 whitespace-nowrap">
                                         <div class="flex items-center gap-4">
-                                            <div class="w-10 h-10 rounded-2xl bg-secondary/5 flex items-center justify-center text-secondary font-black">
-                                                {{ substr($employee->name, 0, 1) }}
-                                            </div>
+                                            @php
+                                                $displayName = app()->getLocale() == 'ar' ? $employee->name_ar : ($employee->name_en ?? $employee->name_ar);
+                                            @endphp
+                                            <x-avatar :name="$displayName" size="md" class="rounded-2xl shadow-sm border border-gray-100" />
                                             <div>
-                                                <div class="text-base font-black text-secondary tracking-tight">{{ $employee->name }}</div>
+                                                <div class="text-base font-black text-secondary tracking-tight capitalize">{{ $displayName }}</div>
                                                 <div class="text-[10px] text-gray-400 font-bold uppercase tracking-widest">{{ $employee->position }}</div>
                                             </div>
                                         </div>
@@ -118,6 +120,17 @@
                                             <span class="mt-2 text-[9px] font-bold uppercase tracking-widest text-gray-400 peer-checked:text-red-600 opacity-0 peer-checked:opacity-100 transition-all">{{ __('messages.absent') ?? __('Absent') }}</span>
                                         </label>
                                     </td>
+                                    <td class="px-4 py-6 text-center">
+                                        <label class="inline-flex flex-col items-center cursor-pointer group">
+                                            <input type="radio" name="attendance[{{ $employee->id }}][status]" value="leave" 
+                                                {{ $currentStatus == 'leave' ? 'checked' : '' }}
+                                                class="peer hidden">
+                                            <div class="w-10 h-10 rounded-2xl bg-gray-50 border-2 border-transparent peer-checked:bg-blue-500 peer-checked:border-blue-200 flex items-center justify-center text-gray-300 peer-checked:text-white transition-all duration-300 group-hover:scale-110 shadow-sm">
+                                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                                            </div>
+                                            <span class="mt-2 text-[9px] font-bold uppercase tracking-widest text-gray-400 peer-checked:text-blue-600 opacity-0 peer-checked:opacity-100 transition-all">{{ __('messages.leave') ?? __('Leave') }}</span>
+                                        </label>
+                                    </td>
                                     <td class="px-8 py-6 whitespace-nowrap">
                                         <div class="relative group/note">
                                             <input type="text" name="attendance[{{ $employee->id }}][notes]" 
@@ -129,7 +142,7 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="5" class="px-8 py-24 text-center">
+                                    <td colspan="6" class="px-8 py-24 text-center">
                                         <div class="flex flex-col items-center">
                                             <div class="w-20 h-20 bg-gray-50 rounded-full flex items-center justify-center mb-6">
                                                 <svg class="w-10 h-10 text-gray-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" /></svg>

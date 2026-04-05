@@ -136,16 +136,20 @@ class EmployeeService
     public function delete(int $clientId, int $employeeId): bool
     {
         $employee = $this->find($clientId, $employeeId);
-        
-        if ($employee->user_id) {
-            $user = \App\Models\User::find($employee->user_id);
-            if ($user) {
-                $user->delete();
+
+        return \Illuminate\Support\Facades\DB::transaction(function () use ($employee) {
+            // Delete associated user account if it exists
+            if ($employee->user_id) {
+                $user = \App\Models\User::find($employee->user_id);
+                if ($user) {
+                    $user->delete();
+                }
             }
-        }
-        
-        // Optionally delete files from storage
-        
-        return $employee->delete(); // Soft delete
+
+            // Optionally clean up other documents if any
+            // We keep them in storage for soft deletes, but they could be archived.
+
+            return $employee->delete();
+        });
     }
 }

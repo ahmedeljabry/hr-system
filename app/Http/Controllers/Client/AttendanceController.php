@@ -40,7 +40,7 @@ class AttendanceController extends Controller
         $request->validate([
             'date' => 'required|date|before_or_equal:today',
             'attendance' => 'required|array',
-            'attendance.*.status' => 'required|in:present,absent,late',
+            'attendance.*.status' => 'required|in:present,absent,late,leave',
             'attendance.*.notes' => 'nullable|string|max:500',
         ]);
 

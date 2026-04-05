@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="py-12" x-data="{ viewMode: localStorage.getItem('view_mode') || 'grid' }" @view-changed.window="viewMode = $event.detail">
-    <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+    <div class="w-full">
         
         <!-- Premium Hero Section -->
         <div class="bg-secondary overflow-hidden shadow-2xl rounded-3xl p-10 text-white mb-10 relative group border border-primary/20">
@@ -152,3 +152,11 @@
 </div>
 
 @endsection
+
+@push('scripts')
+<script>
+    document.addEventListener('submit', function(e) {
+        console.log('Form submission detected:', e.target.action);
+    });
+</script>
+@endpush

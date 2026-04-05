@@ -15,11 +15,16 @@ return [
     'add_employee' => 'Add Employee',
     'edit_employee' => 'Edit Employee',
     'delete_employee' => 'Delete Employee',
-    'save' => 'Save Data',
+    'edit' => 'Edit',
+    'delete' => 'Delete',
+    'view' => 'View',
+    'save' => 'Save',
+    'save_data' => 'Save Data',
     'update' => 'Update Data',
+    'confirm_delete_employee' => 'Are you sure you want to delete this employee? This action will also remove their user account and cannot be undone.',
     'cancel' => 'Cancel',
     'back' => 'Back',
-    
+
     // Messages
     'employee_created' => 'Employee added successfully.',
     'employee_updated' => 'Employee details updated successfully.',
@@ -49,7 +54,7 @@ return [
     'payroll_desc' => 'Process salaries, allowances, and deductions accurately and easily.',
     'leaves_desc' => 'An integrated system for requesting and reviewing various leave types.',
     'reports_desc' => 'Deep analytics and detailed reports for data-driven decisions.',
-    
+
     // Statistics & Labels
     'growth_rate' => 'Growth Rate',
     'team_efficiency' => 'Team Efficiency',
@@ -122,6 +127,7 @@ return [
     'present' => 'Present',
     'late' => 'Late',
     'absent' => 'Absent',
+    'leave' => 'Leave',
     'save_attendance' => 'Save Attendance Records',
     'no_employees_attendance' => 'No employees found for attendance marking.',
     'notes' => 'Notes',
@@ -157,7 +163,7 @@ return [
     'asset_created' => 'Asset registered successfully.',
     'asset_updated' => 'Asset data updated successfully.',
     'assets_empty_desc' => 'Register equipment and assign them to employees for better organizational tracking.',
-    
+
     // Statuses & Actions
     'assigned' => 'Assigned',
     'available' => 'Available',
@@ -177,7 +183,7 @@ return [
     'days' => 'Days',
     'no_leave_requests' => 'No leave requests found',
     'no_leave_requests_desc' => 'Everything is set! No leave requests are currently pending your review.',
-    
+
     // Payroll Runs
     'payroll_run' => 'Payroll Run',
     'payroll_run_desc' => 'Issue and verify monthly payroll records.',
@@ -221,13 +227,11 @@ return [
 
     // Payroll History
     'payroll_history' => 'Payroll History',
-    'payroll_desc' => 'Manage and track your company payroll history.',
     'select_month' => 'Select Month',
     'employee_count' => 'Employee Count',
     'total_net_payout' => 'Total Net Payout',
     'run_date' => 'Run Date',
     'no_payroll_desc' => 'Start your first payroll cycle to see the history here.',
-    'run_payroll' => 'Run Payroll',
     'run_payroll_desc' => 'Initiate a new payroll cycle for your employees.',
     'payroll' => 'Payroll',
     'payroll_history_desc' => 'Detailed view of all employee payslips for this period.',
@@ -261,7 +265,6 @@ return [
     'contact_us' => 'Contact Us',
     'subscription_status_updated' => 'Subscription status updated successfully.',
     'subscription_date_updated' => 'Subscription end date updated successfully.',
-    'view' => 'View',
     'import_employees' => 'Import Employees',
     'search_employees' => 'Search Employees...',
     'grid' => 'Grid',
@@ -269,4 +272,10 @@ return [
     'no_employees' => 'No Employees Found',
     'no_employees_desc' => 'Start by adding your first employee to the system.',
     'clients' => 'Clients',
+    'documents' => 'Documents',
+    'open_document' => 'Open Document',
+    'create_account' => 'Create Employee Account',
+    'phone' => 'Phone Number',
+    'other_documents' => 'Other Documents',
+    'not_uploaded' => 'Not Uploaded',
 ];

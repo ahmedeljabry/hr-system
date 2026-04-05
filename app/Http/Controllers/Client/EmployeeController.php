@@ -73,9 +73,14 @@ class EmployeeController extends Controller
         return redirect()->route('client.employees.index')->with('success', __('messages.employee_updated'));
     }
 
-    public function destroy(int $employee)
+    public function destroy(Employee $employee)
     {
-        $this->employeeService->delete($this->getClientId(), $employee);
+        if ($employee->client_id !== $this->getClientId()) {
+            abort(403);
+        }
+
+        $this->employeeService->delete($this->getClientId(), $employee->id);
+        
         return redirect()->route('client.employees.index')->with('success', __('messages.employee_deleted'));
     }
 

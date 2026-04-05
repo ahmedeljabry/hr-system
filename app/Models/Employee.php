@@ -67,5 +67,11 @@ class Employee extends Model
     {
         return (float) ($this->basic_salary + $this->housing_allowance + $this->transportation_allowance + $this->other_allowances);
     }
+
+    public function getNameAttribute(): string
+    {
+        $locale = app()->getLocale();
+        return $locale === 'ar' ? $this->name_ar : ($this->name_en ?? $this->name_ar);
+    }
 }
 

@@ -11,13 +11,13 @@
         </div>
         <div>
             <h4 class="text-xs font-black text-secondary tracking-tight">{{ $label }}</h4>
-            <p class="text-[9px] font-bold text-gray-400 uppercase tracking-widest">{{ $file ? __('messages.view') : __('messages.not_uploaded') ?? 'NOT UPLOADED' }}</p>
+            <p class="text-[9px] font-bold text-gray-400 uppercase tracking-widest">{{ $file ? __('messages.view') : __('messages.not_uploaded') }}</p>
         </div>
     </div>
     @if($file)
         <a href="{{ route('client.files.employee', [$employee->id, $type]) }}" 
            class="inline-flex justify-center w-full py-2.5 bg-white border border-gray-100 rounded-xl text-[10px] font-black text-secondary hover:bg-secondary hover:text-white transition-all shadow-sm">
-            {{ __('messages.open_document') ?? 'OPEN DOCUMENT' }}
+            {{ __('messages.open_document') }}
         </a>
     @else
         <div class="py-2.5 text-center text-[10px] font-black text-gray-300 italic opacity-50 uppercase tracking-widest">

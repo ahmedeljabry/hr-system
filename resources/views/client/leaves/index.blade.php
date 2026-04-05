@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="py-12">
-    <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+    <div class="w-full">
         
         <!-- Premium Hero Section -->
         <div class="bg-secondary overflow-hidden shadow-2xl rounded-3xl p-10 text-white mb-10 relative group border border-primary/20">
@@ -89,10 +89,11 @@
                             <tr class="hover:bg-gray-50/50 transition-all duration-300">
                                 <td class="px-8 py-6 whitespace-nowrap">
                                     <div class="flex items-center gap-4">
-                                        <div class="w-10 h-10 rounded-2xl bg-secondary/5 flex items-center justify-center text-secondary font-black">
-                                            {{ substr($req->employee->name, 0, 1) }}
-                                        </div>
-                                        <div class="text-base font-black text-secondary tracking-tight">{{ $req->employee->name }}</div>
+                                        @php
+                                            $displayName = app()->getLocale() == 'ar' ? $req->employee->name_ar : ($req->employee->name_en ?? $req->employee->name_ar);
+                                        @endphp
+                                        <x-avatar :name="$displayName" size="md" class="rounded-2xl shadow-sm border border-gray-100" />
+                                        <div class="text-base font-black text-secondary tracking-tight capitalize">{{ $displayName }}</div>
                                     </div>
                                 </td>
                                 <td class="px-8 py-6 whitespace-nowrap">

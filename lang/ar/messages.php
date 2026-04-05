@@ -69,6 +69,7 @@ return [
     'position_placeholder' => 'مثال: مدير المبيعات',
     'national_id_number' => 'رقم الهوية الوطنية / الإقامة',
     'id_placeholder' => 'رقم الهوية المكون من 10 أرقام',
+    'date_of_birth' => 'تاريخ الميلاد',
     'hire_date' => 'تاريخ التعيين',
     'bank_iban' => 'رقم الآيبان (IBAN)',
     'phone_field' => 'رقم الجوال',

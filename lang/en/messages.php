@@ -69,6 +69,7 @@ return [
     'position_placeholder' => 'e.g., Sales Manager',
     'national_id_number' => 'National ID / Residency Number',
     'id_placeholder' => '10-digit ID number',
+    'date_of_birth' => 'Date of Birth',
     'hire_date' => 'Hire Date',
     'bank_iban' => 'Bank IBAN',
     'phone_field' => 'Phone Number',

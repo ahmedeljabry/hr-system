@@ -29,6 +29,7 @@ class Employee extends Model
         'transportation_allowance',
         'other_allowances',
         'hire_date',
+        'date_of_birth',
     ];
 
     protected $casts = [
@@ -37,6 +38,7 @@ class Employee extends Model
         'transportation_allowance' => 'decimal:2',
         'other_allowances' => 'decimal:2',
         'hire_date' => 'date',
+        'date_of_birth' => 'date',
         'other_documents' => 'array',
     ];
 

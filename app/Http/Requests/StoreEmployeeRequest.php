@@ -46,6 +46,7 @@ class StoreEmployeeRequest extends FormRequest
             'transportation_allowance' => ['nullable', 'numeric', 'min:0'],
             'other_allowances' => ['nullable', 'numeric', 'min:0'],
             'hire_date' => ['required', 'date'],
+            'date_of_birth' => ['nullable', 'date'],
         ];
     }
 

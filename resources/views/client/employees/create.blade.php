@@ -258,6 +258,25 @@
                                 </div>
                             </div>
 
+                            <!-- Date of Birth -->
+                            <div class="space-y-3">
+                                <label for="date_of_birth"
+                                    class="block text-xs font-black text-gray-400 uppercase tracking-[0.2em]">{{ __('messages.date_of_birth') }}
+                                    <span class="text-primary">*</span></label>
+                                <div class="relative group">
+                                    <div
+                                        class="absolute inset-y-0 {{ app()->getLocale() == 'ar' ? 'right-3' : 'left-3' }} flex items-center pointer-events-none transition-all duration-300">
+                                        <div class="w-8 h-8 rounded-xl bg-orange-50 group-focus-within:bg-orange-100 flex items-center justify-center transition-all duration-300 group-focus-within:scale-110">
+                                            <svg class="w-4 h-4 text-orange-400 group-focus-within:text-orange-600 transition-colors duration-300" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M11.25 21v-4.5h1.5V21M3.375 7.5a1.125 1.125 0 00-1.125 1.125v10.5c0 .621.504 1.125 1.125 1.125h17.25c.621 0 1.125-.504 1.125-1.125V8.625A1.125 1.125 0 0020.625 7.5H3.375zM12 15a2.25 2.25 0 100-4.5 2.25 2.25 0 000 4.5zM4.5 7.5v-3a2.25 2.25 0 012.25-2.25h10.5A2.25 2.25 0 0119.5 4.5v3"></path>
+                                            </svg>
+                                        </div>
+                                    </div>
+                                    <input type="date" name="date_of_birth" id="date_of_birth" value="{{ old('date_of_birth') }}"
+                                        class="block w-full bg-gray-50 border-2 border-transparent focus:border-primary focus:bg-white rounded-2xl py-4 {{ app()->getLocale() == 'ar' ? 'pr-14 pl-6' : 'pl-14 pr-6' }} text-secondary font-bold transition-all duration-300 outline-none">
+                                </div>
+                            </div>
+
                             <!-- Hire Date -->
                             <div class="space-y-3">
                                 <label for="hire_date"

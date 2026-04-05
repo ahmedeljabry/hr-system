@@ -92,6 +92,10 @@
                                 <dd class="text-lg font-black text-secondary font-mono">{{ $employee->national_id_number }}</dd>
                             </div>
                             <div class="space-y-1">
+                                <dt class="text-[10px] font-black text-gray-400 uppercase tracking-widest">{{ __('messages.date_of_birth') }}</dt>
+                                <dd class="text-lg font-black text-secondary">{{ $employee->date_of_birth ? $employee->date_of_birth->format('d/m/Y') : '—' }}</dd>
+                            </div>
+                            <div class="space-y-1">
                                 <dt class="text-[10px] font-black text-gray-400 uppercase tracking-widest">{{ __('messages.bank_iban') }}</dt>
                                 <dd class="text-lg font-black text-secondary font-mono">{{ $employee->bank_iban ?: '—' }}</dd>
                             </div>

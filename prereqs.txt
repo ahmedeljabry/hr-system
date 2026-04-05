@@ -1,0 +1,1 @@
+﻿{"FEATURE_DIR":"D:\\freelance\\login system\\specs\\007-super-admin-dashboard","AVAILABLE_DOCS":["research.md","data-model.md","quickstart.md"]}

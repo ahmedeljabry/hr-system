@@ -3,15 +3,19 @@
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\Admin\ClientController;
+use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\UserController;
 
 Route::middleware(['auth', 'role:super_admin'])->prefix('admin')->name('admin.')->group(function () {
-    Route::get('/dashboard', function () {
-        return view('admin.dashboard');
-    })->name('dashboard');
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     Route::get('/clients', [ClientController::class, 'index'])->name('clients.index');
+    Route::get('/clients/{client}', [ClientController::class, 'show'])->name('clients.show');
     Route::patch('/clients/{client}/status', [ClientController::class, 'updateStatus'])->name('clients.status');
     Route::patch('/clients/{client}/subscription', [ClientController::class, 'updateSubscription'])->name('clients.subscription');
+
+    Route::get('/users/{user}/edit', [UserController::class, 'edit'])->name('users.edit');
+    Route::patch('/users/{user}', [UserController::class, 'update'])->name('users.update');
 
     Route::resource('/reminder-phrases', \App\Http\Controllers\Admin\ReminderPhraseController::class)->except(['show', 'destroy']);
 });

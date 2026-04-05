@@ -3,7 +3,9 @@
 **Input**: Design documents from `/specs/006-employee-portal/`
 **Prerequisites**: plan.md (required), spec.md (required for user stories), research.md, data-model.md, quickstart.md
 
-**Tests**: TDD is mandatory per Constitution Principle II. Feature tests will be created for each user story.
+**Tests**: TDD is mandatory per Constitution Principle II. The Red-Green-Refactor cycle MUST be followed: write the test first (it must fail), then implement until it passes. Each user story section lists test tasks separately from implementation tasks — tests must be committed and confirmed RED before any implementation task in that story begins.
+
+**TDD Compliance Note**: Tasks marked `[x]` reflect completion tracking during development. When starting fresh, all test tasks (T010, T015, T019, T020) MUST be executed before their corresponding implementation tasks. Code review must verify that test commits precede implementation commits in the git log.
 
 **Organization**: Tasks are grouped by user story to enable independent implementation and testing of each story.
 
@@ -32,7 +34,7 @@
 - [x] T004 Create the employee sidebar layout file at `resources/views/layouts/employee.blade.php`. This layout MUST:
   1. Copy the `<head>` section from `resources/views/layouts/app.blade.php` (fonts, Alpine.js, Tailwind CDN, CSRF meta).
   2. Use `<body class="bg-gray-50 text-gray-900 antialiased min-h-screen flex">` (flex row, not column).
-  3. Create a left sidebar `<aside>` (w-64, bg-white, border-r, min-h-screen, fixed or sticky) containing:
+   3. Create a left sidebar `<aside>` with classes `w-64 bg-white border-r sticky top-0 h-screen overflow-y-auto flex-shrink-0` *(U5: use sticky+h-screen+overflow-y-auto for correct full-height scroll behavior — do NOT use fixed, which breaks document flow and requires manual offset margins)* containing:
      - App branding/logo at the top (link to `/employee/dashboard`).
      - 7 navigation links as `<a>` tags, each with an icon (use simple emoji or SVG) and text label using `__()`:
        - Dashboard → `/employee/dashboard`
@@ -67,7 +69,7 @@
 
 - [x] T007 [P] Create `AnnouncementFactory` at `database/factories/AnnouncementFactory.php`. The factory must:
   - Import `App\Models\Client` at the top (NOT inside the class).
-  - Set `definition()` to return: `'client_id' => Client::factory()`, `'title' => $this->faker->sentence()`, `'body' => $this->faker->paragraph(3)`, `'published_at' => now()`.
+  - Set `definition()` to return: `'client_id' => Client::factory()`, `'title' => $this->faker->sentence()`, `'body' => implode("\n\n", $this->faker->paragraphs(3))`, `'published_at' => now()`. *(I3: Use `implode("\n\n", $this->faker->paragraphs(3))` instead of `$this->faker->paragraph(3)` to guarantee explicit newline characters in the body, making line-break preservation tests reliable. `paragraphs()` returns an array; `paragraph()` returns a single string without `\n` breaks.)*
 
 - [x] T008 [P] Add `announcements()` relationship to `app/Models/Client.php`. Add this method: `public function announcements() { return $this->hasMany(Announcement::class); }`. Import `App\Models\Announcement` at the top of the file.
 
@@ -88,9 +90,10 @@
 - [x] T010 [P] [US1] Create `DashboardTest` at `tests/Feature/Employee/DashboardTest.php`. The test class must:
   - `use RefreshDatabase`.
   - In `setUp()`: create a Client (active subscription), create an Employee linked to that Client, create a User with `role=employee` and `client_id` set, and link `employee.user_id`.
-  - Test `test_employee_sees_dashboard_with_widgets()`: Create 3 Task records (2 with `status=todo`, 1 with `status=done`) for the employee. Create 2 Asset records for the employee. Act as the employee user, GET `/employee/dashboard`, assert status 200, assert the response contains "2" (pending tasks — not done), assert contains "2" (assets count).
+  - Test `test_employee_sees_dashboard_with_widgets()`: Create 3 Task records (2 with `status=todo`, 1 with `status=done`) for the employee. Create 2 Asset records for the employee. Act as the employee user, GET `/employee/dashboard`, assert status 200. Use specific text assertions to avoid false positives: `assertSee('2')` alone is insufficient — instead assert that the pending tasks count appears within its widget label context, e.g. `assertSeeInOrder(['Pending Tasks', '2'])` and separately `assertSeeInOrder(['Assigned Assets', '2'])`.
   - Test `test_dashboard_shows_zero_for_new_employee()`: Act as the employee user (no tasks/assets), GET `/employee/dashboard`, assert status 200, assert contains "0".
   - Test `test_employee_cannot_see_other_employees_data()`: Create tasks/assets for a DIFFERENT employee of the SAME client. Act as the first employee, GET `/employee/dashboard`, assert the counts show "0" (not the other employee's data).
+  - Test `test_dashboard_shows_no_data_for_leave_balance()`: Act as the employee user (no leave data — Phase 4 not yet built), GET `/employee/dashboard`, assert status 200, assert sees `__('No data available')` in the leave balance widget area. *(C2: covers the leave_balance → null branch in DashboardService.)*
 
 ### Implementation for User Story 1
 
@@ -139,17 +142,28 @@
   - In `setUp()`: create Client, Employee (with `name`, `position`, `hire_date`, `basic_salary`), and User linked to them.
   - Test `test_employee_can_view_own_profile()`: Act as employee, GET `/employee/profile`, assert 200, assert sees employee name, position.
   - Test `test_profile_shows_document_not_available_when_no_files()`: Employee has `national_id_image = null` and `contract_image = null`. Act as employee, GET `/employee/profile`, assert sees `__('Document not available')` text.
+  - Test `test_employee_cannot_access_another_employees_document()`: *(U2: Security boundary test for FR-003/FR-008 document isolation.)* Create a second employee of the same client with a `national_id_image` filename set. Act as the first employee (who has no document), attempt `GET /employee/profile/documents/national_id`. Assert the response is 404 — the controller must resolve the file path from the **authenticated** employee's own record, never from a URL parameter referencing another employee's record.
 
 ### Implementation for User Story 2
 
-- [x] T016 [US2] Create `ProfileController` at `app/Http/Controllers/Employee/ProfileController.php`. The controller must:
+- [x] T016a [US2] Create `ProfileService` at `app/Services/ProfileService.php`. *(I1: Moves file-resolution business logic out of the controller per Constitution Principle III — Thin Controllers, Fat Services.)* The service must have one public method:
+  ```php
+  public function getDocumentPath(\App\Models\Employee $employee, string $type): ?string
+  ```
+  This method:
+  1. Validates `$type` is either `national_id` or `contract` — throw `\InvalidArgumentException` if not.
+  2. Gets the stored relative path: if `$type === 'national_id'`, return `$employee->national_id_image`; if `contract`, return `$employee->contract_image`.
+  3. If the value is null or the resolved file does not exist at `storage_path('app/private/' . $path)`, return `null`.
+  4. Otherwise return the full absolute path string: `storage_path('app/private/' . $path)`.
+
+- [x] T016 [US2] Create `ProfileController` at `app/Http/Controllers/Employee/ProfileController.php`. *(Updated: injects ProfileService per Constitution Principle III.)* The controller must:
+  - Inject `ProfileService` via constructor: `public function __construct(private ProfileService $profileService) {}`.
   - Have an `index()` method that gets `$employee = Auth::user()->employee`, checks it exists (redirect if not), and returns `view('employee.profile.index', compact('employee'))`.
-  - Have a `document($type)` method that:
-    1. Gets the employee record.
-    2. Validates `$type` is either `national_id` or `contract`.
-    3. Gets the file path: if `$type == 'national_id'`, use `$employee->national_id_image`; if `contract`, use `$employee->contract_image`.
-    4. If the file path is null or the file doesn't exist in storage, abort(404).
-    5. Return `response()->file(storage_path('app/private/' . $filePath))`.
+  - Have a `document(string $type)` method that:
+    1. Gets `$employee = Auth::user()->employee`.
+    2. Calls `$absolutePath = $this->profileService->getDocumentPath($employee, $type)`.
+    3. If `$absolutePath` is null, abort(404).
+    4. Return `response()->file($absolutePath)`.
 
 - [x] T017 [US2] Add profile routes to `routes/employee.php`. Inside the existing middleware group, add:
   ```php
@@ -218,9 +232,9 @@
 
 - [x] T025 [US3] Create `resources/views/client/announcements/index.blade.php`. Use `@extends('layouts.app')`. Display a table of announcements with columns: Title, Published Date, Actions (Edit/Delete). Include a "Create Announcement" button linking to the create page. Use `$announcements->links()` for pagination. Add CSRF-protected delete forms with confirmation. All text via `__()`.
 
-- [x] T026 [US3] Create `resources/views/client/announcements/create.blade.php`. Use `@extends('layouts.app')`. Show a form with fields: `title` (text input, required), `body` (textarea, required, placeholder text). Submit via POST to `route('client.announcements.store')`. Include `@csrf`. Show `@error` validation messages. All text via `__()`.
+- [x] T026 [US3] Create `resources/views/client/announcements/create.blade.php`. Use `@extends('layouts.app')`. Show a form with fields: `title` (text input, required), `body` (textarea, required, placeholder text, `maxlength="5000"`). *(I2: Add a character count hint below the textarea, e.g. a `<p class="text-sm text-gray-400">Maximum 5,000 characters.</p>` — aligns with the server-side max:5000 validation in T022.)* Submit via POST to `route('client.announcements.store')`. Include `@csrf`. Show `@error` validation messages. All text via `__()`.
 
-- [x] T027 [US3] Create `resources/views/client/announcements/edit.blade.php`. Use `@extends('layouts.app')`. Same as create but pre-filled with `$announcement->title` and `$announcement->body`. Submit via PUT to `route('client.announcements.update', $announcement)`. Include `@csrf` and `@method('PUT')`.
+- [x] T027 [US3] Create `resources/views/client/announcements/edit.blade.php`. Use `@extends('layouts.app')`. Same as create but pre-filled with `$announcement->title` and `$announcement->body`. Include the same `maxlength="5000"` attribute and character count hint on the textarea (same as T026). Submit via PUT to `route('client.announcements.update', $announcement)`. Include `@csrf` and `@method('PUT')`.
 
 - [x] T028 [US3] Create `resources/views/employee/announcements/index.blade.php`. Use `@extends('layouts.employee')`. Display a list/feed of announcements showing: title (bold), published date, and body text (display with `nl2br(e($announcement->body))` to preserve line breaks safely). Use `$announcements->links()` for pagination. If empty, show `{{ __('No announcements yet.') }}`. All text via `__()`.
 
@@ -233,6 +247,8 @@
 **Goal**: Scaffold the leave balance and history page with an empty state that's ready for Phase 4 integration.
 
 **Independent Test**: Log in as employee → navigate to `/employee/leaves` → see a friendly empty state message.
+
+> **FR-007 Deferred** *(U3)*: FR-007 requires displaying employee leave balance breakdown by type and leave request history. This full implementation is **deferred pending completion of the Leave Management module (Phase 4)**. The tasks below create only the routing and empty-state scaffold. When Phase 4 is complete, this phase must be revisited: `LeaveController` must be updated to inject a `LeaveService`, and the view must be updated to render real data. Track as a dependency: Phase 4 → Phase 6 full implementation.
 
 ### Implementation for User Story 4
 
@@ -256,7 +272,7 @@
   - `resources/views/employee/payslips/index.blade.php`
   - `resources/views/employee/payslips/show.blade.php`
 
-- [x] T033 [P] Update `resources/views/layouts/app.blade.php` employee navigation section (lines 57-61). Since employees now use the sidebar layout, the top-nav links for employees are no longer needed. Replace the `@elseif(Auth::user()->isEmployee())` block to only show a single link to `/employee/dashboard` (employees will use the sidebar for the rest).
+- [x] T033 [P] Update `resources/views/layouts/app.blade.php` employee navigation section (lines 57-61). Since employees now use the sidebar layout, the top-nav links for employees are no longer needed. Replace the `@elseif(Auth::user()->isEmployee())` block with `@elseif(Auth::check() && Auth::user()->isEmployee())` and reduce it to a single link to `/employee/dashboard`. *(I4: `Auth::user()` can be null on guest pages — calling `->isEmployee()` on null throws a fatal error. Always guard with `Auth::check()` before calling instance methods on the user object.)*
 
 - [x] T034 [P] Verify all Arabic translations in `lang/ar.json` are complete for Phase 6. Open the file, search for any keys added in T002 that are missing Arabic values, and add them.
 
@@ -277,6 +293,21 @@
 - **Phase 5 (US3 Announcements)**: Depends on Phase 2 (Announcement entity). Independent of US1/US2.
 - **Phase 6 (US4 Leaves)**: Depends on Phase 2. Independent of all other stories.
 - **Phase 7 (Polish)**: Depends on all user stories being complete.
+
+### FR-008 Tenant Isolation Coverage Map (U1)
+
+FR-008 ("employees may only see data belonging to their own company") is a cross-cutting requirement. The following tasks collectively satisfy it across all portal sections:
+
+| Portal Section | Isolation Test Task | Mechanism |
+|---------------|---------------------|-----------|
+| Dashboard (tasks/assets/payslips counts) | T010 `test_employee_cannot_see_other_employees_data()` | DashboardService scopes queries to `employee_id` |
+| Profile (personal info) | T015 `test_employee_can_view_own_profile()` | ProfileController loads from `Auth::user()->employee` |
+| Profile (document access) | T015 `test_employee_cannot_access_another_employees_document()` | ProfileService resolves path from authenticated employee only |
+| Announcements feed | T020 `test_employee_cannot_see_other_client_announcements()` | AnnouncementService scopes by `employee->client_id` |
+| Payslips | *(covered by Phase 5 existing tests — no new isolation test needed)* | Existing `PayslipController` scopes by employee |
+| Tasks | *(covered by Phase 5 existing tests — no new isolation test needed)* | Existing `TaskController` scopes by employee |
+| Assets | *(covered by Phase 5 existing tests — no new isolation test needed)* | Existing `AssetController` scopes by employee |
+| Leaves | T029 (scaffold — no data yet) | Deferred to Phase 4 |
 
 ### Within Each User Story
 

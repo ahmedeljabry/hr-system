@@ -1,47 +1,114 @@
-@extends('layouts.app')
+@extends('layouts.admin')
 
 @section('content')
-<div class="py-12">
-    <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-        <div class="bg-gray-900 overflow-hidden shadow-2xl rounded-3xl p-10 text-white mb-8 relative border border-gray-800">
-            <div class="relative z-10 flex justify-between items-center">
+<div class="mb-8">
+    <div class="bg-white overflow-hidden shadow-sm rounded-2xl p-8 mb-8 border border-gray-100">
+        <div class="flex justify-between items-center">
+            <div>
+                <h1 class="text-3xl font-bold text-gray-900 mb-2">{{ __('Super Admin Dashboard') }}</h1>
+                <p class="text-gray-600">{{ __('System overview and management tools') }}</p>
+            </div>
+            <div class="bg-blue-50 px-4 py-2 rounded-xl">
+                <span class="text-sm font-medium text-blue-700">{{ __('Super Admin') }}</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Stats Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6 mb-8">
+        <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+            <div class="flex items-center justify-between">
                 <div>
-                    <h1 class="text-4xl font-extrabold mb-2 text-blue-400">نظام إدارة الموارد البشرية</h1>
-                    <p class="text-gray-400 text-lg">لوحة تحكم مدير النظام - Super Admin Dashboard</p>
+                    <p class="text-sm font-medium text-gray-600">{{ __('Total Clients') }}</p>
+                    <p class="text-3xl font-bold text-gray-900">{{ number_format($stats['total_clients']) }}</p>
                 </div>
-                <div class="bg-gray-800 p-4 rounded-2xl border border-gray-700">
-                    <span class="text-xs uppercase font-bold text-gray-500 tracking-widest block mb-1">دور المستخدم / Role</span>
-                    <span class="text-blue-400 font-bold">مدير النظام (Super Admin)</span>
+                <div class="bg-blue-50 p-3 rounded-xl">
+                    <span class="text-xl">👥</span>
                 </div>
             </div>
-            <!-- Grid effect -->
-            <div class="absolute inset-0 opacity-10" style="background-image: radial-gradient(#3b82f6 1px, transparent 1px); background-size: 20px 20px;"></div>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
-            <a href="/admin/clients" class="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 hover:border-blue-300 hover:shadow-md transition-all group">
-                <div class="flex items-center space-x-4 {{ app()->getLocale() == 'ar' ? 'space-x-reverse' : '' }} mb-4">
-                    <div class="bg-blue-50 p-4 rounded-xl group-hover:bg-blue-600 group-hover:text-white transition-colors">
-                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
-                    </div>
+        <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm font-medium text-gray-600">{{ __('Total Employees') }}</p>
+                    <p class="text-3xl font-bold text-gray-900">{{ number_format($stats['total_employees']) }}</p>
                 </div>
-                <h3 class="text-xl font-bold text-gray-800 mb-2">إدارة العملاء</h3>
-                <p class="text-sm text-gray-400">عرض وإدارة جميع شركات العملاء والاشتراكات</p>
-                <div class="mt-6 flex items-center text-blue-600 font-bold text-sm">
-                    <span>عرض التفاصيل</span>
-                    <svg class="w-4 h-4 ms-2 transform rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                <div class="bg-green-50 p-3 rounded-xl">
+                    <span class="text-xl">👤</span>
                 </div>
-            </a>
-            
-            <!-- Other card placeholders -->
-            <div class="bg-white p-8 rounded-2xl border border-dashed border-gray-200 flex flex-col items-center justify-center text-gray-300 opacity-60">
-                <p class="font-medium text-sm">إعدادات النظام</p>
             </div>
-            <div class="bg-white p-8 rounded-2xl border border-dashed border-gray-200 flex flex-col items-center justify-center text-gray-300 opacity-60">
-                <p class="font-medium text-sm">تقارير النظام</p>
+        </div>
+
+        <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm font-medium text-gray-600">{{ __('Active Subscriptions') }}</p>
+                    <p class="text-3xl font-bold text-green-600">{{ number_format($stats['active_count']) }}</p>
+                </div>
+                <div class="bg-green-50 p-3 rounded-xl">
+                    <span class="text-xl">✅</span>
+                </div>
             </div>
-            <div class="bg-white p-8 rounded-2xl border border-dashed border-gray-200 flex flex-col items-center justify-center text-gray-300 opacity-60">
-                <p class="font-medium text-sm">سجلات الأمان</p>
+        </div>
+
+        <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm font-medium text-gray-600">{{ __('Suspended Subscriptions') }}</p>
+                    <p class="text-3xl font-bold text-amber-600">{{ number_format($stats['suspended_count']) }}</p>
+                </div>
+                <div class="bg-amber-50 p-3 rounded-xl">
+                    <span class="text-xl">⏸️</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm font-medium text-gray-600">{{ __('Expired Subscriptions') }}</p>
+                    <p class="text-3xl font-bold text-red-600">{{ number_format($stats['expired_count']) }}</p>
+                </div>
+                <div class="bg-red-50 p-3 rounded-xl">
+                    <span class="text-xl">❌</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <a href="{{ route('admin.clients.index') }}" class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 hover:border-blue-300 hover:shadow-md transition-all group">
+            <div class="flex items-center justify-between mb-4">
+                <div>
+                    <h3 class="text-lg font-bold text-gray-900">{{ __('Clients') }}</h3>
+                    <p class="text-sm text-gray-600">{{ __('Manage client subscriptions and view details') }}</p>
+                </div>
+                <div class="bg-blue-50 p-3 rounded-xl group-hover:bg-blue-100 transition-colors">
+                    <span class="text-xl">👥</span>
+                </div>
+            </div>
+            <div class="flex items-center text-blue-600 font-medium text-sm">
+                <span>{{ __('View All Clients') }}</span>
+                <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                </svg>
+            </div>
+        </a>
+
+        <div class="bg-gray-50 p-6 rounded-2xl border border-gray-200 border-dashed">
+            <div class="flex items-center justify-between mb-4">
+                <div>
+                    <h3 class="text-lg font-bold text-gray-400">{{ __('System Reports') }}</h3>
+                    <p class="text-sm text-gray-400">{{ __('Advanced analytics and reporting tools') }}</p>
+                </div>
+                <div class="bg-gray-100 p-3 rounded-xl">
+                    <span class="text-xl text-gray-300">📊</span>
+                </div>
+            </div>
+            <div class="flex items-center text-gray-400 font-medium text-sm">
+                <span>{{ __('Coming Soon') }}</span>
             </div>
         </div>
     </div>

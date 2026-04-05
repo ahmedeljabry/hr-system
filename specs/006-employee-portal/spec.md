@@ -84,9 +84,9 @@ Employees can view their current leave balance breakdown by leave type and see a
 
 ### Functional Requirements
 
-- **FR-001**: System MUST display a personalised employee dashboard with real-time summary widgets for tasks, assets, leave balance, and latest payslip.
+- **FR-001**: System MUST display a personalised employee dashboard with summary widgets for tasks, assets, leave balance, and latest payslip — all data computed at page load (no live/push updates required).
 - **FR-002**: System MUST allow employees to view their own profile information including name, position, hire date, and basic salary.
-- **FR-003**: System MUST serve employee document images (national ID, contract) through authenticated, tenant-scoped file access — not public URLs.
+- **FR-003**: System MUST serve employee document images (national ID, contract) through authenticated, tenant-scoped file access — not public URLs. *(Implements FR-008 for file serving: employees may only access their own documents; attempts to access another employee's document must return 404.)*
 - **FR-004**: System MUST allow clients to create, edit, and delete company announcements with a title, body, and publication date.
 - **FR-005**: System MUST display company announcements to employees in reverse chronological order, scoped to their tenant only.
 - **FR-006**: System MUST paginate announcements (10 per page) for both client management and employee viewing.
@@ -109,7 +109,7 @@ Employees can view their current leave balance breakdown by leave type and see a
 ### Measurable Outcomes
 
 - **SC-001**: Employees can access all portal sections (dashboard, profile, payslips, tasks, assets, announcements) within 2 clicks from login.
-- **SC-002**: Dashboard page loads with all summary widgets in under 3 seconds for an employee with up to 100 records across all modules.
+- **SC-002**: Dashboard page loads with all summary widgets in under 3 seconds for an employee with up to 100 records **per module** (i.e., up to 100 tasks, 100 assets, 100 payslips, and 100 announcements simultaneously).
 - **SC-003**: Zero cross-tenant data leakage — employees never see data from another company in any portal section.
 - **SC-004**: All portal pages render correctly in both Arabic (RTL) and English (LTR) modes without layout breakage.
 - **SC-005**: Client can create and publish an announcement, and all employees of that client can see it within one page refresh.

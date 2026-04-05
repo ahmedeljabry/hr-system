@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Client;
 use App\Services\SubscriptionService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
 
 class ClientController extends Controller
 {
@@ -16,10 +18,27 @@ class ClientController extends Controller
     /**
      * Display a listing of clients.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $clients = Client::latest()->get();
-        return view('admin.clients.index', compact('clients'));
+        $sortable = ['name', 'status', 'subscription_end'];
+        $sort = in_array($request->get('sort'), $sortable) ? $request->get('sort') : 'name';
+        $dir = $request->get('dir') === 'desc' ? 'desc' : 'asc';
+
+        $clients = Client::withCount('employees')
+            ->orderBy($sort, $dir)
+            ->paginate(15)
+            ->withQueryString();
+
+        return view('admin.clients.index', compact('clients', 'sort', 'dir'));
+    }
+
+    /**
+     * Display the specified client.
+     */
+    public function show(Client $client)
+    {
+        $employees = $client->employees()->with('user')->get();
+        return view('admin.clients.show', compact('client', 'employees'));
     }
 
     /**
@@ -31,9 +50,19 @@ class ClientController extends Controller
             'status' => 'required|in:active,suspended,expired',
         ]);
 
+        $old = $client->status;
         $this->subscriptionService->toggleStatus($client, $data['status']);
 
-        return back()->with('success', 'تم تحديث حالة الاشتراك بنجاح.');
+        Log::channel('daily')->info('ADMIN_ACTION', [
+            'admin_id' => Auth::id(),
+            'action' => 'status_change',
+            'target' => 'clients',
+            'record_id' => $client->id,
+            'old' => $old,
+            'new' => $data['status'],
+        ]);
+
+        return back()->with('success', __('Subscription status updated successfully.'));
     }
 
     /**

@@ -1,16 +1,16 @@
 <x-auth-layout>
     <x-auth-split-layout :title="__('messages.register')">
         <x-slot name="branding">
-            <h2 class="text-4xl font-outfit font-bold mb-4 text-primary">انضم إلينا</h2>
+            <h2 class="text-4xl font-outfit font-bold mb-4 text-primary">{{ __('messages.join_us') }}</h2>
             <p class="text-lg font-inter opacity-90 max-w-md mx-auto text-gray-300">
-                وابدأ إدارة مواردك البشرية بكفاءة
+                {{ __('messages.register_subtitle') }}
             </p>
         </x-slot>
 
         <form method="POST" action="{{ route('register') }}" class="space-y-6 w-full mt-4">
             @csrf
 
-            <x-step-indicator :current="1" :total="3" :labels="['الحساب', 'الشركة', 'تأكيد']" />
+            <x-step-indicator :current="1" :total="3" :labels="[__('messages.step_account'), __('messages.step_company'), __('messages.step_confirm')]" />
 
             <div>
                 <label for="name" class="block text-sm font-semibold text-gray-700 mb-2">{{ __('messages.name') }}</label>
@@ -50,8 +50,8 @@
         </form>
 
         <div class="mt-8 text-center border-t border-gray-50 pt-6">
-            <p class="text-sm text-gray-500">لديك حساب بالفعل؟ 
-                <a href="{{ route('login') }}" class="text-secondary font-bold hover:text-primary transition-colors">سجل دخولك هنا</a>
+            <p class="text-sm text-gray-500">{{ __('messages.already_have_account') }} 
+                <a href="{{ route('login') }}" class="text-secondary font-bold hover:text-primary transition-colors">{{ __('messages.login_here') }}</a>
             </p>
         </div>
     </x-auth-split-layout>

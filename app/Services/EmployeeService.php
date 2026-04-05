@@ -51,6 +51,10 @@ class EmployeeService
             $data['other_documents'] = $paths;
         }
 
+        $data['housing_allowance'] = $data['housing_allowance'] ?? 0;
+        $data['transportation_allowance'] = $data['transportation_allowance'] ?? 0;
+        $data['other_allowances'] = $data['other_allowances'] ?? 0;
+
         return \Illuminate\Support\Facades\DB::transaction(function () use ($clientId, $data) {
             // Create User account for Employee
             $user = \App\Models\User::create([
@@ -102,6 +106,10 @@ class EmployeeService
             $data['other_documents'] = array_merge($existingPaths, $newPaths);
         }
 
+        $data['housing_allowance'] = $data['housing_allowance'] ?? 0;
+        $data['transportation_allowance'] = $data['transportation_allowance'] ?? 0;
+        $data['other_allowances'] = $data['other_allowances'] ?? 0;
+
         return \Illuminate\Support\Facades\DB::transaction(function () use ($data, $employee) {
             // Update corresponding User account
             if ($employee->user) {
@@ -116,6 +124,8 @@ class EmployeeService
                 
                 $employee->user->update($userData);
             }
+
+            unset($data['password']);
 
             $employee->update($data);
             return $employee->fresh();

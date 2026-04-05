@@ -19,7 +19,7 @@ return [
     'update' => 'تحديث البيانات',
     'cancel' => 'إلغاء',
     'back' => 'رجوع',
-    
+
     // Messages
     'employee_created' => 'تم إضافة الموظف بنجاح.',
     'employee_updated' => 'تم تحديث بيانات الموظف بنجاح.',
@@ -49,7 +49,7 @@ return [
     'payroll_desc' => 'معالجة الرواتب، البدلات، والاقتطاعات بدقة وسهولة.',
     'leaves_desc' => 'نظام متكامل لطلب ومراجعة الإجازات بأنواعها المختلفة.',
     'reports_desc' => 'تحليلات عميقة وتقارير مفصلة لاتخاذ قرارات مبنية على البيانات.',
-    
+
     // Statistics & Labels
     'growth_rate' => 'معدل النمو',
     'team_efficiency' => 'كفاءة الفريق',
@@ -87,7 +87,7 @@ return [
     'contract_image' => 'صورة عقد العمل',
     'cv_file' => 'السيرة الذاتية',
     'other_documents_label' => 'مستندات أخرى',
-    'upload_file' => 'ارفع ملفاً',
+    'upload_file' => 'ارفع ملفات',
     'select_multiple_files' => 'يمكنك اختيار عدة ملفات',
     'add_more_files' => 'إضافة المزيد من الملفات',
     'change_file' => 'تغيير الملف',
@@ -152,7 +152,7 @@ return [
     'asset_created' => 'تم تسجيل الأصل بنجاح.',
     'asset_updated' => 'تم تحديث بيانات الأصل بنجاح.',
     'assets_empty_desc' => 'قم بتسجيل المعدات وإسنادها للموظفين لتتبع تنظيمي أفضل.',
-    
+
     // Statuses & Actions
     'assigned' => 'مسند',
     'available' => 'متاح',
@@ -172,7 +172,7 @@ return [
     'days' => 'أيام',
     'no_leave_requests' => 'لم يتم العثور على طلبات إجازة',
     'no_leave_requests_desc' => 'كل شيء جاهز! لا توجد طلبات إجازة بانتظار مراجعتك حالياً.',
-    
+
     // Payroll Runs
     'payroll_run' => 'تشغيل الرواتب',
     'payroll_run_desc' => 'إصدار مسيرات الرواتب الشهرية والتحقق منها.',
@@ -183,4 +183,23 @@ return [
     'no_payroll_runs' => 'لا توجد مسيرات رواتب مصدرة.',
     'run_payroll' => 'بدء مسير رواتب',
     'payroll_run_created' => 'تم بدء مسير الرواتب بنجاح.',
+
+    // Authentication
+    'login' => 'تسجيل الدخول',
+    'register' => 'تسجيل جديد',
+    'register_now' => 'سجل الآن',
+    'name' => 'الاسم الكامل',
+    'company_name' => 'اسم الشركة',
+    'confirm_password' => 'تأكيد كلمة المرور',
+    'remember_me' => 'تذكرني',
+    'forgot_password' => 'نسيت كلمة المرور؟',
+    'no_account' => 'ليس لديك حساب؟',
+    'login_subtitle' => 'سجل دخولك للوصول إلى لوحة الإدارة',
+    'join_us' => 'انضم إلينا',
+    'register_subtitle' => 'وابدأ إدارة مواردك البشرية بكفاءة',
+    'already_have_account' => 'لديك حساب بالفعل؟',
+    'login_here' => 'سجل دخولك هنا',
+    'step_account' => 'الحساب',
+    'step_company' => 'الشركة',
+    'step_confirm' => 'تأكيد',
 ];

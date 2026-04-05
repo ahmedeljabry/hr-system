@@ -48,13 +48,11 @@
         </div>
 
         <!-- Action Buttons -->
-        <div class="mt-auto pt-6 flex flex-col sm:flex-row gap-3 border-t border-gray-50">
+        <div class="mt-auto pt-6 flex flex-col sm:flex-row gap-3 border-t border-gray-50 items-center">
             <a href="{{ route('client.employees.show', $employee) }}" 
-               class="flex-1 inline-flex items-center justify-center px-4 py-3 bg-secondary text-white text-xs font-black rounded-2xl transition-all duration-300 hover:shadow-lg active:scale-95 group/view">
+               class="flex-1 w-full inline-flex items-center justify-center px-4 py-3 bg-secondary text-white text-xs font-black rounded-2xl transition-all duration-300 hover:shadow-lg active:scale-95 group/view">
+                <svg class="w-4 h-4 me-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
                 {{ __('messages.view') }}
-                <svg class="w-4 h-4 ms-2 group-hover/view:translate-x-1 transition-transform rtl:group-hover/view:-translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                </svg>
             </a>
             <a href="{{ route('client.employees.edit', $employee) }}" 
                class="inline-flex items-center justify-center p-3 bg-primary/10 text-primary border border-primary/20 rounded-2xl hover:bg-primary hover:text-secondary transition-all duration-300 hover:-translate-y-1 active:translate-y-0"
@@ -63,17 +61,17 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                 </svg>
             </a>
-            <form action="{{ route('client.employees.destroy', $employee) }}" method="POST" onsubmit="return confirm('{{ __('messages.confirm_delete_employee') }}')">
+            
+            <form id="delete-grid-{{ $employee->id }}" action="{{ route('client.employees.destroy', $employee->id) }}" method="POST" style="display: none;">
                 @csrf
                 @method('DELETE')
-                <button type="submit" 
-                        class="inline-flex items-center justify-center p-3 bg-red-50 text-red-500 border border-red-100/50 rounded-2xl hover:bg-red-500 hover:text-white transition-all duration-300 hover:-translate-y-1 active:translate-y-0 shadow-sm hover:shadow-red-200"
-                        title="{{ __('messages.delete') }}">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                    </svg>
-                </button>
             </form>
+            <button type="button" 
+                    onclick="if(confirm('{{ __('messages.confirm_delete_employee') }}')) document.getElementById('delete-grid-{{ $employee->id }}').submit()"
+                    class="inline-flex items-center justify-center p-3 text-red-600 hover:text-white hover:bg-red-500 rounded-2xl transition-all duration-300 border border-red-500/10 hover:border-red-500 font-bold bg-red-50/30"
+                    title="{{ __('messages.delete') }}">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+            </button>
         </div>
     </div>
 </div>

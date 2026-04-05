@@ -393,87 +393,103 @@
 
                         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                             <!-- ID / IQAMA Copy -->
-                            <div class="space-y-3">
+                            <div class="space-y-3" x-data="{ fileName: '{{ $employee->national_id_image ? __('messages.change_file') : '' }}' }">
                                 <label
                                     class="block text-[10px] font-black text-gray-400 uppercase tracking-[0.2em]">{{ __('messages.national_id_image') }}</label>
                                 <label class="relative group block h-32 cursor-pointer">
                                     <input type="file" name="national_id_image"
                                         class="absolute inset-0 w-full h-full opacity-0 z-10 cursor-pointer"
-                                        accept="image/*,.pdf">
+                                        accept="image/*,.pdf"
+                                        @change="fileName = $event.target.files[0] ? $event.target.files[0].name : '{{ $employee->national_id_image ? __('messages.change_file') : '' }}'">
                                     <div
-                                        class="absolute inset-0 border-2 border-dashed {{ $employee->national_id_image ? 'border-primary/30 bg-primary/5' : 'border-gray-100 bg-gray-50' }} rounded-2xl group-hover:border-primary group-hover:bg-primary/5 transition-all duration-300 flex flex-col items-center justify-center">
-                                        <svg class="w-6 h-6 {{ $employee->national_id_image ? 'text-primary' : 'text-gray-300' }} group-hover:text-primary mb-1 transition-colors"
+                                        class="absolute inset-0 border-2 border-dashed {{ $employee->national_id_image ? 'border-primary/30 bg-primary/5' : 'border-gray-100 bg-gray-50' }} rounded-2xl group-hover:border-primary group-hover:bg-primary/5 transition-all duration-300 flex flex-col items-center justify-center overflow-hidden px-4">
+                                        <svg x-show="!fileName" class="w-6 h-6 {{ $employee->national_id_image ? 'text-primary' : 'text-gray-300' }} group-hover:text-primary mb-1 transition-colors"
                                             fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                 d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z">
                                             </path>
                                         </svg>
-                                        <span
-                                            class="text-[9px] font-black {{ $employee->national_id_image ? 'text-secondary' : 'text-gray-400' }} uppercase tracking-widest text-center">{{ $employee->national_id_image ? __('messages.change_file') : (__('messages.upload_file') ?? 'Upload File') }}</span>
+                                        <svg x-show="fileName" class="w-6 h-6 text-emerald-500 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path>
+                                        </svg>
+                                        <span x-text="fileName ? fileName : '{{ __('messages.upload_file') ?? 'Upload File' }}'"
+                                            class="text-[9px] font-black {{ $employee->national_id_image ? 'text-secondary' : 'text-gray-400' }} uppercase tracking-widest text-center truncate w-full"></span>
                                     </div>
                                 </label>
                             </div>
 
                             <!-- CV / Resume -->
-                            <div class="space-y-3">
+                            <div class="space-y-3" x-data="{ fileName: '{{ $employee->cv_file ? __('messages.change_file') : '' }}' }">
                                 <label
                                     class="block text-[10px] font-black text-gray-400 uppercase tracking-[0.2em]">{{ __('messages.cv_file') }}</label>
                                 <label class="relative group block h-32 cursor-pointer">
                                     <input type="file" name="cv_file"
                                         class="absolute inset-0 w-full h-full opacity-0 z-10 cursor-pointer"
-                                        accept=".pdf,.doc,.docx">
+                                        accept=".pdf,.doc,.docx"
+                                        @change="fileName = $event.target.files[0] ? $event.target.files[0].name : '{{ $employee->cv_file ? __('messages.change_file') : '' }}'">
                                     <div
-                                        class="absolute inset-0 border-2 border-dashed {{ $employee->cv_file ? 'border-primary/30 bg-primary/5' : 'border-gray-100 bg-gray-50' }} rounded-2xl group-hover:border-primary group-hover:bg-primary/5 transition-all duration-300 flex flex-col items-center justify-center">
-                                        <svg class="w-6 h-6 {{ $employee->cv_file ? 'text-primary' : 'text-gray-300' }} group-hover:text-primary mb-1 transition-colors"
+                                        class="absolute inset-0 border-2 border-dashed {{ $employee->cv_file ? 'border-primary/30 bg-primary/5' : 'border-gray-100 bg-gray-50' }} rounded-2xl group-hover:border-primary group-hover:bg-primary/5 transition-all duration-300 flex flex-col items-center justify-center overflow-hidden px-4">
+                                        <svg x-show="!fileName" class="w-6 h-6 {{ $employee->cv_file ? 'text-primary' : 'text-gray-300' }} group-hover:text-primary mb-1 transition-colors"
                                             fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                 d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
                                             </path>
                                         </svg>
-                                        <span
-                                            class="text-[9px] font-black {{ $employee->cv_file ? 'text-secondary' : 'text-gray-400' }} uppercase tracking-widest text-center">{{ $employee->cv_file ? __('messages.change_file') : (__('messages.upload_file') ?? 'Upload File') }}</span>
+                                        <svg x-show="fileName" class="w-6 h-6 text-emerald-500 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path>
+                                        </svg>
+                                        <span x-text="fileName ? fileName : '{{ __('messages.upload_file') ?? 'Upload File' }}'"
+                                            class="text-[9px] font-black {{ $employee->cv_file ? 'text-secondary' : 'text-gray-400' }} uppercase tracking-widest text-center truncate w-full"></span>
                                     </div>
                                 </label>
                             </div>
 
                             <!-- Contract -->
-                            <div class="space-y-3">
+                            <div class="space-y-3" x-data="{ fileName: '{{ $employee->contract_image ? __('messages.change_file') : '' }}' }">
                                 <label
                                     class="block text-[10px] font-black text-gray-400 uppercase tracking-[0.2em]">{{ __('messages.contract_image') }}</label>
                                 <label class="relative group block h-32 cursor-pointer">
                                     <input type="file" name="contract_image"
                                         class="absolute inset-0 w-full h-full opacity-0 z-10 cursor-pointer"
-                                        accept="image/*,.pdf">
+                                        accept="image/*,.pdf"
+                                        @change="fileName = $event.target.files[0] ? $event.target.files[0].name : '{{ $employee->contract_image ? __('messages.change_file') : '' }}'">
                                     <div
-                                        class="absolute inset-0 border-2 border-dashed {{ $employee->contract_image ? 'border-primary/30 bg-primary/5' : 'border-gray-100 bg-gray-50' }} rounded-2xl group-hover:border-primary group-hover:bg-primary/5 transition-all duration-300 flex flex-col items-center justify-center">
-                                        <svg class="w-6 h-6 {{ $employee->contract_image ? 'text-primary' : 'text-gray-300' }} group-hover:text-primary mb-1 transition-colors"
+                                        class="absolute inset-0 border-2 border-dashed {{ $employee->contract_image ? 'border-primary/30 bg-primary/5' : 'border-gray-100 bg-gray-50' }} rounded-2xl group-hover:border-primary group-hover:bg-primary/5 transition-all duration-300 flex flex-col items-center justify-center overflow-hidden px-4">
+                                        <svg x-show="!fileName" class="w-6 h-6 {{ $employee->contract_image ? 'text-primary' : 'text-gray-300' }} group-hover:text-primary mb-1 transition-colors"
                                             fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                 d="M12 11c0 3.517-1.009 6.799-2.753 9.571m-3.44-2.04l.054-.09A10.003 10.003 0 0012 20a10.003 10.003 0 006.255-2.164l.054.09A9.991 9.991 0 0112 22c-5.523 0-10-4.477-10-10 0-2.39 1.833-4.35 4.14-4.632M12 11c0-5.523 4.477-10 10-10 2.39 0 4.35 1.833 4.632 4.14M12 11c0 5.523-4.477 10-10 10-2.39 0-4.35-1.833-4.632-4.14M12 11c0-5.523 4.477-10 10-10">
                                             </path>
                                         </svg>
-                                        <span
-                                            class="text-[9px] font-black {{ $employee->contract_image ? 'text-secondary' : 'text-gray-400' }} uppercase tracking-widest text-center">{{ $employee->contract_image ? __('messages.change_file') : (__('messages.upload_file') ?? 'Upload File') }}</span>
+                                        <svg x-show="fileName" class="w-6 h-6 text-emerald-500 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path>
+                                        </svg>
+                                        <span x-text="fileName ? fileName : '{{ __('messages.upload_file') ?? 'Upload File' }}'"
+                                            class="text-[9px] font-black {{ $employee->contract_image ? 'text-secondary' : 'text-gray-400' }} uppercase tracking-widest text-center truncate w-full"></span>
                                     </div>
                                 </label>
                             </div>
 
                             <!-- Other Documents -->
-                            <div class="space-y-3">
+                            <div class="space-y-3" x-data="{ fileCount: 0 }">
                                 <label
                                     class="block text-[10px] font-black text-gray-400 uppercase tracking-[0.2em]">{{ __('messages.other_documents_label') }}</label>
                                 <label class="relative group block h-32 cursor-pointer">
                                     <input type="file" name="other_documents[]" multiple
-                                        class="absolute inset-0 w-full h-full opacity-0 z-10 cursor-pointer">
+                                        class="absolute inset-0 w-full h-full opacity-0 z-10 cursor-pointer"
+                                        @change="fileCount = $event.target.files.length">
                                     <div
-                                        class="absolute inset-0 border-2 border-dashed {{ !empty($employee->other_documents) ? 'border-primary/30 bg-primary/5' : 'border-gray-100 bg-gray-50' }} rounded-2xl group-hover:border-primary group-hover:bg-primary/5 transition-all duration-300 flex flex-col items-center justify-center">
-                                        <svg class="w-6 h-6 {{ !empty($employee->other_documents) ? 'text-primary' : 'text-gray-300' }} group-hover:text-primary mb-1 transition-colors"
+                                        class="absolute inset-0 border-2 border-dashed {{ !empty($employee->other_documents) ? 'border-primary/30 bg-primary/5' : 'border-gray-100 bg-gray-50' }} rounded-2xl group-hover:border-primary group-hover:bg-primary/5 transition-all duration-300 flex flex-col items-center justify-center overflow-hidden px-4">
+                                        <svg x-show="fileCount === 0" class="w-6 h-6 {{ !empty($employee->other_documents) ? 'text-primary' : 'text-gray-300' }} group-hover:text-primary mb-1 transition-colors"
                                             fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                 d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
                                         </svg>
-                                        <span
-                                            class="text-[9px] font-black {{ !empty($employee->other_documents) ? 'text-secondary' : 'text-gray-400' }} uppercase tracking-widest text-center">{{ !empty($employee->other_documents) ? __('messages.add_more_files') ?? 'Add More Files' : __('messages.select_multiple_files') }}</span>
+                                        <svg x-show="fileCount > 0" class="w-6 h-6 text-emerald-500 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path>
+                                        </svg>
+                                        <span x-text="fileCount > 0 ? fileCount + ' {{ __('messages.files_selected') ?? 'files selected' }}' : '{{ !empty($employee->other_documents) ? __('messages.add_more_files') : __('messages.select_multiple_files') }}'"
+                                            class="text-[9px] font-black {{ !empty($employee->other_documents) ? 'text-secondary' : 'text-gray-400' }} uppercase tracking-widest text-center truncate w-full"></span>
                                     </div>
                                 </label>
                             </div>

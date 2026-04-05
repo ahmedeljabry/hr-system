@@ -97,6 +97,7 @@ return [
     'add_more_files' => 'إضافة المزيد من الملفات',
     'change_file' => 'تغيير الملف',
     'total_salary' => 'إجمالي الراتب',
+    'files_selected' => 'ملفات مختارة',
 
     // Leave Types Expansion
     'config_leave_types_title' => 'إعدادات أنواع الإجازات',

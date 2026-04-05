@@ -73,15 +73,29 @@ class EmployeeController extends Controller
         return redirect()->route('client.employees.index')->with('success', __('messages.employee_updated'));
     }
 
-    public function destroy(Employee $employee)
+    /**
+     * Remove the specified employee from storage.
+     */
+    public function destroy(int $id)
     {
-        if ($employee->client_id !== $this->getClientId()) {
-            abort(403);
+        try {
+            \Illuminate\Support\Facades\Log::info("Destroy command received for employee ID: $id");
+            
+            $success = $this->employeeService->delete($this->getClientId(), $id);
+            
+            if ($success) {
+                \Illuminate\Support\Facades\Log::info("Employee $id deleted successfully.");
+                return redirect()->route('client.employees.index')->with('success', __('messages.employee_deleted') ?? 'Employee deleted successfully.');
+            }
+            
+            \Illuminate\Support\Facades\Log::warning("Employee $id could not be deleted (not found or service failed).");
+            return redirect()->route('client.employees.index')->with('error', 'Employee could not be found or has already been deleted.');
+            
+        } catch (\Exception $e) {
+            \Illuminate\Support\Facades\Log::error("CRITICAL ERROR during employee $id deletion: " . $e->getMessage());
+            \Illuminate\Support\Facades\Log::error($e->getTraceAsString());
+            return redirect()->route('client.employees.index')->with('error', 'An error occurred while deleting: ' . $e->getMessage());
         }
-
-        $this->employeeService->delete($this->getClientId(), $employee->id);
-        
-        return redirect()->route('client.employees.index')->with('success', __('messages.employee_deleted'));
     }
 
     public function importForm()

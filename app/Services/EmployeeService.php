@@ -139,17 +139,14 @@ class EmployeeService
 
         return \Illuminate\Support\Facades\DB::transaction(function () use ($employee) {
             // Delete associated user account if it exists
-            if ($employee->user_id) {
-                $user = \App\Models\User::find($employee->user_id);
-                if ($user) {
-                    $user->delete();
-                }
+            if ($employee->user) {
+                $employee->user->delete();
             }
 
             // Optionally clean up other documents if any
             // We keep them in storage for soft deletes, but they could be archived.
 
-            return $employee->delete();
+            return (bool) $employee->delete();
         });
     }
 }

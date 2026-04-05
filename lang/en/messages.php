@@ -102,6 +102,7 @@ return [
     'add_more_files' => 'Add More Files',
     'change_file' => 'Change File',
     'total_salary' => 'Total Salary',
+    'files_selected' => 'files selected',
 
     // Leave Types Expansion
     'config_leave_types_title' => 'Leave Type Settings',

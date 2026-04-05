@@ -50,7 +50,42 @@
             </div>
         @endif
 
-        <form action="{{ route('client.attendance.store') }}" method="POST">
+        <form action="{{ route('client.attendance.store') }}" method="POST"
+              x-data="{ 
+                saving: false,
+                lastSaved: null,
+                async saveAttendance(employeeId, status, notes = null) {
+                    this.saving = true;
+                    this.lastSaved = employeeId;
+                    const formData = new FormData();
+                    formData.append('_token', '{{ csrf_token() }}');
+                    formData.append('date', '{{ $date }}');
+                    formData.append(`attendance[${employeeId}][status]`, status || document.querySelector(`input[name='attendance[${employeeId}][status]']:checked`)?.value);
+                    if (notes !== null) {
+                        formData.append(`attendance[${employeeId}][notes]`, notes);
+                    } else {
+                        const noteInput = document.querySelector(`input[name='attendance[${employeeId}][notes]']`);
+                        if (noteInput) formData.append(`attendance[${employeeId}][notes]`, noteInput.value);
+                    }
+                    
+                    try {
+                        const response = await fetch('{{ route('client.attendance.store') }}', {
+                            method: 'POST',
+                            body: formData,
+                            headers: { 'X-Requested-With': 'XMLHttpRequest' }
+                        });
+                        const data = await response.json();
+                        if (data.success) {
+                            // Optional: Show a subtle success indicator
+                            console.log('Saved:', employeeId);
+                        }
+                    } catch (e) {
+                        console.error('Save failed:', e);
+                    } finally {
+                        setTimeout(() => { if (this.lastSaved === employeeId) this.saving = false; }, 1000);
+                    }
+                }
+              }">
             @csrf
             <input type="hidden" name="date" value="{{ $date }}">
 
@@ -66,13 +101,14 @@
                                 <th class="px-4 py-6 text-center text-[11px] font-black text-gray-400 uppercase tracking-[0.2em]">{{ __('messages.absent') ?? __('Absent') }}</th>
                                 <th class="px-4 py-6 text-center text-[11px] font-black text-gray-400 uppercase tracking-[0.2em]">{{ __('messages.leave') ?? __('Leave') }}</th>
                                 <th class="px-8 py-6 text-left text-[11px] font-black text-gray-400 uppercase tracking-[0.2em] {{ app()->getLocale() == 'ar' ? 'text-right' : '' }}">{{ __('messages.notes') ?? __('Notes') }}</th>
+                                <th class="px-4 py-6 text-center text-[11px] font-black text-gray-400 uppercase tracking-[0.2em]">{{ __('messages.actions') ?? __('Actions') }}</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-50">
                             @forelse($employees as $employee)
                                 @php 
                                     $record = $records->get($employee->id);
-                                    $currentStatus = old("attendance.{$employee->id}.status", $record?->status ?: 'present');
+                                    $currentStatus = old("attendance.{$employee->id}.status", $record?->status);
                                 @endphp
                                 <tr class="hover:bg-gray-50/50 transition-all duration-300">
                                     <td class="px-8 py-6 whitespace-nowrap">
@@ -80,17 +116,25 @@
                                             @php
                                                 $displayName = app()->getLocale() == 'ar' ? $employee->name_ar : ($employee->name_en ?? $employee->name_ar);
                                             @endphp
-                                            <x-avatar :name="$displayName" size="md" class="rounded-2xl shadow-sm border border-gray-100" />
-                                            <div>
-                                                <div class="text-base font-black text-secondary tracking-tight capitalize">{{ $displayName }}</div>
-                                                <div class="text-[10px] text-gray-400 font-bold uppercase tracking-widest">{{ $employee->position }}</div>
-                                            </div>
+                                            <a href="{{ route('client.employees.show', $employee) }}" class="flex items-center gap-3 group/profile">
+                                                <x-avatar :name="$displayName" size="md" class="rounded-2xl shadow-sm border border-gray-100 group-hover/profile:border-primary transition-all shadow-sm" />
+                                                <div>
+                                                    <div class="flex items-center gap-2">
+                                                        <div class="text-base font-black text-secondary tracking-tight capitalize group-hover/profile:text-primary transition-colors">{{ $displayName }}</div>
+                                                        <template x-if="saving && lastSaved == {{ $employee->id }}">
+                                                            <span class="inline-flex w-1.5 h-1.5 bg-emerald-500 rounded-full animate-ping"></span>
+                                                        </template>
+                                                    </div>
+                                                    <div class="text-[10px] text-gray-400 font-bold uppercase tracking-widest">{{ $employee->position }}</div>
+                                                </div>
+                                            </a>
                                         </div>
                                     </td>
                                     <td class="px-4 py-6 text-center">
                                         <label class="inline-flex flex-col items-center cursor-pointer group">
                                             <input type="radio" name="attendance[{{ $employee->id }}][status]" value="present" 
                                                 {{ $currentStatus == 'present' ? 'checked' : '' }}
+                                                @change="saveAttendance({{ $employee->id }}, 'present')"
                                                 class="peer hidden">
                                             <div class="w-10 h-10 rounded-2xl bg-gray-50 border-2 border-transparent peer-checked:bg-emerald-500 peer-checked:border-emerald-200 flex items-center justify-center text-gray-300 peer-checked:text-white transition-all duration-300 group-hover:scale-110 shadow-sm">
                                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
@@ -102,6 +146,7 @@
                                         <label class="inline-flex flex-col items-center cursor-pointer group">
                                             <input type="radio" name="attendance[{{ $employee->id }}][status]" value="late" 
                                                 {{ $currentStatus == 'late' ? 'checked' : '' }}
+                                                @change="saveAttendance({{ $employee->id }}, 'late')"
                                                 class="peer hidden">
                                             <div class="w-10 h-10 rounded-2xl bg-gray-50 border-2 border-transparent peer-checked:bg-amber-500 peer-checked:border-amber-200 flex items-center justify-center text-gray-300 peer-checked:text-white transition-all duration-300 group-hover:scale-110 shadow-sm">
                                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
@@ -113,6 +158,7 @@
                                         <label class="inline-flex flex-col items-center cursor-pointer group">
                                             <input type="radio" name="attendance[{{ $employee->id }}][status]" value="absent" 
                                                 {{ $currentStatus == 'absent' ? 'checked' : '' }}
+                                                @change="saveAttendance({{ $employee->id }}, 'absent')"
                                                 class="peer hidden">
                                             <div class="w-10 h-10 rounded-2xl bg-gray-50 border-2 border-transparent peer-checked:bg-red-500 peer-checked:border-red-200 flex items-center justify-center text-gray-300 peer-checked:text-white transition-all duration-300 group-hover:scale-110 shadow-sm">
                                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M6 18L18 6M6 6l12 12"></path></svg>
@@ -124,6 +170,7 @@
                                         <label class="inline-flex flex-col items-center cursor-pointer group">
                                             <input type="radio" name="attendance[{{ $employee->id }}][status]" value="leave" 
                                                 {{ $currentStatus == 'leave' ? 'checked' : '' }}
+                                                @change="saveAttendance({{ $employee->id }}, 'leave')"
                                                 class="peer hidden">
                                             <div class="w-10 h-10 rounded-2xl bg-gray-50 border-2 border-transparent peer-checked:bg-blue-500 peer-checked:border-blue-200 flex items-center justify-center text-gray-300 peer-checked:text-white transition-all duration-300 group-hover:scale-110 shadow-sm">
                                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
@@ -136,8 +183,31 @@
                                             <input type="text" name="attendance[{{ $employee->id }}][notes]" 
                                                 value="{{ old("attendance.{$employee->id}.notes", $record?->notes) }}"
                                                 placeholder="{{ __('messages.add_note_placeholder') ?? __('Add optional note...') }}"
-                                                class="block w-full bg-gray-50 border-2 border-transparent focus:border-primary/30 focus:bg-white rounded-xl py-2.5 px-4 text-xs font-bold text-secondary transition-all duration-300 outline-none">
+                                                @change="saveAttendance({{ $employee->id }}, null, $el.value)"
+                                                class="block w-full bg-gray-50 border-2 border-transparent focus:border-primary/30 focus:bg-white rounded-xl py-2.5 px-4 text-xs font-bold text-secondary transition-all duration-300 outline-none shadow-sm">
                                         </div>
+                                    </td>
+                                    <td class="px-4 py-6 text-center">
+                                        <button type="button" 
+                                                onclick="if(confirm('{{ __('messages.confirm_delete_employee') }}')) { 
+                                                    const f = document.createElement('form');
+                                                    f.method = 'POST'; f.action = '{{ route('client.employees.destroy', $employee->id) }}';
+                                                    
+                                                    const t = document.createElement('input'); 
+                                                    t.type = 'hidden'; t.name = '_token'; t.value = '{{ csrf_token() }}';
+                                                    f.appendChild(t);
+                                                    
+                                                    const m = document.createElement('input');
+                                                    m.type = 'hidden'; m.name = '_method'; m.value = 'DELETE';
+                                                    f.appendChild(m);
+                                                    
+                                                    document.body.appendChild(f);
+                                                    f.submit();
+                                                }"
+                                                class="p-2.5 text-gray-300 hover:text-red-500 hover:bg-red-50 rounded-xl transition-all"
+                                                title="{{ __('messages.remove_from_list') ?? __('Remove Employee') }}">
+                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+                                        </button>
                                     </td>
                                 </tr>
                             @empty

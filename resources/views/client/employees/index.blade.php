@@ -49,6 +49,17 @@
             </div>
         @endif
 
+        @if(session('error'))
+            <div class="mb-8 bg-red-50 border border-red-100 p-5 rounded-2xl shadow-sm flex items-center gap-4 animate-in fade-in slide-in-from-top-4 duration-500">
+                <div class="bg-red-100 p-2 rounded-xl">
+                    <svg class="h-6 w-6 text-red-600" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                </div>
+                <p class="text-sm font-bold text-red-800">{{ session('error') }}</p>
+            </div>
+        @endif
+
         <div class="space-y-8">
             
             <!-- Main Content Container -->
@@ -73,71 +84,74 @@
                         @endif
                     </form>
 
-                    <div class="flex items-center p-1.5 bg-gray-100/80 rounded-2xl border border-gray-200/50">
-                        <x-view-toggle />
+                    <div class="flex items-center gap-2 p-1.5 bg-gray-100/80 rounded-2xl border border-gray-200/50">
+                        <button onclick="localStorage.setItem('view_mode', 'grid'); location.reload();" 
+                                class="px-4 py-2 rounded-xl text-xs font-bold transition-all {{ (request('view') ?? 'grid') == 'grid' ? 'bg-white text-secondary shadow-sm' : 'text-gray-400 hover:text-secondary' }}">
+                            {{ __('messages.grid') }}
+                        </button>
+                        <button onclick="localStorage.setItem('view_mode', 'list'); location.reload();" 
+                                class="px-4 py-2 rounded-xl text-xs font-bold transition-all {{ request('view') == 'list' ? 'bg-white text-secondary shadow-sm' : 'text-gray-400 hover:text-secondary' }}">
+                            {{ __('messages.list') }}
+                        </button>
                     </div>
                 </div>
 
                 <!-- Views -->
                 <div class="flex-grow">
-                    <!-- Grid View -->
-                    <div x-show="viewMode === 'grid'" 
-                         x-transition:enter="transition ease-out duration-300"
-                         x-transition:enter-start="opacity-0 translate-y-4"
-                         x-transition:enter-end="opacity-100 translate-y-0"
-                         class="p-8">
-                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-                            @forelse($employees as $employee)
-                                @include('client.employees._grid-card', ['employee' => $employee])
-                            @empty
-                                <div class="col-span-full py-20 flex flex-col items-center justify-center text-center opacity-60">
-                                    <div class="bg-gray-100 p-8 rounded-[2.5rem] mb-6">
-                                        <svg class="w-16 h-16 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
-                                        </svg>
-                                    </div>
-                                    <h3 class="text-xl font-bold text-secondary mb-2">{{ __('messages.no_employees') }}</h3>
-                                    <p class="text-sm text-gray-400 max-w-xs mx-auto">{{ __('messages.no_employees_desc') ?? 'Start by adding your first employee to the system.' }}</p>
-                                </div>
-                            @endforelse
-                        </div>
-                    </div>
-
-                    <!-- List View -->
-                    <div x-show="viewMode === 'list'" 
-                         x-transition:enter="transition ease-out duration-300"
-                         x-transition:enter-start="opacity-0 translate-y-4"
-                         x-transition:enter-end="opacity-100 translate-y-0"
-                         class="overflow-x-auto p-1" style="display: none;">
-                        <table class="min-w-full">
-                            <thead>
-                                <tr class="bg-gray-50/50 border-b border-gray-100">
-                                    <th class="px-8 py-5 text-start text-xs font-black text-gray-400 uppercase tracking-[0.2em]">{{ __('messages.employee_name') }}</th>
-                                    <th class="px-8 py-5 text-start text-xs font-black text-gray-400 uppercase tracking-[0.2em]">{{ __('messages.position') }}</th>
-                                    <th class="px-8 py-5 text-start text-xs font-black text-gray-400 uppercase tracking-[0.2em]">{{ __('messages.national_id_number') }}</th>
-                                    <th class="px-8 py-5 text-start text-xs font-black text-gray-400 uppercase tracking-[0.2em]">{{ __('messages.basic_salary') }}</th>
-                                    <th class="px-8 py-5 text-start text-xs font-black text-gray-400 uppercase tracking-[0.2em]">{{ __('messages.hire_date') }}</th>
-                                    <th class="px-8 py-5 text-end text-xs font-black text-gray-400 uppercase tracking-[0.2em]">{{ __('messages.actions') }}</th>
-                                </tr>
-                            </thead>
-                            <tbody class="divide-y divide-gray-50">
+                    @php 
+                        $viewMode = request('view', 'grid'); 
+                    @endphp
+                    
+                    @if($viewMode === 'grid')
+                        <div class="p-8">
+                            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
                                 @forelse($employees as $employee)
-                                    @include('client.employees._list-row', ['employee' => $employee])
+                                    @include('client.employees._grid-card', ['employee' => $employee])
                                 @empty
-                                    <tr>
-                                        <td colspan="6" class="px-8 py-32 text-center">
-                                            <div class="flex flex-col items-center justify-center opacity-40">
-                                                <svg class="w-12 h-12 mb-4 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
-                                                </svg>
-                                                <span class="text-lg font-bold text-gray-500">{{ __('messages.no_employees') }}</span>
-                                            </div>
-                                        </td>
-                                    </tr>
+                                    <div class="col-span-full py-20 flex flex-col items-center justify-center text-center opacity-60">
+                                        <div class="bg-gray-100 p-8 rounded-[2.5rem] mb-6">
+                                            <svg class="w-16 h-16 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                                            </svg>
+                                        </div>
+                                        <h3 class="text-xl font-bold text-secondary mb-2">{{ __('messages.no_employees') }}</h3>
+                                        <p class="text-sm text-gray-400 max-w-xs mx-auto">{{ __('messages.no_employees_desc') ?? 'Start by adding your first employee to the system.' }}</p>
+                                    </div>
                                 @endforelse
-                            </tbody>
-                        </table>
-                    </div>
+                            </div>
+                        </div>
+                    @else
+                        <div class="overflow-x-auto p-1">
+                            <table class="min-w-full">
+                                <thead>
+                                    <tr class="bg-gray-50/50 border-b border-gray-100">
+                                        <th class="px-8 py-5 text-start text-xs font-black text-gray-400 uppercase tracking-[0.2em]">{{ __('messages.employee_name') }}</th>
+                                        <th class="px-8 py-5 text-start text-xs font-black text-gray-400 uppercase tracking-[0.2em]">{{ __('messages.position') }}</th>
+                                        <th class="px-8 py-5 text-start text-xs font-black text-gray-400 uppercase tracking-[0.2em]">{{ __('messages.national_id_number') }}</th>
+                                        <th class="px-8 py-5 text-start text-xs font-black text-gray-400 uppercase tracking-[0.2em]">{{ __('messages.basic_salary') }}</th>
+                                        <th class="px-8 py-5 text-start text-xs font-black text-gray-400 uppercase tracking-[0.2em]">{{ __('messages.hire_date') }}</th>
+                                        <th class="px-8 py-5 text-end text-xs font-black text-gray-400 uppercase tracking-[0.2em]">{{ __('messages.actions') }}</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-gray-50">
+                                    @forelse($employees as $employee)
+                                        @include('client.employees._list-row', ['employee' => $employee])
+                                    @empty
+                                        <tr>
+                                            <td colspan="6" class="px-8 py-32 text-center">
+                                                <div class="flex flex-col items-center justify-center opacity-40">
+                                                    <svg class="w-12 h-12 mb-4 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                                                    </svg>
+                                                    <span class="text-lg font-bold text-gray-500">{{ __('messages.no_employees') }}</span>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    @endforelse
+                                </tbody>
+                            </table>
+                        </div>
+                    @endif
                 </div>
 
                 <!-- Footer / Pagination -->

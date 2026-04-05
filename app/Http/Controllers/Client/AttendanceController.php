@@ -29,7 +29,7 @@ class AttendanceController extends Controller
             $date = $carbonDate->format('Y-m-d');
         }
         
-        $employees = $client->employees()->orderBy('name')->get();
+        $employees = $client->employees()->orderBy('name_ar')->get();
         $records = $this->attendanceService->getAttendanceForDate($client, $carbonDate)->keyBy('employee_id');
 
         return view('client.attendance.index', compact('employees', 'records', 'date'));
@@ -45,7 +45,14 @@ class AttendanceController extends Controller
         ]);
 
         $this->attendanceService->bulkUpdateAttendance(Auth::user()->client, $request->only('date', 'attendance'));
+        
+        if ($request->ajax()) {
+            return response()->json([
+                'success' => true,
+                'message' => __('messages.attendance_updated') ?? __('Attendance updated successfully.')
+            ]);
+        }
 
-        return redirect()->back()->with('success', __('Attendance updated successfully.'));
+        return redirect()->back()->with('success', __('messages.attendance_updated') ?? __('Attendance updated successfully.'));
     }
 }

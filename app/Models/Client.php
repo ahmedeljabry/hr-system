@@ -31,7 +31,7 @@ class Client extends Model
 
     public function isActive(): bool
     {
-        return $this->status === 'active';
+        return $this->status === 'active' && (!$this->subscription_end || $this->subscription_end->isFuture());
     }
 
     public function isSuspended(): bool

@@ -18,7 +18,8 @@ class StoreEmployeeRequest extends FormRequest
         $employeeId = $this->route('employee');
 
         return [
-            'name' => ['required', 'string', 'max:255'],
+            'name_ar' => ['required', 'string', 'max:255'],
+            'name_en' => ['required', 'string', 'max:255'],
             'position' => ['required', 'string', 'max:255'],
             'national_id_number' => [
                 'required',
@@ -62,7 +63,8 @@ class StoreEmployeeRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'name.required' => __('validation.required', ['attribute' => __('messages.employee_name')]),
+            'name_ar.required' => __('validation.required', ['attribute' => __('messages.name_ar')]),
+            'name_en.required' => __('validation.required', ['attribute' => __('messages.name_en')]),
             'national_id_number.unique' => __('messages.national_id_duplicate'),
         ];
     }

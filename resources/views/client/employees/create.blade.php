@@ -70,10 +70,10 @@
                         </div>
 
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
-                            <!-- Employee Name -->
-                            <div class="md:col-span-2 space-y-3">
-                                <label for="name"
-                                    class="block text-xs font-black text-gray-400 uppercase tracking-[0.2em]">{{ __('messages.employee_name') }}
+                            <!-- Arabic Name -->
+                            <div class="space-y-3">
+                                <label for="name_ar"
+                                    class="block text-xs font-black text-gray-400 uppercase tracking-[0.2em]">{{ __('messages.name_ar') }}
                                     <span class="text-primary">*</span></label>
                                 <div class="relative group">
                                     <div
@@ -84,9 +84,29 @@
                                             </svg>
                                         </div>
                                     </div>
-                                    <input type="text" name="name" id="name" value="{{ old('name') }}" required
+                                    <input type="text" name="name_ar" id="name_ar" value="{{ old('name_ar') }}" required
                                         class="block w-full bg-gray-50 border-2 border-transparent focus:border-primary focus:bg-white rounded-2xl py-4 {{ app()->getLocale() == 'ar' ? 'pr-14 pl-6' : 'pl-14 pr-6' }} text-secondary font-bold transition-all duration-300 outline-none"
-                                        placeholder="{{ __('messages.name_placeholder') }}">
+                                        placeholder="{{ __('messages.name_ar_placeholder') }}">
+                                </div>
+                            </div>
+
+                            <!-- English Name -->
+                            <div class="space-y-3">
+                                <label for="name_en"
+                                    class="block text-xs font-black text-gray-400 uppercase tracking-[0.2em]">{{ __('messages.name_en') }}
+                                    <span class="text-primary">*</span></label>
+                                <div class="relative group">
+                                    <div
+                                        class="absolute inset-y-0 {{ app()->getLocale() == 'ar' ? 'right-3' : 'left-3' }} flex items-center pointer-events-none transition-all duration-300">
+                                        <div class="w-8 h-8 rounded-xl bg-primary/10 group-focus-within:bg-primary/20 flex items-center justify-center transition-all duration-300 group-focus-within:scale-110">
+                                            <svg class="w-4 h-4 text-primary/60 group-focus-within:text-primary transition-colors duration-300" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"></path>
+                                            </svg>
+                                        </div>
+                                    </div>
+                                    <input type="text" name="name_en" id="name_en" value="{{ old('name_en') }}" required
+                                        class="block w-full bg-gray-50 border-2 border-transparent focus:border-primary focus:bg-white rounded-2xl py-4 {{ app()->getLocale() == 'ar' ? 'pr-14 pl-6' : 'pl-14 pr-6' }} text-secondary font-bold transition-all duration-300 outline-none"
+                                        placeholder="{{ __('messages.name_en_placeholder') }}">
                                 </div>
                             </div>
 

@@ -29,7 +29,7 @@ class EmployeesImport implements ToModel, WithHeadingRow, WithValidation, SkipsO
         $user = \App\Models\User::firstOrCreate(
             ['email' => $row['email_address']],
             [
-                'name' => $row['employee_name'],
+                'name' => $row['employee_name_english'],
                 'password' => $row['password'], 
                 'role' => 'employee',
                 'client_id' => $this->clientId,
@@ -39,7 +39,8 @@ class EmployeesImport implements ToModel, WithHeadingRow, WithValidation, SkipsO
         return new Employee([
             'client_id' => $this->clientId,
             'user_id' => $user->id,
-            'name' => $row['employee_name'],
+            'name_ar' => $row['employee_name_arabic'],
+            'name_en' => $row['employee_name_english'],
             'position' => $row['position'],
             'national_id_number' => $row['national_id_residency_number'],
             'phone' => $row['phone_number'] ?? null,
@@ -57,19 +58,31 @@ class EmployeesImport implements ToModel, WithHeadingRow, WithValidation, SkipsO
     public function rules(): array
     {
         return [
-            'employee_name' => ['required', 'string', 'max:255'],
+            'employee_name_arabic' => ['required', 'string', 'max:255'],
+            'employee_name_english' => ['required', 'string', 'max:255'],
             'email_address' => ['required', 'email'],
-            'password' => ['required', 'string', 'min:8'],
+            'password' => ['required', 'min:8'],
             'position' => ['required', 'string', 'max:255'],
-            'national_id_residency_number' => ['required', 'string', 'max:100'],
+            'national_id_residency_number' => ['required', 'max:100'],
             'basic_salary' => ['required', 'numeric', 'min:0'],
+        ];
+    }
+
+    public function customValidationAttributes(): array
+    {
+        return [
+            'employee_name_arabic' => __('messages.name_ar'),
+            'employee_name_english' => __('messages.name_en'),
+            'email_address' => __('messages.email'),
+            'password' => __('messages.password'),
+            'position' => __('messages.position'),
+            'national_id_residency_number' => __('messages.national_id_number'),
+            'basic_salary' => __('messages.basic_salary'),
         ];
     }
 
     public function customValidationMessages(): array
     {
-        return [
-            'name.required' => __('messages.employee_name') . ' ' . __('validation.required'),
-        ];
+        return [];
     }
 }

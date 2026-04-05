@@ -12,7 +12,7 @@ Route::middleware(['auth', 'role:client', 'check_subscription'])->prefix('client
     Route::get('/employees/create', [EmployeeController::class, 'create'])->name('employees.create');
     Route::post('/employees', [EmployeeController::class, 'store'])->name('employees.store');
 
-    Route::get('/employees/import/form', [EmployeeController::class, 'importForm'])->name('employees.import.form');
+    Route::get('/employees/import', [EmployeeController::class, 'importForm'])->name('employees.import.form');
     Route::post('/employees/import', [EmployeeController::class, 'import'])->name('employees.import');
 
     Route::get('/employees/{employee}', [EmployeeController::class, 'show'])->name('employees.show');

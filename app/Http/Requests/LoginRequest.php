@@ -58,12 +58,11 @@ class LoginRequest extends FormRequest
         RateLimiter::clear($this->throttleKey());
     }
 
-    public function messages(): array
+    public function attributes(): array
     {
         return [
-            'email.required' => 'البريد الإلكتروني مطلوب.',
-            'email.email' => 'تنسيق البريد الإلكتروني غير صالح.',
-            'password.required' => 'كلمة المرور مطلوبة.',
+            'email' => __('messages.email'),
+            'password' => __('messages.password'),
         ];
     }
 }

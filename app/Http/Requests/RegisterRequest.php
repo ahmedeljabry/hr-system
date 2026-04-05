@@ -21,16 +21,13 @@ class RegisterRequest extends FormRequest
         ];
     }
 
-    public function messages(): array
+    public function attributes(): array
     {
         return [
-            'name.required' => 'الاسم الكامل مطلوب.',
-            'email.required' => 'البريد الإلكتروني مطلوب.',
-            'email.unique' => 'هذا البريد الإلكتروني مسجل بالفعل.',
-            'password.required' => 'كلمة المرور مطلوبة.',
-            'password.min' => 'يجب أن تكون كلمة المرور 8 أحرف على الأقل.',
-            'password.confirmed' => 'تأكيد كلمة المرور غير متطابق.',
-            'company_name.required' => 'اسم الشركة مطلوب.',
+            'name' => __('messages.name'),
+            'email' => __('messages.email'),
+            'password' => __('messages.password'),
+            'company_name' => __('messages.company_name'),
         ];
     }
 }

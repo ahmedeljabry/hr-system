@@ -15,13 +15,14 @@ class EmployeeService
 
         if ($search) {
             $query->where(function ($q) use ($search) {
-                $q->where('name', 'like', "%{$search}%")
+                $q->where('name_ar', 'like', "%{$search}%")
+                  ->orWhere('name_en', 'like', "%{$search}%")
                   ->orWhere('position', 'like', "%{$search}%")
                   ->orWhere('national_id_number', 'like', "%{$search}%");
             });
         }
 
-        return $query->orderBy('name')->paginate($perPage);
+        return $query->orderBy('name_ar')->paginate($perPage);
     }
 
     public function find(int $clientId, int $employeeId): Employee
@@ -58,7 +59,7 @@ class EmployeeService
         return \Illuminate\Support\Facades\DB::transaction(function () use ($clientId, $data) {
             // Create User account for Employee
             $user = \App\Models\User::create([
-                'name' => $data['name'],
+                'name' => $data['name_en'],
                 'email' => $data['email'],
                 'password' => $data['password'], // Hash is handled by cast in User model
                 'role' => 'employee',
@@ -114,7 +115,7 @@ class EmployeeService
             // Update corresponding User account
             if ($employee->user) {
                 $userData = [
-                    'name' => $data['name'] ?? $employee->user->name,
+                    'name' => $data['name_en'] ?? $employee->user->name,
                     'email' => $data['email'] ?? $employee->user->email,
                 ];
                 

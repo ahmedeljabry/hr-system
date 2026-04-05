@@ -51,7 +51,7 @@
                     {{ __('messages.import_instructions') }}
                 </h2>
                 <div class="mt-4 flex flex-wrap gap-3">
-                    @foreach([__('messages.employee_name'), __('messages.email'), __('messages.password'), __('messages.position'), __('messages.national_id_number'), __('messages.phone_field'), __('messages.emergency_phone'), __('messages.bank_iban'), __('messages.basic_salary'), __('messages.housing_allowance'), __('messages.transportation_allowance'), __('messages.other_allowances'), __('messages.date_of_birth'), __('messages.hire_date')] as $col)
+                    @foreach([__('messages.name_ar'), __('messages.name_en'), __('messages.email'), __('messages.password'), __('messages.position'), __('messages.national_id_number'), __('messages.phone_field'), __('messages.emergency_phone'), __('messages.bank_iban'), __('messages.basic_salary'), __('messages.housing_allowance'), __('messages.transportation_allowance'), __('messages.other_allowances'), __('messages.date_of_birth'), __('messages.hire_date')] as $col)
                         <span class="px-4 py-2 bg-white border-2 border-gray-100 rounded-xl text-xs font-black text-secondary">{{ $col }}</span>
                     @endforeach
                 </div>

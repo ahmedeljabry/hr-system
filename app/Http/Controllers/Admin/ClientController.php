@@ -74,7 +74,7 @@ class ClientController extends Controller
             'new' => $data['status'],
         ]);
 
-        return back()->with('success', __('Subscription status updated successfully.'));
+        return back()->with('success', __('messages.subscription_status_updated'));
     }
 
     /**
@@ -88,6 +88,6 @@ class ClientController extends Controller
 
         $this->subscriptionService->setEndDate($client, $data['subscription_end']);
 
-        return back()->with('success', 'تم تحديث تاريخ انتهاء الاشتراك بنجاح.');
+        return back()->with('success', __('messages.subscription_date_updated'));
     }
 }

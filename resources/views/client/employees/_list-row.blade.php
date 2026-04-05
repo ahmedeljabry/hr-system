@@ -1,8 +1,11 @@
 <tr class="hover:bg-gray-50/50 transition-all duration-300 group border-b border-gray-50 last:border-0">
     <td class="px-8 py-6 whitespace-nowrap">
         <div class="flex items-center">
-            <x-avatar :name="$employee->name" size="md" class="me-4 shadow-sm border border-gray-100 group-hover:scale-110 transition-transform duration-500" />
-            <div class="text-sm font-black text-secondary group-hover:text-primary transition-colors">{{ $employee->name }}</div>
+            @php
+                $displayName = app()->getLocale() == 'ar' ? $employee->name_ar : ($employee->name_en ?? $employee->name_ar);
+            @endphp
+            <x-avatar :name="$displayName" size="md" class="me-4 shadow-sm border border-gray-100 group-hover:scale-110 transition-transform duration-500" />
+            <div class="text-sm font-black text-secondary group-hover:text-primary transition-colors">{{ $displayName }}</div>
         </div>
     </td>
     <td class="px-8 py-6 whitespace-nowrap">

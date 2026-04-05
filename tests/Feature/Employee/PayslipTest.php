@@ -22,8 +22,8 @@ class PayslipTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->client = Client::factory()->create(['status' => 'active']);
-        $this->employeeUser = User::factory()->create(['role' => 'employee']);
+        $this->client = Client::factory()->create(['status' => 'active', 'subscription_end' => now()->addDays(30)]);
+        $this->employeeUser = User::factory()->create(['role' => 'employee', 'client_id' => $this->client->id]);
         $this->employee = Employee::factory()->create([
             'client_id' => $this->client->id,
             'user_id' => $this->employeeUser->id,

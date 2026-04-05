@@ -51,6 +51,11 @@
                         <a href="/admin/clients" class="text-sm font-medium hover:text-blue-500 transition-colors">{{ __('messages.clients') }}</a>
                     @elseif(Auth::user()->isClient())
                         <a href="/client/dashboard" class="text-sm font-medium hover:text-blue-500 transition-colors">{{ __('messages.dashboard') }}</a>
+                        <a href="{{ route('client.attendance.index') }}" class="text-sm font-medium hover:text-blue-500 transition-colors">{{ __('Attendance') }}</a>
+                        <a href="{{ route('client.tasks.index') }}" class="text-sm font-medium hover:text-blue-500 transition-colors">{{ __('Tasks') }}</a>
+                        <a href="{{ route('client.assets.index') }}" class="text-sm font-medium hover:text-blue-500 transition-colors">{{ __('Assets') }}</a>
+                    @elseif(Auth::user()->isEmployee())
+                        <a href="/employee/dashboard" class="text-sm font-medium hover:text-blue-500 transition-colors">{{ __('messages.dashboard') }}</a>
                     @endif
                     
                     <form method="POST" action="/logout" class="inline">

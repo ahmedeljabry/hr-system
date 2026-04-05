@@ -39,5 +39,12 @@ Route::middleware(['auth', 'role:client', 'check_subscription'])->prefix('client
 
     // Secure file serving (tenant-scoped)
     Route::get('/files/employees/{employee}/{type}', [EmployeeFileController::class, 'show'])->name('files.employee');
+
+    // Operational Management (Attendance, Tasks, Assets)
+    Route::get('/attendance', [\App\Http\Controllers\Client\AttendanceController::class, 'index'])->name('attendance.index');
+    Route::post('/attendance', [\App\Http\Controllers\Client\AttendanceController::class, 'store'])->name('attendance.store');
+    Route::resource('tasks', \App\Http\Controllers\Client\TaskController::class);
+    Route::resource('assets', \App\Http\Controllers\Client\AssetController::class);
+    Route::resource('announcements', \App\Http\Controllers\Client\AnnouncementController::class);
 });
 

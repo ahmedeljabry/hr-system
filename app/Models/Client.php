@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\User;
 use App\Models\Employee;
+use App\Models\Announcement;
 
 class Client extends Model
 {
@@ -60,6 +61,11 @@ class Client extends Model
     public function payrollRuns()
     {
         return $this->hasMany(PayrollRun::class);
+    }
+
+    public function announcements()
+    {
+        return $this->hasMany(Announcement::class);
     }
 }
 

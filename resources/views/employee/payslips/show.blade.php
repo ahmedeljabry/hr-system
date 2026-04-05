@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.employee')
 
 @section('content')
 <div class="max-w-4xl mx-auto space-y-6">

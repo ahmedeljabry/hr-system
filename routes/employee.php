@@ -2,11 +2,18 @@
 
 use Illuminate\Support\Facades\Route;
 
-Route::middleware(['auth', 'role:employee'])->prefix('employee')->name('employee.')->group(function () {
-    Route::get('/dashboard', function () {
-        return view('employee.dashboard');
-    })->name('dashboard');
+Route::middleware(['auth', 'role:employee', 'check_subscription'])->prefix('employee')->name('employee.')->group(function () {
+    Route::get('/dashboard', [\App\Http\Controllers\Employee\DashboardController::class, 'index'])->name('dashboard');
 
     Route::get('/payslips', [\App\Http\Controllers\Employee\PayslipController::class, 'index'])->name('payslips.index');
     Route::get('/payslips/{payslip}', [\App\Http\Controllers\Employee\PayslipController::class, 'show'])->name('payslips.show');
+
+    Route::get('/profile', [\App\Http\Controllers\Employee\ProfileController::class, 'index'])->name('profile.index');
+    Route::get('/profile/documents/{type}', [\App\Http\Controllers\Employee\ProfileController::class, 'document'])->name('profile.document')->where('type', 'national_id|contract');
+
+    // Read-Only Portals
+    Route::get('/tasks', [\App\Http\Controllers\Employee\TaskController::class, 'index'])->name('tasks.index');
+    Route::get('/assets', [\App\Http\Controllers\Employee\AssetController::class, 'index'])->name('assets.index');
+    Route::get('/announcements', [\App\Http\Controllers\Employee\AnnouncementController::class, 'index'])->name('announcements.index');
+    Route::get('/leaves', [\App\Http\Controllers\Employee\LeaveController::class, 'index'])->name('leaves.index');
 });

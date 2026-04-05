@@ -17,29 +17,47 @@ class AssetController extends Controller
         $this->assetService = $assetService;
     }
 
+    private function getClient()
+    {
+        return Auth::user()->client;
+    }
+
     public function index()
     {
-        $assets = Asset::with('employee')->latest()->paginate(10);
+        $client = $this->getClient();
+        $assets = Asset::where('client_id', $client->id)
+            ->with('employee')
+            ->latest()
+            ->paginate(10);
         return view('client.assets.index', compact('assets'));
     }
 
     public function create()
     {
-        $employees = Auth::user()->client->employees()->orderBy('name')->get();
+        $employees = $this->getClient()->employees()->orderBy('name')->get();
         return view('client.assets.create', compact('employees'));
     }
 
     public function store(Request $request)
     {
+        $client = $this->getClient();
+
         $data = $request->validate([
             'employee_id' => 'nullable|exists:employees,id',
             'type' => 'required|string|max:255',
-            'serial_number' => 'nullable|string|max:255|unique:assets,serial_number,NULL,id,client_id,' . Auth::user()->client_id,
+            'serial_number' => 'nullable|string|max:255|unique:assets,serial_number,NULL,id,client_id,' . $client->id,
             'description' => 'nullable|string',
             'assigned_date' => 'required|date',
             'returned_date' => 'nullable|date|after_or_equal:assigned_date',
         ]);
 
+        // Validate employee belongs to this client
+        if (!empty($data['employee_id'])) {
+            $employeeBelongsToClient = $client->employees()->where('id', $data['employee_id'])->exists();
+            abort_unless($employeeBelongsToClient, 403, __('messages.unauthorized'));
+        }
+
+        $data['client_id'] = $client->id;
         Asset::create($data);
 
         return redirect()->route('client.assets.index')->with('success', __('Asset recorded successfully.'));
@@ -47,20 +65,32 @@ class AssetController extends Controller
 
     public function edit(Asset $asset)
     {
-        $employees = Auth::user()->client->employees()->orderBy('name')->get();
+        $client = $this->getClient();
+        abort_unless($asset->client_id === $client->id, 403, __('messages.unauthorized'));
+
+        $employees = $client->employees()->orderBy('name')->get();
         return view('client.assets.edit', compact('asset', 'employees'));
     }
 
     public function update(Request $request, Asset $asset)
     {
+        $client = $this->getClient();
+        abort_unless($asset->client_id === $client->id, 403, __('messages.unauthorized'));
+
         $data = $request->validate([
             'employee_id' => 'nullable|exists:employees,id',
             'type' => 'required|string|max:255',
-            'serial_number' => 'nullable|string|max:255|unique:assets,serial_number,' . $asset->id . ',id,client_id,' . Auth::user()->client_id,
+            'serial_number' => 'nullable|string|max:255|unique:assets,serial_number,' . $asset->id . ',id,client_id,' . $client->id,
             'description' => 'nullable|string',
             'assigned_date' => 'required|date',
             'returned_date' => 'nullable|date|after_or_equal:assigned_date',
         ]);
+
+        // Validate employee belongs to this client
+        if (!empty($data['employee_id'])) {
+            $employeeBelongsToClient = $client->employees()->where('id', $data['employee_id'])->exists();
+            abort_unless($employeeBelongsToClient, 403, __('messages.unauthorized'));
+        }
 
         $asset->update($data);
 
@@ -69,6 +99,9 @@ class AssetController extends Controller
 
     public function destroy(Asset $asset)
     {
+        $client = $this->getClient();
+        abort_unless($asset->client_id === $client->id, 403, __('messages.unauthorized'));
+
         $asset->delete();
         return redirect()->route('client.assets.index')->with('success', __('Asset deleted successfully.'));
     }

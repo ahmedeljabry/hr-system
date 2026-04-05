@@ -60,7 +60,7 @@
     </a>
 
     <!-- Leave Balance -->
-    <a href="/employee/leaves" class="bg-white rounded-2xl shadow-sm p-6 border border-gray-100 hover:shadow-md transition-shadow group flex flex-col justify-between h-full relative overflow-hidden">
+    <a href="{{ route('employee.leaves.index') }}" class="bg-white rounded-2xl shadow-sm p-6 border border-gray-100 hover:shadow-md transition-shadow group flex flex-col justify-between h-full relative overflow-hidden">
         <div>
             <div class="flex items-center justify-between mb-4">
                 <h3 class="text-gray-500 text-sm font-medium">{{ __('Leave Balance') }}</h3>
@@ -69,7 +69,11 @@
                 </div>
             </div>
             <div class="text-3xl font-bold text-gray-900">
-                <span class="text-sm font-normal text-gray-400">{{ __('No data available') }}</span>
+                @if($widgets['leave_balance'] !== null)
+                    {{ $widgets['leave_balance'] }} <span class="text-sm font-normal text-gray-400">{{ __('days') }}</span>
+                @else
+                    <span class="text-sm font-normal text-gray-400">{{ __('No data available') }}</span>
+                @endif
             </div>
         </div>
     </a>

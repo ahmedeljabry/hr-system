@@ -40,7 +40,7 @@ class RoleMiddlewareTest extends TestCase
         $resp = $this->actingAs($user)->get('/client/dashboard');
         file_put_contents('debug_test.txt', $resp->content());
         $resp->assertRedirect('/admin/dashboard');
-        $this->actingAs($user)->get('/employee/dashboard')->assertRedirect('/');
+        $this->actingAs($user)->get('/employee/dashboard')->assertRedirect('/admin/dashboard');
     }
 
     /** @test */

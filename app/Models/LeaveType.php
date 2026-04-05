@@ -2,24 +2,18 @@
 
 namespace App\Models;
 
+use App\Traits\BelongsToTenant;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\Client;
-use App\Traits\BelongsToTenant;
 
-class Announcement extends Model
+class LeaveType extends Model
 {
     use HasFactory, BelongsToTenant;
 
     protected $fillable = [
         'client_id',
-        'title',
-        'body',
-        'published_at',
-    ];
-
-    protected $casts = [
-        'published_at' => 'datetime',
+        'name',
+        'max_days_per_year',
     ];
 
     public function client()
@@ -27,8 +21,13 @@ class Announcement extends Model
         return $this->belongsTo(Client::class);
     }
 
-    public function scopeForClient($query, $clientId)
+    public function leaveBalances()
     {
-        return $query->where('client_id', $clientId);
+        return $this->hasMany(LeaveBalance::class);
+    }
+
+    public function leaveRequests()
+    {
+        return $this->hasMany(LeaveRequest::class);
     }
 }

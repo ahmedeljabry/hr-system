@@ -30,6 +30,7 @@ class PayslipController extends Controller
     {
         $employeeId = $this->getEmployeeId();
         $payslip = Payslip::where('employee_id', $employeeId)
+            ->whereHas('payrollRun', fn($q) => $q->where('status', 'confirmed'))
             ->with(['payrollRun', 'lineItems', 'employee'])
             ->findOrFail($payslip);
 

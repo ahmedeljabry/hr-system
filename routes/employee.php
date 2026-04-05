@@ -16,4 +16,6 @@ Route::middleware(['auth', 'role:employee', 'check_subscription'])->prefix('empl
     Route::get('/assets', [\App\Http\Controllers\Employee\AssetController::class, 'index'])->name('assets.index');
     Route::get('/announcements', [\App\Http\Controllers\Employee\AnnouncementController::class, 'index'])->name('announcements.index');
     Route::get('/leaves', [\App\Http\Controllers\Employee\LeaveController::class, 'index'])->name('leaves.index');
+    Route::get('/leaves/create', [\App\Http\Controllers\Employee\LeaveController::class, 'create'])->name('leaves.create');
+    Route::post('/leaves', [\App\Http\Controllers\Employee\LeaveController::class, 'store'])->name('leaves.store');
 });

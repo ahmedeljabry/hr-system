@@ -65,7 +65,7 @@
                 <span class="text-lg {{ app()->getLocale() == 'ar' ? 'ml-3' : 'mr-3' }}">💰</span>
                 {{ __('Payslips') ?? 'Payslips' }}
             </a>
-            <a href="/employee/leaves" class="flex items-center px-4 py-3 text-sm font-medium rounded-xl transition-colors {{ request()->is('employee/leaves*') ? 'bg-indigo-50 text-indigo-700' : 'text-gray-600 hover:bg-gray-50' }}">
+            <a href="{{ route('employee.leaves.index') }}" class="flex items-center px-4 py-3 text-sm font-medium rounded-xl transition-colors {{ request()->routeIs('employee.leaves.*') ? 'bg-indigo-50 text-indigo-700' : 'text-gray-600 hover:bg-gray-50' }}">
                 <span class="text-lg {{ app()->getLocale() == 'ar' ? 'ml-3' : 'mr-3' }}">🏖️</span>
                 {{ __('My Leaves') }}
             </a>

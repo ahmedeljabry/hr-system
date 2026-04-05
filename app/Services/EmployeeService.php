@@ -67,6 +67,14 @@ class EmployeeService
     public function delete(int $clientId, int $employeeId): bool
     {
         $employee = $this->find($clientId, $employeeId);
+        
+        if ($employee->user_id) {
+            $user = \App\Models\User::find($employee->user_id);
+            if ($user) {
+                $user->delete();
+            }
+        }
+        
         return $employee->delete(); // Soft delete
     }
 }

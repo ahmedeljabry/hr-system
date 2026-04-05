@@ -14,7 +14,7 @@ class AttendanceService
      */
     public function getAttendanceForDate(Client $client, Carbon $date): Collection
     {
-        return Attendance::whereDate('date', $date)->get();
+        return Attendance::where('client_id', $client->id)->whereDate('date', $date)->get();
     }
 
     public function bulkUpdateAttendance(Client $client, array $data): bool

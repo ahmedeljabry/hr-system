@@ -23,12 +23,18 @@ class RoleMiddleware
 
         $user = Auth::user();
         
-        // SuperAdmin bypasses all role checks
+        $allowedRoles = explode(',', $roles);
+
+        // SuperAdmin can access admin routes, but should be redirected
+        // away from client/employee routes where they lack tenant context
         if ($user->isSuperAdmin()) {
-            return $next($request);
+            if (in_array('super_admin', $allowedRoles)) {
+                return $next($request);
+            }
+            // Redirect to admin dashboard instead of crashing on missing client
+            return redirect('/admin/dashboard');
         }
 
-        $allowedRoles = explode(',', $roles);
         if (in_array($user->role, $allowedRoles)) {
             return $next($request);
         }

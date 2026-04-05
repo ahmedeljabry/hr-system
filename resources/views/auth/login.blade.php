@@ -6,7 +6,7 @@
         <div class="p-8">
             <div class="text-center mb-10">
                 <h1 class="text-3xl font-extrabold text-blue-600 mb-2">{{ __('messages.login') }}</h1>
-                <p class="text-gray-400 text-sm italic">مرحبًا بعودتك.. أدخل بياناتك للمتابعة</p>
+                <p class="text-gray-400 text-sm italic">{{ __('messages.login_subtitle') }}</p>
             </div>
 
             @if ($errors->has('email'))
@@ -28,7 +28,7 @@
                 <div>
                     <div class="flex justify-between items-center mb-2">
                         <label for="password" class="block text-sm font-semibold text-gray-700">{{ __('messages.password') }}</label>
-                        <a href="#" class="text-xs text-blue-500 hover:text-blue-700">نسيت كلمة المرور؟</a>
+                        <a href="#" class="text-xs text-blue-500 hover:text-blue-700">{{ __('messages.forgot_password') }}</a>
                     </div>
                     <input type="password" id="password" name="password" required
                         class="w-full px-4 py-3 bg-gray-50 border border-gray-100 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all outline-none">
@@ -50,8 +50,8 @@
             </form>
 
             <div class="mt-8 text-center border-t border-gray-50 pt-6">
-                <p class="text-sm text-gray-500">ليس لديك حساب؟ 
-                    <a href="{{ route('register') }}" class="text-blue-600 font-bold hover:underline">سجل شركتك الآن</a>
+                <p class="text-sm text-gray-500">{{ __('messages.no_account') }} 
+                    <a href="{{ route('register') }}" class="text-blue-600 font-bold hover:underline">{{ __('messages.register_now') }}</a>
                 </p>
             </div>
         </div>

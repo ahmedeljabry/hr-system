@@ -40,12 +40,15 @@ class EmployeeAccountController extends Controller
             'email' => $request->email,
             'password' => Hash::make($password),
             'role' => 'employee',
+            'client_id' => $clientId,
         ]);
 
         $emp->update(['user_id' => $user->id]);
 
         return redirect()
             ->route('client.employees.show', $emp->id)
-            ->with('success', __('messages.employee_account_created', ['password' => $password]));
+            ->with('success', __('messages.employee_account_created'))
+            ->with('generated_password', $password)
+            ->with('generated_email', $request->email);
     }
 }

@@ -2,6 +2,10 @@
 
 return [
     'login' => 'Login',
+    'login_subtitle' => 'Welcome back. Enter your details to continue',
+    'forgot_password' => 'Forgot password?',
+    'no_account' => 'Don\'t have an account?',
+    'register_now' => 'Register your company now',
     'register' => 'Register New Client',
     'logout' => 'Logout',
     'email' => 'Email',

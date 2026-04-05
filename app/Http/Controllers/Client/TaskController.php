@@ -17,20 +17,31 @@ class TaskController extends Controller
         $this->taskService = $taskService;
     }
 
+    private function getClient()
+    {
+        return Auth::user()->client;
+    }
+
     public function index()
     {
-        $tasks = Task::with('employee')->latest()->paginate(10);
+        $client = $this->getClient();
+        $tasks = Task::where('client_id', $client->id)
+            ->with('employee')
+            ->latest()
+            ->paginate(10);
         return view('client.tasks.index', compact('tasks'));
     }
 
     public function create()
     {
-        $employees = Auth::user()->client->employees()->orderBy('name')->get();
+        $employees = $this->getClient()->employees()->orderBy('name')->get();
         return view('client.tasks.create', compact('employees'));
     }
 
     public function store(Request $request)
     {
+        $client = $this->getClient();
+
         $data = $request->validate([
             'employee_id' => 'nullable|exists:employees,id',
             'title' => 'required|string|max:255',
@@ -39,19 +50,31 @@ class TaskController extends Controller
             'status' => 'required|in:todo,in_progress,done',
         ]);
 
-        $this->taskService->createTask($data, Auth::user()->client);
+        // Validate employee belongs to this client
+        if (!empty($data['employee_id'])) {
+            $employeeBelongsToClient = $client->employees()->where('id', $data['employee_id'])->exists();
+            abort_unless($employeeBelongsToClient, 403, __('messages.unauthorized'));
+        }
+
+        $this->taskService->createTask($data, $client);
 
         return redirect()->route('client.tasks.index')->with('success', __('Task created successfully.'));
     }
 
     public function edit(Task $task)
     {
-        $employees = Auth::user()->client->employees()->orderBy('name')->get();
+        $client = $this->getClient();
+        abort_unless($task->client_id === $client->id, 403, __('messages.unauthorized'));
+
+        $employees = $client->employees()->orderBy('name')->get();
         return view('client.tasks.edit', compact('task', 'employees'));
     }
 
     public function update(Request $request, Task $task)
     {
+        $client = $this->getClient();
+        abort_unless($task->client_id === $client->id, 403, __('messages.unauthorized'));
+
         $data = $request->validate([
             'employee_id' => 'nullable|exists:employees,id',
             'title' => 'required|string|max:255',
@@ -59,6 +82,12 @@ class TaskController extends Controller
             'due_date' => 'nullable|date',
             'status' => 'required|in:todo,in_progress,done',
         ]);
+
+        // Validate employee belongs to this client
+        if (!empty($data['employee_id'])) {
+            $employeeBelongsToClient = $client->employees()->where('id', $data['employee_id'])->exists();
+            abort_unless($employeeBelongsToClient, 403, __('messages.unauthorized'));
+        }
 
         $task->update($data);
 
@@ -67,6 +96,9 @@ class TaskController extends Controller
 
     public function destroy(Task $task)
     {
+        $client = $this->getClient();
+        abort_unless($task->client_id === $client->id, 403, __('messages.unauthorized'));
+
         $task->delete();
         return redirect()->route('client.tasks.index')->with('success', __('Task deleted successfully.'));
     }

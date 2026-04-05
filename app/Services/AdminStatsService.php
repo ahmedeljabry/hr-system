@@ -14,12 +14,14 @@ class AdminStatsService
      */
     public function getStats(): array
     {
-        return [
-            'total_clients' => Client::count(),
-            'total_employees' => Employee::count(),
-            'active_count' => Client::where('status', 'active')->count(),
-            'suspended_count' => Client::where('status', 'suspended')->count(),
-            'expired_count' => Client::where('status', 'expired')->count(),
-        ];
+        return \Illuminate\Support\Facades\Cache::remember('admin_dashboard_stats', 3600, function () {
+            return [
+                'total_clients' => Client::count(),
+                'total_employees' => Employee::count(),
+                'active_count' => Client::where('status', 'active')->count(),
+                'suspended_count' => Client::where('status', 'suspended')->count(),
+                'expired_count' => Client::where('status', 'expired')->count(),
+            ];
+        });
     }
 }

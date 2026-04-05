@@ -65,7 +65,7 @@ The project artifacts, access credentials, and a concise usage document must be 
 
 **Acceptance Scenarios**:
 
-1. **Given** the deployed application, **When** the implementation finishes, **Then** the client receives a document containing Super Admin credentials, database access securely stored, and basic operational notes.
+1. **Given** the deployed application, **When** the implementation finishes, **Then** the client receives a document containing Super Admin credentials, database access securely stored, and a defined operational Runbook (identifying URLs, recovery protocols, and routine administrative checks).
 
 ---
 
@@ -94,7 +94,7 @@ The project artifacts, access credentials, and a concise usage document must be 
 ### Measurable Outcomes
 
 - **SC-001**: Zero failing unit and feature tests executed on the master branch.
-- **SC-002**: 100% of the application views pass basic mobility responsiveness checks.
+- **SC-002**: 100% of the application views pass Google Lighthouse Mobile Accessibility and Performance checks scoring > 90.
 - **SC-003**: Zero access allowed across separate tenant IDs. 
 - **SC-004**: Deployment concludes in a verified "running" state on the final server with a response time averaging below 500ms initially.
 

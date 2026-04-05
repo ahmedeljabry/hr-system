@@ -17,9 +17,14 @@ class AnnouncementController extends Controller
         $this->announcementService = $announcementService;
     }
 
+    private function getClient()
+    {
+        return Auth::user()->client;
+    }
+
     public function index()
     {
-        $announcements = $this->announcementService->getForClient(Auth::user()->client);
+        $announcements = $this->announcementService->getForClient($this->getClient());
         return view('client.announcements.index', compact('announcements'));
     }
 
@@ -35,18 +40,24 @@ class AnnouncementController extends Controller
             'body' => 'required|string|max:5000',
         ]);
 
-        $this->announcementService->create(Auth::user()->client, $validated);
+        $this->announcementService->create($this->getClient(), $validated);
 
         return redirect()->route('client.announcements.index')->with('success', __('Announcement created successfully.'));
     }
 
     public function edit(Announcement $announcement)
     {
+        $client = $this->getClient();
+        abort_unless($announcement->client_id === $client->id, 403, __('messages.unauthorized'));
+
         return view('client.announcements.edit', compact('announcement'));
     }
 
     public function update(Request $request, Announcement $announcement)
     {
+        $client = $this->getClient();
+        abort_unless($announcement->client_id === $client->id, 403, __('messages.unauthorized'));
+
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'body' => 'required|string|max:5000',
@@ -59,6 +70,9 @@ class AnnouncementController extends Controller
 
     public function destroy(Announcement $announcement)
     {
+        $client = $this->getClient();
+        abort_unless($announcement->client_id === $client->id, 403, __('messages.unauthorized'));
+
         $this->announcementService->delete($announcement);
 
         return redirect()->route('client.announcements.index')->with('success', __('Announcement deleted successfully.'));

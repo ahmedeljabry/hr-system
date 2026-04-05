@@ -63,7 +63,7 @@ class PayrollService
                 $totalAllowances = $allowances->sum('amount');
                 $totalDeductions = $deductions->sum('amount');
                 $basicSalary = (float) $employee->basic_salary;
-                $netSalary = $basicSalary + $totalAllowances - $totalDeductions;
+                $netSalary = max(0, $basicSalary + $totalAllowances - $totalDeductions);
 
                 $payslip = Payslip::create([
                     'payroll_run_id' => $run->id,

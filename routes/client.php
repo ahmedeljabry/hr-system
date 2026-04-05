@@ -46,5 +46,14 @@ Route::middleware(['auth', 'role:client', 'check_subscription'])->prefix('client
     Route::resource('tasks', \App\Http\Controllers\Client\TaskController::class);
     Route::resource('assets', \App\Http\Controllers\Client\AssetController::class);
     Route::resource('announcements', \App\Http\Controllers\Client\AnnouncementController::class);
+
+    // Leave Management
+    Route::get('/leaves', [\App\Http\Controllers\Client\LeaveController::class, 'index'])->name('leaves.index');
+    Route::get('/leaves/types', [\App\Http\Controllers\Client\LeaveController::class, 'types'])->name('leaves.types');
+    Route::post('/leaves/types', [\App\Http\Controllers\Client\LeaveController::class, 'storeType'])->name('leaves.store-type');
+    Route::put('/leaves/types/{leaveType}', [\App\Http\Controllers\Client\LeaveController::class, 'updateType'])->name('leaves.update-type');
+    Route::delete('/leaves/types/{leaveType}', [\App\Http\Controllers\Client\LeaveController::class, 'destroyType'])->name('leaves.destroy-type');
+    Route::post('/leaves/{leaveRequest}/approve', [\App\Http\Controllers\Client\LeaveController::class, 'approve'])->name('leaves.approve');
+    Route::post('/leaves/{leaveRequest}/reject', [\App\Http\Controllers\Client\LeaveController::class, 'reject'])->name('leaves.reject');
 });
 

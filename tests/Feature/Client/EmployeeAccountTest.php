@@ -27,6 +27,7 @@ class EmployeeAccountTest extends TestCase
 
     public function test_client_can_create_employee_account(): void
     {
+        $this->withoutExceptionHandling();
         $employee = Employee::factory()->create(['client_id' => $this->client->id, 'user_id' => null]);
 
         $response = $this->actingAs($this->clientUser)

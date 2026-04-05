@@ -150,5 +150,11 @@
     "Advanced analytics and reporting tools": "Advanced analytics and reporting tools",
     "Manage client subscriptions and view details": "Manage client subscriptions and view details",
     "View All Clients": "View All Clients",
-    "Logout": "Logout"
+    "Logout": "Logout",
+    "سنوية": "Annual",
+    "مرضية": "Sick",
+    "طارئة": "Emergency",
+    "بدون أجر": "Unpaid",
+    "اجازة مدفوعة الأجر": "Paid Leave",
+    "إجازة مدفوعة الأجر": "Paid Leave"
 }

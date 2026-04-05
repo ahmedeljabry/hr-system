@@ -26,11 +26,36 @@ class StoreEmployeeRequest extends FormRequest
                 'max:100',
                 Rule::unique('employees')->where('client_id', $clientId)->ignore($employeeId),
             ],
-            'national_id_image' => ['nullable', 'file', 'mimes:jpeg,png,pdf', 'max:5120'],
-            'contract_image' => ['nullable', 'file', 'mimes:jpeg,png,pdf', 'max:5120'],
+            'national_id_image' => ['nullable', 'file', 'mimes:jpeg,png,pdf', 'max:10240'],
+            'contract_image' => ['nullable', 'file', 'mimes:jpeg,png,pdf', 'max:10240'],
+            'cv_file' => ['nullable', 'file', 'mimes:jpeg,png,pdf,doc,docx', 'max:10240'],
+            'other_documents' => ['nullable', 'array'],
+            'other_documents.*' => ['file', 'mimes:jpeg,png,pdf,doc,docx', 'max:10240'],
+            'bank_iban' => ['nullable', 'string', 'max:100'],
+            'phone' => ['nullable', 'string', 'max:50'],
+            'emergency_phone' => ['nullable', 'string', 'max:50'],
+            'email' => [
+                'required', 
+                'email', 
+                'max:255', 
+                Rule::unique('users')->ignore($this->getLinkedUserId(), 'id')
+            ],
+            'password' => [$this->route('employee') ? 'nullable' : 'required', 'string', 'min:8'],
             'basic_salary' => ['required', 'numeric', 'min:0'],
+            'housing_allowance' => ['nullable', 'numeric', 'min:0'],
+            'transportation_allowance' => ['nullable', 'numeric', 'min:0'],
+            'other_allowances' => ['nullable', 'numeric', 'min:0'],
             'hire_date' => ['required', 'date'],
         ];
+    }
+
+    private function getLinkedUserId(): ?int
+    {
+        $employeeId = $this->route('employee');
+        if (!$employeeId) return null;
+
+        $employee = \App\Models\Employee::find($employeeId);
+        return $employee?->user_id;
     }
 
     public function messages(): array

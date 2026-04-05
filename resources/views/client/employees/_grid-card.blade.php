@@ -1,36 +1,36 @@
-<div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 flex flex-col hover:shadow-md transition-shadow relative">
-    <div class="absolute top-4 right-4 rtl:left-4 rtl:right-auto">
-        <!-- Optional Badges or Actions -->
-    </div>
-    
-    <div class="flex flex-col items-center mb-4">
-        <x-avatar :name="$employee->name" size="lg" class="mb-3" />
-        <h3 class="text-lg font-bold text-gray-900 text-center">{{ $employee->name }}</h3>
-        <p class="text-xs text-primary font-medium bg-blue-50 px-3 py-1 rounded-full mt-1">{{ $employee->position }}</p>
+<div class="bg-white rounded-3xl shadow-[0_10px_30px_rgba(0,0,0,0.03)] border border-gray-100/80 p-8 flex flex-col hover:shadow-[0_20px_60px_rgba(0,0,0,0.06)] hover:translate-y-[-4px] transition-all duration-500 relative group overflow-hidden">
+    <!-- Subtle background halo on hover -->
+    <div class="absolute -top-10 -right-10 w-32 h-32 bg-primary/5 rounded-full blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
+
+    <div class="flex flex-col items-center mb-8 relative">
+        <div class="relative mb-4">
+            <x-avatar :name="$employee->name" size="xl" class="shadow-lg border-2 border-white" />
+            <div class="absolute -bottom-1 -right-1 w-5 h-5 bg-green-500 border-2 border-white rounded-full"></div>
+        </div>
+        <h3 class="text-xl font-black text-secondary text-center group-hover:text-primary transition-colors leading-tight mb-2">{{ $employee->name }}</h3>
+        <span class="inline-flex items-center px-4 py-1.5 rounded-xl text-[10px] font-black uppercase tracking-widest bg-primary/10 text-primary border border-primary/20">
+            {{ $employee->position }}
+        </span>
     </div>
 
-    <div class="flex-1">
-        <div class="flex flex-col space-y-2 mt-4 text-sm text-gray-600">
-            <div class="flex justify-between items-center py-1 border-b border-gray-50">
-                <span class="text-gray-400">{{ __('messages.national_id_number') }}</span>
-                <span class="font-medium text-gray-900 font-mono">{{ $employee->national_id_number }}</span>
+    <div class="flex-1 space-y-4 relative">
+        <div class="grid grid-cols-1 gap-3">
+            <div class="flex items-center justify-between p-3 rounded-2xl bg-gray-50/80 border border-gray-100 group-hover:bg-white transition-colors duration-500">
+                <span class="text-[10px] font-bold text-gray-400 uppercase tracking-wider">{{ __('messages.national_id_number') }}</span>
+                <span class="text-xs font-black text-secondary font-mono tracking-tighter">{{ $employee->national_id_number }}</span>
             </div>
-            <div class="flex justify-between items-center py-1 border-b border-gray-50">
-                <span class="text-gray-400">{{ __('messages.basic_salary') }}</span>
-                <span class="font-medium text-gray-900">{{ number_format($employee->basic_salary, 2) }}</span>
-            </div>
-            <div class="flex justify-between items-center py-1">
-                <span class="text-gray-400">{{ __('messages.hire_date') }}</span>
-                <span class="font-medium text-gray-900">{{ $employee->hire_date->format('d/m/Y') }}</span>
+            <div class="flex items-center justify-between p-3 rounded-2xl bg-gray-50/80 border border-gray-100 group-hover:bg-white transition-colors duration-500">
+                <span class="text-[10px] font-bold text-gray-400 uppercase tracking-wider">{{ __('messages.total_salary') }}</span>
+                <span class="text-xs font-black text-secondary">{{ number_format($employee->total_salary, 2) }}</span>
             </div>
         </div>
     </div>
 
-    <div class="mt-6 pt-4 border-t border-gray-100 flex justify-between items-center space-x-2 rtl:space-x-reverse">
-        <a href="{{ route('client.employees.show', $employee) }}" class="flex-1 inline-flex justify-center items-center px-4 py-2 bg-gray-50 hover:bg-gray-100 text-gray-700 text-sm font-medium rounded-lg transition-colors">
+    <div class="mt-8 pt-6 border-t border-gray-100 flex gap-3 relative">
+        <a href="{{ route('client.employees.show', $employee) }}" class="flex-1 inline-flex justify-center items-center py-3 bg-gray-50 hover:bg-secondary hover:text-white text-secondary text-xs font-bold rounded-2xl transition-all duration-300">
             {{ __('messages.view') }}
         </a>
-        <a href="{{ route('client.employees.edit', $employee) }}" class="flex-1 inline-flex justify-center items-center px-4 py-2 bg-primary/10 hover:bg-primary/20 text-primary text-sm font-medium rounded-lg transition-colors">
+        <a href="{{ route('client.employees.edit', $employee) }}" class="flex-1 inline-flex justify-center items-center py-3 bg-primary/10 hover:bg-primary text-primary hover:text-secondary text-xs font-black rounded-2xl border border-primary/20 transition-all duration-300">
             {{ __('messages.edit') }}
         </a>
     </div>

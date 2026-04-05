@@ -2,12 +2,18 @@
 @import "print.css";
 
 @theme {
-    /* Premium Blue */
-    --color-primary: hsl(221 83% 53%);
-    /* Pure Surface */
-    --color-surface: hsl(0 0% 100%);
-    /* Dark Navy Text */
-    --color-text-main: hsl(222 47% 11%);
+    /* Entelaka Branding Colors */
+    /* Primary: Lime Green #79EB93 */
+    --color-primary: hsl(134 75% 70%);
+    --color-primary-rgb: 121, 235, 147;
+    /* Secondary/Dark Focus: Dark Navy #161616 */
+    --color-secondary: hsl(0 0% 9%);
+    /* Surface: Soft Grayish White #F3F5F4 */
+    --color-surface: hsl(150 4% 96%);
+    /* Text Main: Dark Navy for body #161616 is also used for headers */
+    --color-text-main: hsl(0 0% 9%);
+    /* Paragraphs: Medium Gray #666666 */
+    --color-text-muted: hsl(0 0% 40%);
 
     /* Fonts */
     --font-sans: "Outfit", "Inter", ui-sans-serif, system-ui;
@@ -17,9 +23,10 @@
 
 @layer base {
     .dark {
-        --color-primary: hsl(217 91% 60%);
-        --color-surface: hsl(222 47% 11%);
+        --color-primary: hsl(134 75% 60%);
+        --color-surface: hsl(0 0% 9%);
         --color-text-main: hsl(210 40% 98%);
+        --color-text-muted: hsl(210 20% 70%);
     }
 }
 

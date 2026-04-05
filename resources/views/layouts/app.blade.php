@@ -13,7 +13,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Outfit:wght@100..900&display=swap" rel="stylesheet">
     
     @if(app()->getLocale() == 'ar')
-        <link href="https://fonts.googleapis.com/css2?family=Noto+Kufi+Arabic:wght@100..900&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@200..1000&display=swap" rel="stylesheet">
     @endif
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -23,51 +23,73 @@
 
     <style>
         [x-cloak] { display: none !important; }
+        
+        @if(app()->getLocale() == 'ar')
+        :root {
+            --font-sans: "Cairo", sans-serif;
+        }
+        body {
+            font-family: "Cairo", sans-serif !important;
+            font-size: 1.05rem; /* Slight increase for Arabic readability */
+            line-height: 1.8;   /* Better breathing room for Arabic scripts */
+        }
+        h1, h2, h3, h4, h5, h6, .font-bold, .font-black {
+            font-weight: 700 !important;
+        }
+        @endif
     </style>
 </head>
 <body class="bg-gray-50 text-gray-900 antialiased min-h-screen flex flex-col">
 
-    <nav class="bg-white border-b border-gray-100 py-4 px-6 mb-8 shadow-sm">
+    <nav class="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-100 py-3 px-6 shadow-sm">
         <div class="max-w-7xl mx-auto flex justify-between items-center">
-            <!-- Brand -->
-            <div class="flex items-center space-x-4 {{ app()->getLocale() == 'ar' ? 'space-x-reverse' : '' }}">
-                <a href="/" class="text-xl font-bold text-blue-600 tracking-tight">
-                    {{ config('app.name', 'HR System') }}
+            <!-- Brand / Logo -->
+            <div class="flex items-center">
+                <a href="/" class="group flex items-center gap-3">
+                    <div class="bg-primary/10 p-2 rounded-lg group-hover:bg-primary/20 transition-colors">
+                        <x-application-logo class="w-7 h-7 text-secondary" />
+                    </div>
                 </a>
             </div>
 
             <!-- Nav Links & Switcher -->
-            <div class="flex items-center space-x-6 {{ app()->getLocale() == 'ar' ? 'space-x-reverse' : '' }}">
+            <div class="flex items-center gap-8">
                 
-                <!-- Role-based links (simple placeholders for now) -->
-                @auth
-                    @if(Auth::user()->isSuperAdmin())
-                        <a href="/admin/clients" class="text-sm font-medium hover:text-blue-500 transition-colors">{{ __('messages.clients') }}</a>
-                    @elseif(Auth::user()->isClient())
-                        <a href="/client/dashboard" class="text-sm font-medium hover:text-blue-500 transition-colors">{{ __('messages.dashboard') }}</a>
-                        <a href="{{ route('client.attendance.index') }}" class="text-sm font-medium hover:text-blue-500 transition-colors">{{ __('Attendance') }}</a>
-                        <a href="{{ route('client.tasks.index') }}" class="text-sm font-medium hover:text-blue-500 transition-colors">{{ __('Tasks') }}</a>
-                        <a href="{{ route('client.assets.index') }}" class="text-sm font-medium hover:text-blue-500 transition-colors">{{ __('Assets') }}</a>
-                        <a href="{{ route('client.leaves.index') }}" class="text-sm font-medium hover:text-blue-500 transition-colors">{{ __('Leaves') }}</a>
-                    @elseif(Auth::user()->isEmployee())
-                        <a href="/employee/dashboard" class="text-sm font-medium hover:text-blue-500 transition-colors">{{ __('messages.dashboard') }}</a>
-                    @endif
-                    
-                    <form method="POST" action="/logout" class="inline">
-                        @csrf
-                        <button type="submit" class="text-sm font-medium text-red-500 hover:text-red-600 transition-colors">
-                            {{ __('messages.logout') }}
-                        </button>
-                    </form>
-                @endauth
+                <!-- Main Navigation -->
+                <div class="hidden md:flex items-center gap-6">
+                    @auth
+                        @if(Auth::user()->isSuperAdmin())
+                            <a href="/admin/clients" class="text-sm font-semibold text-gray-600 hover:text-secondary hover:underline decoration-primary decoration-2 underline-offset-8 transition-all">{{ __('messages.clients') }}</a>
+                        @elseif(Auth::user()->isClient())
+                            <a href="/client/dashboard" class="text-sm font-semibold {{ request()->is('client/dashboard') ? 'text-secondary underline decoration-primary decoration-2 underline-offset-8' : 'text-gray-500 hover:text-secondary' }} transition-all">{{ __('messages.dashboard') }}</a>
+                            <a href="{{ route('client.attendance.index') }}" class="text-sm font-semibold {{ request()->routeIs('client.attendance.*') ? 'text-secondary underline decoration-primary decoration-2 underline-offset-8' : 'text-gray-500 hover:text-secondary' }} transition-all">{{ __('Attendance') }}</a>
+                            <a href="{{ route('client.tasks.index') }}" class="text-sm font-semibold {{ request()->routeIs('client.tasks.*') ? 'text-secondary underline decoration-primary decoration-2 underline-offset-8' : 'text-gray-500 hover:text-secondary' }} transition-all">{{ __('Tasks') }}</a>
+                            <a href="{{ route('client.assets.index') }}" class="text-sm font-semibold {{ request()->routeIs('client.assets.*') ? 'text-secondary underline decoration-primary decoration-2 underline-offset-8' : 'text-gray-500 hover:text-secondary' }} transition-all">{{ __('Assets') }}</a>
+                            <a href="{{ route('client.leaves.index') }}" class="text-sm font-semibold {{ request()->routeIs('client.leaves.*') ? 'text-secondary underline decoration-primary decoration-2 underline-offset-8' : 'text-gray-500 hover:text-secondary' }} transition-all">{{ __('Leaves') }}</a>
+                        @elseif(Auth::user()->isEmployee())
+                            <a href="/employee/dashboard" class="text-sm font-semibold {{ request()->is('employee/dashboard') ? 'text-secondary underline decoration-primary decoration-2 underline-offset-8' : 'text-gray-500 hover:text-secondary' }} transition-all">{{ __('messages.dashboard') }}</a>
+                        @endif
+                    @endauth
+                </div>
 
-                <!-- Lang Switcher -->
-                <div class="flex items-center border-s border-gray-200 ps-6 {{ app()->getLocale() == 'ar' ? 'space-x-reverse' : '' }}">
-                    @if(app()->getLocale() == 'ar')
-                        <a href="/lang/en" class="text-xs uppercase font-bold text-gray-400 hover:text-blue-600 transition-colors">EN</a>
-                    @else
-                        <a href="/lang/ar" class="text-xs uppercase font-bold text-gray-400 hover:text-blue-600 transition-colors">عربي</a>
-                    @endif
+                <div class="flex items-center gap-4 border-s border-gray-100 ps-4">
+                    @auth
+                        <form method="POST" action="/logout" class="inline">
+                            @csrf
+                            <button type="submit" class="text-xs font-bold uppercase tracking-wider text-red-500 hover:text-red-600 transition-colors px-3 py-1.5 rounded-full hover:bg-red-50">
+                                {{ __('messages.logout') }}
+                            </button>
+                        </form>
+                    @endauth
+
+                    <!-- Lang Switcher -->
+                    <div class="px-2">
+                        @if(app()->getLocale() == 'ar')
+                            <a href="/lang/en" class="text-xs font-bold text-gray-400 hover:text-secondary transition-colors">EN</a>
+                        @else
+                            <a href="/lang/ar" class="text-xs font-bold text-gray-400 hover:text-secondary transition-colors">عربي</a>
+                        @endif
+                    </div>
                 </div>
             </div>
         </div>
@@ -77,8 +99,14 @@
         @yield('content')
     </main>
 
-    <footer class="mt-12 py-8 bg-white border-t border-gray-50 text-center text-sm text-gray-400">
-        <p>&copy; {{ date('Y') }} {{ config('app.name') }}. {{ __('messages.all_rights_reserved') ?? '' }}</p>
+    <footer class="mt-auto py-8 bg-white border-t border-gray-50 text-center text-sm text-gray-400">
+        <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-4">
+            <p>&copy; {{ date('Y') }} {{ __('messages.company_name_localized') }}. {{ __('messages.all_rights_reserved') }}</p>
+            <div class="flex items-center gap-4">
+                <a href="#" class="hover:text-secondary transition-colors">{{ __('Privacy Policy') }}</a>
+                <a href="#" class="hover:text-secondary transition-colors">{{ __('Terms of Service') }}</a>
+            </div>
+        </div>
     </footer>
 
 </body>

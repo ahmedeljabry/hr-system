@@ -29,7 +29,7 @@ class EmployeeService
         return Employee::where('client_id', $clientId)->findOrFail($employeeId);
     }
 
-    public function create(int $clientId, array $data, ?UploadedFile $nationalIdFile = null, ?UploadedFile $contractFile = null): Employee
+    public function create(int $clientId, array $data, ?UploadedFile $nationalIdFile = null, ?UploadedFile $contractFile = null, ?UploadedFile $cvFile = null, array $otherFiles = []): Employee
     {
         $data['client_id'] = $clientId;
 
@@ -39,11 +39,35 @@ class EmployeeService
         if ($contractFile) {
             $data['contract_image'] = $contractFile->store("employees/{$clientId}/contracts", 'private');
         }
+        if ($cvFile) {
+            $data['cv_file'] = $cvFile->store("employees/{$clientId}/cvs", 'private');
+        }
 
-        return Employee::create($data);
+        if (!empty($otherFiles)) {
+            $paths = [];
+            foreach ($otherFiles as $file) {
+                $paths[] = $file->store("employees/{$clientId}/others", 'private');
+            }
+            $data['other_documents'] = $paths;
+        }
+
+        return \Illuminate\Support\Facades\DB::transaction(function () use ($clientId, $data) {
+            // Create User account for Employee
+            $user = \App\Models\User::create([
+                'name' => $data['name'],
+                'email' => $data['email'],
+                'password' => $data['password'], // Hash is handled by cast in User model
+                'role' => 'employee',
+                'client_id' => $clientId,
+            ]);
+
+            $data['user_id'] = $user->id;
+
+            return Employee::create($data);
+        });
     }
 
-    public function update(int $clientId, int $employeeId, array $data, ?UploadedFile $nationalIdFile = null, ?UploadedFile $contractFile = null): Employee
+    public function update(int $clientId, int $employeeId, array $data, ?UploadedFile $nationalIdFile = null, ?UploadedFile $contractFile = null, ?UploadedFile $cvFile = null, array $otherFiles = []): Employee
     {
         $employee = $this->find($clientId, $employeeId);
 
@@ -59,9 +83,43 @@ class EmployeeService
             }
             $data['contract_image'] = $contractFile->store("employees/{$clientId}/contracts", 'private');
         }
+        if ($cvFile) {
+            if ($employee->cv_file) {
+                Storage::disk('private')->delete($employee->cv_file);
+            }
+            $data['cv_file'] = $cvFile->store("employees/{$clientId}/cvs", 'private');
+        }
 
-        $employee->update($data);
-        return $employee->fresh();
+        if (!empty($otherFiles)) {
+            // Usually we append or replace. For simplicity, replace or merge.
+            // Let's assume replace for now, or just append. 
+            // Better: let the UI handle deletion of old ones.
+            $existingPaths = $employee->other_documents ?? [];
+            $newPaths = [];
+            foreach ($otherFiles as $file) {
+                $newPaths[] = $file->store("employees/{$clientId}/others", 'private');
+            }
+            $data['other_documents'] = array_merge($existingPaths, $newPaths);
+        }
+
+        return \Illuminate\Support\Facades\DB::transaction(function () use ($data, $employee) {
+            // Update corresponding User account
+            if ($employee->user) {
+                $userData = [
+                    'name' => $data['name'] ?? $employee->user->name,
+                    'email' => $data['email'] ?? $employee->user->email,
+                ];
+                
+                if (!empty($data['password'])) {
+                    $userData['password'] = $data['password'];
+                }
+                
+                $employee->user->update($userData);
+            }
+
+            $employee->update($data);
+            return $employee->fresh();
+        });
     }
 
     public function delete(int $clientId, int $employeeId): bool
@@ -74,6 +132,8 @@ class EmployeeService
                 $user->delete();
             }
         }
+        
+        // Optionally delete files from storage
         
         return $employee->delete(); // Soft delete
     }

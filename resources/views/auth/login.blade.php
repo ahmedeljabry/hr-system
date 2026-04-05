@@ -12,7 +12,7 @@
             <div>
                 <div class="flex justify-between items-center mb-2">
                     <label for="password" class="block text-sm font-semibold text-gray-700">{{ __('messages.password') }}</label>
-                    <a href="{{ Route::has('password.request') ? route('password.request') : '#' }}" class="text-xs text-primary hover:text-blue-700">{{ __('messages.forgot_password') }}</a>
+                    <a href="{{ Route::has('password.request') ? route('password.request') : '#' }}" class="text-xs text-secondary hover:text-primary font-medium transition-colors">{{ __('messages.forgot_password') }}</a>
                 </div>
                 <x-input type="password" id="password" name="password" required />
                 <x-validation-feedback field="password" />
@@ -35,7 +35,7 @@
 
         <div class="mt-8 text-center border-t border-gray-50 pt-6">
             <p class="text-sm text-gray-500">{{ __('messages.no_account') }} 
-                <a href="{{ route('register') }}" class="text-primary font-bold hover:underline">{{ __('messages.register_now') }}</a>
+                <a href="{{ route('register') }}" class="text-secondary font-bold hover:text-primary transition-colors">{{ __('messages.register_now') }}</a>
             </p>
         </div>
     </x-auth-split-layout>

@@ -1,8 +1,8 @@
 <x-auth-layout>
     <x-auth-split-layout :title="__('messages.register')">
         <x-slot name="branding">
-            <h2 class="text-4xl font-outfit font-bold mb-4">انضم إلينا</h2>
-            <p class="text-lg font-inter opacity-90 max-w-md mx-auto">
+            <h2 class="text-4xl font-outfit font-bold mb-4 text-primary">انضم إلينا</h2>
+            <p class="text-lg font-inter opacity-90 max-w-md mx-auto text-gray-300">
                 وابدأ إدارة مواردك البشرية بكفاءة
             </p>
         </x-slot>
@@ -51,7 +51,7 @@
 
         <div class="mt-8 text-center border-t border-gray-50 pt-6">
             <p class="text-sm text-gray-500">لديك حساب بالفعل؟ 
-                <a href="{{ route('login') }}" class="text-primary font-bold hover:underline">سجل دخولك هنا</a>
+                <a href="{{ route('login') }}" class="text-secondary font-bold hover:text-primary transition-colors">سجل دخولك هنا</a>
             </p>
         </div>
     </x-auth-split-layout>

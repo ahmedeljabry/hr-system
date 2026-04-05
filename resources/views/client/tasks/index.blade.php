@@ -1,122 +1,144 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="mb-8 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-    <div>
-        <h1 class="text-3xl font-extrabold text-gray-900 tracking-tight">{{ __('Tasks') }}</h1>
-        <p class="mt-2 text-sm text-gray-500">{{ __('Assign and track operational tasks for your team.') }}</p>
-    </div>
-    
-    <div class="flex items-center gap-3">
-        <a href="{{ route('client.tasks.create') }}" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-bold rounded-lg shadow-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-500/50 transition-all hover:-translate-y-0.5">
-            <svg class="-ml-1 mr-2 h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4" />
-            </svg>
-            {{ __('Create Task') }}
-        </a>
-    </div>
-</div>
+<div class="py-12">
+    <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+        
+        <!-- Premium Hero Section -->
+        <div class="bg-secondary overflow-hidden shadow-2xl rounded-3xl p-10 text-white mb-10 relative group border border-primary/20">
+            <div class="relative z-10 flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+                <div>
+                    <h1 class="text-4xl font-extrabold mb-2 tracking-tight text-primary">{{ __('messages.tasks') ?? __('Tasks') }}</h1>
+                    <p class="text-gray-300 text-lg opacity-90">{{ __('messages.tasks_desc') ?? 'Organize and track employee tasks and deadlines efficiently.' }}</p>
+                </div>
+                
+                <div class="flex items-center gap-4">
+                    <a href="{{ route('client.tasks.create') }}" 
+                       class="inline-flex items-center px-10 py-4 bg-primary hover:bg-[#8affaa] text-secondary text-sm font-black rounded-2xl shadow-[0_20px_50px_rgba(var(--color-primary-rgb),0.3)] hover:shadow-[0_25px_60px_rgba(var(--color-primary-rgb),0.5)] border-b-4 border-emerald-400 hover:border-emerald-300 transition-all duration-500 hover:-translate-y-2 active:translate-y-1 active:border-b-0 group/add">
+                        <svg class="w-5 h-5 me-3 group-hover/add:rotate-90 transition-transform duration-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M12 4v16m8-8H4" />
+                        </svg>
+                        {{ __('messages.add_task') ?? __('Create Task') }}
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Animated decorative overlays -->
+            <div class="absolute top-[-2rem] right-[-2rem] w-48 h-48 bg-primary opacity-5 rounded-full transition-transform duration-700 group-hover:scale-110"></div>
+            <div class="absolute bottom-[-1rem] left-[10%] w-24 h-24 bg-primary opacity-5 rounded-full transition-transform duration-500 group-hover:-translate-y-4"></div>
+        </div>
 
-@if(session('success'))
-    <div class="mb-4 bg-green-50 border-l-4 border-green-400 p-4 rounded-md shadow-sm">
-        <div class="flex">
-            <div class="flex-shrink-0">
-                <svg class="h-5 w-5 text-green-400" viewBox="0 0 20 20" fill="currentColor">
-                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
-                </svg>
+        @if(session('success'))
+            <div class="mb-8 animate-in fade-in slide-in-from-top-4 duration-500">
+                <div class="bg-emerald-50 border border-emerald-100 p-5 rounded-[1.5rem] flex items-center gap-4 shadow-sm">
+                    <div class="w-10 h-10 rounded-full bg-emerald-500/10 flex items-center justify-center shrink-0">
+                        <svg class="w-6 h-6 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path></svg>
+                    </div>
+                    <p class="text-emerald-800 font-bold tracking-tight">{{ session('success') }}</p>
+                </div>
             </div>
-            <div class="ml-3">
-                <p class="text-sm text-green-700">{{ session('success') }}</p>
+        @endif
+
+        <!-- Table Container -->
+        <div class="bg-white rounded-[2.5rem] shadow-[0_20px_50px_rgba(0,0,0,0.04)] border border-gray-100/50 overflow-hidden transition-all duration-500">
+            <div class="overflow-x-auto">
+                <table class="min-w-full">
+                    <thead>
+                        <tr class="bg-gray-50/50 border-b border-gray-100">
+                            <th class="px-8 py-6 text-left text-[11px] font-black text-gray-400 uppercase tracking-[0.2em] {{ app()->getLocale() == 'ar' ? 'text-right' : '' }}">{{ __('messages.task_title') ?? __('Task') }}</th>
+                            <th class="px-8 py-6 text-left text-[11px] font-black text-gray-400 uppercase tracking-[0.2em] {{ app()->getLocale() == 'ar' ? 'text-right' : '' }}">{{ __('messages.assigned_to') ?? __('Assignee') }}</th>
+                            <th class="px-8 py-6 text-left text-[11px] font-black text-gray-400 uppercase tracking-[0.2em] {{ app()->getLocale() == 'ar' ? 'text-right' : '' }}">{{ __('messages.due_date') ?? __('Due Date') }}</th>
+                            <th class="px-8 py-6 text-center text-[11px] font-black text-gray-400 uppercase tracking-[0.2em]">{{ __('messages.status') ?? __('Status') }}</th>
+                            <th class="px-8 py-6 text-right text-[11px] font-black text-gray-400 uppercase tracking-[0.2em] {{ app()->getLocale() == 'ar' ? 'text-left' : '' }}">{{ __('messages.actions') ?? __('Actions') }}</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-50">
+                        @forelse($tasks as $task)
+                            <tr class="hover:bg-gray-50/50 transition-all duration-300">
+                                <td class="px-8 py-6 whitespace-nowrap">
+                                    <div class="flex items-center gap-4">
+                                        <div class="w-10 h-10 rounded-2xl bg-secondary/5 flex items-center justify-center text-secondary font-black">
+                                            {{ substr($task->title, 0, 1) }}
+                                        </div>
+                                        <div>
+                                            <div class="text-base font-black text-secondary tracking-tight">{{ $task->title }}</div>
+                                            <div class="text-[10px] text-gray-400 font-bold uppercase tracking-widest truncate max-w-xs">{{ $task->description }}</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="px-8 py-6 whitespace-nowrap">
+                                    <div class="flex items-center gap-2">
+                                        <div class="w-7 h-7 rounded-lg bg-primary/10 flex items-center justify-center text-[10px] font-black text-secondary">
+                                            {{ substr($task->employee?->name ?? '?', 0, 1) }}
+                                        </div>
+                                        <span class="text-sm font-bold text-gray-600">{{ $task->employee?->name ?: __('messages.unassigned') ?? __('Unassigned') }}</span>
+                                    </div>
+                                </td>
+                                <td class="px-8 py-6 whitespace-nowrap">
+                                    <div class="flex flex-col">
+                                        <span class="text-sm font-black {{ $task->due_date?->isPast() && $task->status != 'done' ? 'text-red-500' : 'text-secondary/70' }}">
+                                            {{ $task->due_date?->format('M d, Y') ?: '-' }}
+                                        </span>
+                                        @if($task->due_date?->isPast() && $task->status != 'done')
+                                            <span class="text-[9px] font-black uppercase text-red-400 tracking-tighter">{{ __('OVERDUE') }}</span>
+                                        @endif
+                                    </div>
+                                </td>
+                                <td class="px-8 py-6 whitespace-nowrap text-center">
+                                    @php
+                                        $statusConfig = [
+                                            'todo' => 'bg-gray-100 text-gray-500',
+                                            'in_progress' => 'bg-secondary text-white',
+                                            'done' => 'bg-primary/20 text-secondary border border-primary/30',
+                                        ][$task->status] ?? 'bg-gray-100 text-gray-600';
+                                    @endphp
+                                    <span class="px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest {{ $statusConfig }}">
+                                        {{ __($task->status) }}
+                                    </span>
+                                </td>
+                                <td class="px-8 py-6 whitespace-nowrap">
+                                    <div class="flex items-center justify-end gap-3 {{ app()->getLocale() == 'ar' ? 'justify-start' : '' }}">
+                                        <a href="{{ route('client.tasks.edit', $task) }}" 
+                                           class="p-2.5 text-gray-400 hover:text-secondary hover:bg-gray-100 rounded-xl transition-all duration-300 group/edit">
+                                            <svg class="h-5 w-5 group-hover/edit:scale-110 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>
+                                        </a>
+                                        <form action="{{ route('client.tasks.destroy', $task) }}" method="POST" class="inline" onsubmit="return confirm('{{ __('Are you sure?') }}')">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="p-2.5 text-red-300 hover:text-red-500 hover:bg-red-50 rounded-xl transition-all duration-300 group/del">
+                                                <svg class="h-5 w-5 group-hover/del:rotate-12 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="5" class="px-8 py-24 text-center">
+                                    <div class="flex flex-col items-center">
+                                        <div class="w-20 h-20 bg-gray-50 rounded-full flex items-center justify-center mb-6">
+                                            <svg class="w-10 h-10 text-gray-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" /></svg>
+                                        </div>
+                                        <h3 class="text-xl font-black text-secondary tracking-tight mb-2">{{ __('messages.no_tasks') ?? __('No Tasks Found') }}</h3>
+                                        <p class="text-sm text-gray-400 max-w-xs mx-auto mb-6">{{ __('messages.tasks_empty_desc') }}</p>
+                                        <a href="{{ route('client.tasks.create') }}" class="inline-flex items-center gap-2 text-primary hover:text-primary/80 font-black text-sm transition-colors">
+                                            {{ __('messages.add_task') }}
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"></path></svg>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
             </div>
+            
+            @if($tasks->hasPages())
+                <div class="px-8 py-6 bg-gray-50 border-t border-gray-100">
+                    {{ $tasks->links() }}
+                </div>
+            @endif
         </div>
     </div>
-@endif
-
-<div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-    <div class="overflow-x-auto">
-        <table class="min-w-full divide-y divide-gray-200">
-            <thead class="bg-gray-50">
-                <tr>
-                    <th scope="col" class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider {{ app()->getLocale() == 'ar' ? 'text-right' : '' }}">
-                        {{ __('Task') }}
-                    </th>
-                    <th scope="col" class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider {{ app()->getLocale() == 'ar' ? 'text-right' : '' }}">
-                        {{ __('Assignee') }}
-                    </th>
-                    <th scope="col" class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase tracking-wider {{ app()->getLocale() == 'ar' ? 'text-right' : '' }}">
-                        {{ __('Due Date') }}
-                    </th>
-                    <th scope="col" class="px-6 py-4 text-center text-xs font-bold text-gray-500 uppercase tracking-wider">
-                        {{ __('Status') }}
-                    </th>
-                    <th scope="col" class="px-6 py-4 text-right text-xs font-bold text-gray-500 uppercase tracking-wider {{ app()->getLocale() == 'ar' ? 'text-left' : '' }}">
-                        {{ __('Actions') }}
-                    </th>
-                </tr>
-            </thead>
-            <tbody class="bg-white divide-y divide-gray-100">
-                @forelse($tasks as $task)
-                    <tr class="hover:bg-gray-50/50 transition-colors">
-                        <td class="px-6 py-4 whitespace-nowrap">
-                            <div class="text-sm font-bold text-gray-900">{{ $task->title }}</div>
-                            <div class="text-xs text-gray-500 truncate max-w-xs">{{ $task->description }}</div>
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap">
-                            <div class="text-sm text-gray-900 font-medium">
-                                {{ $task->employee?->name ?: __('Unassigned') }}
-                            </div>
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap">
-                            <div class="text-sm {{ $task->due_date?->isPast() && $task->status != 'done' ? 'text-red-600 font-bold' : 'text-gray-600' }}">
-                                {{ $task->due_date?->format('d/m/Y') ?: '-' }}
-                            </div>
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-center">
-                            @php
-                                $statusClasses = [
-                                    'todo' => 'bg-gray-100 text-gray-700',
-                                    'in_progress' => 'bg-blue-100 text-blue-700',
-                                    'done' => 'bg-green-100 text-green-700',
-                                ][$task->status] ?? 'bg-gray-100 text-gray-700';
-                            @endphp
-                            <span class="px-3 py-1 rounded-full text-xs font-extrabold uppercase {{ $statusClasses }}">
-                                {{ __($task->status) }}
-                            </span>
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium {{ app()->getLocale() == 'ar' ? 'text-left' : '' }}">
-                            <div class="flex items-center justify-end gap-3 {{ app()->getLocale() == 'ar' ? 'justify-start' : '' }}">
-                                <a href="{{ route('client.tasks.edit', $task) }}" class="text-indigo-600 hover:text-indigo-900 bg-indigo-50 p-1.5 rounded-md transition-colors" title="{{ __('Edit') }}">
-                                    <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                                    </svg>
-                                </a>
-                                <form action="{{ route('client.tasks.destroy', $task) }}" method="POST" class="inline" onsubmit="return confirm('{{ __('Are you sure you want to delete this task?') }}')">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="text-red-600 hover:text-red-900 bg-red-50 p-1.5 rounded-md transition-colors" title="{{ __('Delete') }}">
-                                        <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                                        </svg>
-                                    </button>
-                                </form>
-                            </div>
-                        </td>
-                    </tr>
-                @empty
-                    <tr>
-                        <td colspan="5" class="px-6 py-12 text-center text-gray-500 font-bold">
-                            {{ __('No tasks found.') }}
-                        </td>
-                    </tr>
-                @endforelse
-            </tbody>
-        </table>
-    </div>
-    
-    @if($tasks->hasPages())
-        <div class="px-6 py-4 bg-gray-50 border-t border-gray-100">
-            {{ $tasks->links() }}
-        </div>
-    @endif
 </div>
 @endsection

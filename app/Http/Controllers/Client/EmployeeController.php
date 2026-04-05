@@ -41,6 +41,8 @@ class EmployeeController extends Controller
             $request->validated(),
             $request->file('national_id_image'),
             $request->file('contract_image'),
+            $request->file('cv_file'),
+            $request->file('other_documents', []),
         );
         return redirect()->route('client.employees.index')->with('success', __('messages.employee_created'));
     }
@@ -65,6 +67,8 @@ class EmployeeController extends Controller
             $request->validated(),
             $request->file('national_id_image'),
             $request->file('contract_image'),
+            $request->file('cv_file'),
+            $request->file('other_documents', []),
         );
         return redirect()->route('client.employees.index')->with('success', __('messages.employee_updated'));
     }

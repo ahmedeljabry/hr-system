@@ -6,10 +6,11 @@ use App\Http\Controllers\Controller;
 use App\Models\Employee;
 use Illuminate\Support\Facades\Storage;
 use Symfony\Component\HttpFoundation\StreamedResponse;
+use Illuminate\Http\Request;
 
 class EmployeeFileController extends Controller
 {
-    public function show(int $employee, string $type): StreamedResponse
+    public function show(Request $request, int $employee, string $type): StreamedResponse
     {
         $user = auth()->user();
         $client = $user->client;
@@ -23,6 +24,8 @@ class EmployeeFileController extends Controller
         $path = match ($type) {
             'national_id' => $emp->national_id_image,
             'contract' => $emp->contract_image,
+            'cv' => $emp->cv_file,
+            'other' => $this->getOtherPath($emp, $request->input('index')),
             default => abort(404),
         };
 
@@ -31,5 +34,13 @@ class EmployeeFileController extends Controller
         }
 
         return Storage::disk('private')->download($path);
+    }
+
+    private function getOtherPath(Employee $emp, $index): ?string
+    {
+        if (is_null($index) || !isset($emp->other_documents[$index])) {
+            return null;
+        }
+        return $emp->other_documents[$index];
     }
 }

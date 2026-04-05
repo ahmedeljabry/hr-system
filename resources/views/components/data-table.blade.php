@@ -112,7 +112,7 @@
         <span class="text-sm text-gray-600 mb-4 md:mb-0">
             {{ __('Showing results dynamically') }}
         </span>
-        <div class="flex items-center space-x-1 {{ document?.documentElement?.dir === 'rtl' ? 'space-x-reverse' : '' }}">
+        <div class="flex items-center space-x-1 rtl:space-x-reverse">
             <template x-for="link in links">
                 <button 
                     @click.prevent="fetchData(link.url)" 

@@ -273,4 +273,14 @@ return [
     'no_payslips' => 'لا توجد قسائم رواتب لهذا المسير.',
     'payroll_confirmed' => 'تم التأكيد',
     'payroll_draft' => 'مسودة',
+
+    // Import Employees
+    'import_instructions' => 'تعليمات الاستيراد',
+    'import_format_hint' => 'يرجى تحميل ملف Excel (.xlsx أو .xls) يحتوي على بيانات الموظفين. تأكد من تطابق أسماء الأعمدة في الملف مع الحقول التالية:',
+    'upload_excel' => 'رفع ملف التميز (Excel)',
+    'choose_file' => 'اختر ملف',
+    'excel_size_hint' => 'ملف Excel فقط، بحجم أقصى 10MB',
+    'import' => 'استيراد',
+    'import_errors' => 'أخطاء الاستيراد',
+    'import_partial_success' => 'تم استيراد :count موظف(ين) بنجاح.',
 ];

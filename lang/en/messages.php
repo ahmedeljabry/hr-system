@@ -234,4 +234,14 @@ return [
     'no_payslips' => 'No payslips found for this cycle.',
     'payroll_confirmed' => 'Confirmed',
     'payroll_draft' => 'Draft',
+
+    // Import Employees
+    'import_instructions' => 'Import Instructions',
+    'import_format_hint' => 'Please upload an Excel file (.xlsx or .xls) containing employee data. Ensure the column headers exactly match the following fields:',
+    'upload_excel' => 'Upload Excel File',
+    'choose_file' => 'Choose File',
+    'excel_size_hint' => 'Excel file only, maximum size 10MB',
+    'import' => 'Import',
+    'import_errors' => 'Import Errors',
+    'import_partial_success' => 'Successfully imported :count employee(s).',
 ];

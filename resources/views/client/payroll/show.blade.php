@@ -10,14 +10,14 @@
                 <div class="space-y-4">
                     <div class="flex items-center gap-4">
                         <h1 class="text-4xl font-extrabold tracking-tight text-primary">
-                            {{ __('messages.payroll') }} - {{ $run->month->format('F Y') }}
+                            {{ __('messages.payroll') }} - {{ $run->month->translatedFormat('F Y') }}
                         </h1>
                         <div class="px-4 py-1 rounded-full text-xs font-black uppercase tracking-widest border {{ $run->isConfirmed() ? 'border-primary text-primary bg-primary/10' : 'border-yellow-400 text-yellow-400 bg-yellow-400/10' }}">
                             {{ $run->isConfirmed() ? __('messages.payroll_confirmed') : __('messages.payroll_draft') }}
                         </div>
                     </div>
                     <p class="text-gray-400 text-lg max-w-xl">
-                        {{ __('messages.payroll_history_desc') ?? 'Detailed view of all employee payslips for this period.' }}
+                        {{ __('messages.payroll_history_desc') }}
                     </p>
                 </div>
                 

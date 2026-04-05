@@ -8,17 +8,12 @@
         <div class="bg-secondary overflow-hidden shadow-2xl rounded-3xl p-10 text-white mb-10 relative group border border-primary/20">
             <div class="relative z-10 flex flex-col md:flex-row md:items-center md:justify-between gap-6">
                 <div>
-                    <h1 class="text-4xl font-extrabold mb-2 tracking-tight text-primary">{{ __('messages.tasks') ?? __('Tasks') }}</h1>
-                    <p class="text-gray-300 text-lg opacity-90">{{ __('messages.tasks_desc') ?? 'Organize and track employee tasks and deadlines efficiently.' }}</p>
+                    <h1 class="text-4xl font-extrabold mb-2 tracking-tight text-primary">{{ __('messages.tasks') }}</h1>
+                    <p class="text-gray-300 text-lg opacity-90">{{ __('messages.tasks_desc') }}</p>
                 </div>
                 
                 <div class="flex items-center gap-4">
-                    <a href="{{ route('client.tasks.create') }}" 
-                       class="inline-flex items-center px-10 py-4 bg-primary hover:bg-[#8affaa] text-secondary text-sm font-black rounded-2xl shadow-[0_20px_50px_rgba(var(--color-primary-rgb),0.3)] hover:shadow-[0_25px_60px_rgba(var(--color-primary-rgb),0.5)] border-b-4 border-emerald-400 hover:border-emerald-300 transition-all duration-500 hover:-translate-y-2 active:translate-y-1 active:border-b-0 group/add">
-                        <svg class="w-5 h-5 me-3 group-hover/add:rotate-90 transition-transform duration-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M12 4v16m8-8H4" />
-                        </svg>
-                        {{ __('messages.add_task') ?? __('Create Task') }}
+                        {{ __('messages.add_task') }}
                     </a>
                 </div>
             </div>
@@ -45,11 +40,11 @@
                 <table class="min-w-full">
                     <thead>
                         <tr class="bg-gray-50/50 border-b border-gray-100">
-                            <th class="px-8 py-6 text-left text-[11px] font-black text-gray-400 uppercase tracking-[0.2em] {{ app()->getLocale() == 'ar' ? 'text-right' : '' }}">{{ __('messages.task_title') ?? __('Task') }}</th>
-                            <th class="px-8 py-6 text-left text-[11px] font-black text-gray-400 uppercase tracking-[0.2em] {{ app()->getLocale() == 'ar' ? 'text-right' : '' }}">{{ __('messages.assigned_to') ?? __('Assignee') }}</th>
-                            <th class="px-8 py-6 text-left text-[11px] font-black text-gray-400 uppercase tracking-[0.2em] {{ app()->getLocale() == 'ar' ? 'text-right' : '' }}">{{ __('messages.due_date') ?? __('Due Date') }}</th>
-                            <th class="px-8 py-6 text-center text-[11px] font-black text-gray-400 uppercase tracking-[0.2em]">{{ __('messages.status') ?? __('Status') }}</th>
-                            <th class="px-8 py-6 text-right text-[11px] font-black text-gray-400 uppercase tracking-[0.2em] {{ app()->getLocale() == 'ar' ? 'text-left' : '' }}">{{ __('messages.actions') ?? __('Actions') }}</th>
+                            <th class="px-8 py-6 text-left text-[11px] font-black text-gray-400 uppercase tracking-[0.2em] {{ app()->getLocale() == 'ar' ? 'text-right' : '' }}">{{ __('messages.task_title') }}</th>
+                            <th class="px-8 py-6 text-left text-[11px] font-black text-gray-400 uppercase tracking-[0.2em] {{ app()->getLocale() == 'ar' ? 'text-right' : '' }}">{{ __('messages.assigned_to') }}</th>
+                            <th class="px-8 py-6 text-left text-[11px] font-black text-gray-400 uppercase tracking-[0.2em] {{ app()->getLocale() == 'ar' ? 'text-right' : '' }}">{{ __('messages.due_date') }}</th>
+                            <th class="px-8 py-6 text-center text-[11px] font-black text-gray-400 uppercase tracking-[0.2em]">{{ __('messages.status') }}</th>
+                            <th class="px-8 py-6 text-right text-[11px] font-black text-gray-400 uppercase tracking-[0.2em] {{ app()->getLocale() == 'ar' ? 'text-left' : '' }}">{{ __('messages.actions') }}</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-50">
@@ -71,7 +66,7 @@
                                         <div class="w-7 h-7 rounded-lg bg-primary/10 flex items-center justify-center text-[10px] font-black text-secondary">
                                             {{ substr($task->employee?->name ?? '?', 0, 1) }}
                                         </div>
-                                        <span class="text-sm font-bold text-gray-600">{{ $task->employee?->name ?: __('messages.unassigned') ?? __('Unassigned') }}</span>
+                                        <span class="text-sm font-bold text-gray-600">{{ $task->employee?->name ?: __('messages.unassigned') }}</span>
                                     </div>
                                 </td>
                                 <td class="px-8 py-6 whitespace-nowrap">
@@ -80,7 +75,7 @@
                                             {{ $task->due_date?->format('M d, Y') ?: '-' }}
                                         </span>
                                         @if($task->due_date?->isPast() && $task->status != 'done')
-                                            <span class="text-[9px] font-black uppercase text-red-400 tracking-tighter">{{ __('OVERDUE') }}</span>
+                                            <span class="text-[9px] font-black uppercase text-red-400 tracking-tighter">{{ __('messages.overdue') }}</span>
                                         @endif
                                     </div>
                                 </td>
@@ -93,7 +88,7 @@
                                         ][$task->status] ?? 'bg-gray-100 text-gray-600';
                                     @endphp
                                     <span class="px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest {{ $statusConfig }}">
-                                        {{ __($task->status) }}
+                                        {{ __('messages.' . $task->status) }}
                                     </span>
                                 </td>
                                 <td class="px-8 py-6 whitespace-nowrap">
@@ -102,7 +97,7 @@
                                            class="p-2.5 text-gray-400 hover:text-secondary hover:bg-gray-100 rounded-xl transition-all duration-300 group/edit">
                                             <svg class="h-5 w-5 group-hover/edit:scale-110 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>
                                         </a>
-                                        <form action="{{ route('client.tasks.destroy', $task) }}" method="POST" class="inline" onsubmit="return confirm('{{ __('Are you sure?') }}')">
+                                        <form action="{{ route('client.tasks.destroy', $task) }}" method="POST" class="inline" onsubmit="return confirm('{{ __('messages.are_you_sure') }}')">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" class="p-2.5 text-red-300 hover:text-red-500 hover:bg-red-50 rounded-xl transition-all duration-300 group/del">
@@ -119,7 +114,7 @@
                                         <div class="w-20 h-20 bg-gray-50 rounded-full flex items-center justify-center mb-6">
                                             <svg class="w-10 h-10 text-gray-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" /></svg>
                                         </div>
-                                        <h3 class="text-xl font-black text-secondary tracking-tight mb-2">{{ __('messages.no_tasks') ?? __('No Tasks Found') }}</h3>
+                                        <h3 class="text-xl font-black text-secondary tracking-tight mb-2">{{ __('messages.no_tasks') }}</h3>
                                         <p class="text-sm text-gray-400 max-w-xs mx-auto mb-6">{{ __('messages.tasks_empty_desc') }}</p>
                                         <a href="{{ route('client.tasks.create') }}" class="inline-flex items-center gap-2 text-primary hover:text-primary/80 font-black text-sm transition-colors">
                                             {{ __('messages.add_task') }}

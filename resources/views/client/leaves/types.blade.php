@@ -8,8 +8,8 @@
         <div class="bg-secondary overflow-hidden shadow-2xl rounded-3xl p-10 text-white mb-10 relative group border border-primary/20">
             <div class="relative z-10 flex flex-col md:flex-row md:items-center md:justify-between gap-6">
                 <div>
-                    <h1 class="text-4xl font-extrabold mb-2 tracking-tight text-primary">{{ __('messages.leave_types_config') ?? __('Leave Types Configuration') }}</h1>
-                    <p class="text-gray-300 text-lg opacity-90">{{ __('messages.leave_types_desc') ?? 'Define and manage standard leave categories and annual allowances for your workforce.' }}</p>
+                    <h1 class="text-4xl font-extrabold mb-2 tracking-tight text-primary">{{ __('messages.leave_types_config') }}</h1>
+                    <p class="text-gray-300 text-lg opacity-90">{{ __('messages.leave_types_desc') }}</p>
                 </div>
                 
                 <div class="flex items-center gap-4">
@@ -18,7 +18,7 @@
                         <svg class="w-5 h-5 me-2 group-hover/back:-translate-x-1 transition-transform rtl:group-hover/back:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
                         </svg>
-                        {{ __('messages.back_to_requests') ?? __('Back to Requests') }}
+                        {{ __('messages.back_to_requests') }}
                     </a>
                 </div>
             </div>
@@ -47,13 +47,13 @@
                         <div class="w-10 h-10 rounded-2xl bg-primary/10 flex items-center justify-center">
                             <svg class="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
                         </div>
-                        <h3 class="text-xl font-black text-secondary tracking-tight">{{ __('messages.add_leave_type') ?? __('Add Leave Type') }}</h3>
+                        <h3 class="text-xl font-black text-secondary tracking-tight">{{ __('messages.add_leave_type') }}</h3>
                     </div>
 
                     <form action="{{ route('client.leaves.store-type') }}" method="POST" class="space-y-8">
                         @csrf
                         <div class="space-y-3">
-                            <label for="name" class="block text-xs font-black text-gray-400 uppercase tracking-[0.2em] {{ app()->getLocale() == 'ar' ? 'text-right' : '' }}">{{ __('messages.name') ?? __('Name') }} <span class="text-primary">*</span></label>
+                            <label for="name" class="block text-xs font-black text-gray-400 uppercase tracking-[0.2em] {{ app()->getLocale() == 'ar' ? 'text-right' : '' }}">{{ __('messages.name') }} <span class="text-primary">*</span></label>
                             <input type="text" name="name" id="name" required placeholder="{{ __('e.g. Annual Leave') }}"
                                 class="block w-full bg-gray-50 border-2 border-transparent focus:border-primary focus:bg-white rounded-2xl py-4 px-6 text-secondary font-bold transition-all duration-300 outline-none @error('name') border-red-200 bg-red-50 @enderror" value="{{ old('name') }}">
                             @error('name') <p class="text-red-500 text-xs font-bold">{{ $message }}</p> @enderror
@@ -62,7 +62,7 @@
                         <div class="space-y-3">
                             <div class="flex justify-between items-center">
                                 <label for="max_days_per_year" class="block text-xs font-black text-gray-400 uppercase tracking-[0.2em] {{ app()->getLocale() == 'ar' ? 'text-right' : '' }}">{{ __('messages.max_days_per_year') ?? __('Max Days/Year') }} <span class="text-primary">*</span></label>
-                                <span class="text-[10px] font-black text-primary/60 uppercase tracking-widest">{{ __('Unlimited = 0') }}</span>
+                                <span class="text-[10px] font-black text-primary/60 uppercase tracking-widest">{{ __('messages.unlimited_zero') }}</span>
                             </div>
                             <input type="number" name="max_days_per_year" id="max_days_per_year" required min="0" max="365"
                                 class="block w-full bg-gray-50 border-2 border-transparent focus:border-primary focus:bg-white rounded-2xl py-4 px-6 text-secondary font-black transition-all duration-300 outline-none" value="{{ old('max_days_per_year', 0) }}">
@@ -84,9 +84,9 @@
                     <table class="min-w-full">
                         <thead>
                             <tr class="bg-gray-50/50 border-b border-gray-100">
-                                <th class="px-8 py-6 text-left text-[11px] font-black text-gray-400 uppercase tracking-[0.2em] {{ app()->getLocale() == 'ar' ? 'text-right' : '' }}">{{ __('messages.name') ?? __('Name') }}</th>
-                                <th class="px-8 py-6 text-left text-[11px] font-black text-gray-400 uppercase tracking-[0.2em] {{ app()->getLocale() == 'ar' ? 'text-right' : '' }}">{{ __('messages.max_days_per_year') ?? __('Max Allowance') }}</th>
-                                <th class="px-8 py-6 text-right text-[11px] font-black text-gray-400 uppercase tracking-[0.2em] {{ app()->getLocale() == 'ar' ? 'text-left' : '' }}">{{ __('messages.actions') ?? __('Actions') }}</th>
+                                <th class="px-8 py-6 text-left text-[11px] font-black text-gray-400 uppercase tracking-[0.2em] {{ app()->getLocale() == 'ar' ? 'text-right' : '' }}">{{ __('messages.name') }}</th>
+                                <th class="px-8 py-6 text-left text-[11px] font-black text-gray-400 uppercase tracking-[0.2em] {{ app()->getLocale() == 'ar' ? 'text-right' : '' }}">{{ __('messages.max_days_per_year') }}</th>
+                                <th class="px-8 py-6 text-right text-[11px] font-black text-gray-400 uppercase tracking-[0.2em] {{ app()->getLocale() == 'ar' ? 'text-left' : '' }}">{{ __('messages.actions') }}</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-50">
@@ -135,10 +135,10 @@
                                             <button @click="editing = true" class="p-3 text-gray-400 hover:text-primary hover:bg-primary/10 rounded-2xl transition-all duration-300" title="{{ __('Edit') }}">
                                                 <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>
                                             </button>
-                                            <form action="{{ route('client.leaves.destroy-type', $type) }}" method="POST" class="inline" onsubmit="return confirm('{{ __('Are you sure?') }}')">
+                                            <form action="{{ route('client.leaves.destroy-type', $type) }}" method="POST" class="inline" onsubmit="return confirm('{{ __('messages.are_you_sure') }}')">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="submit" class="p-3 text-red-300 hover:text-red-500 hover:bg-red-50 rounded-2xl transition-all duration-300" title="{{ __('Delete') }}">
+                                                <button type="submit" class="p-3 text-red-300 hover:text-red-500 hover:bg-red-50 rounded-2xl transition-all duration-300" title="{{ __('messages.delete') }}">
                                                     <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
                                                 </button>
                                             </form>
@@ -152,7 +152,7 @@
                                             <div class="w-20 h-20 bg-gray-50 rounded-full flex items-center justify-center mb-4">
                                                 <svg class="w-10 h-10 text-gray-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
                                             </div>
-                                            <p class="text-gray-400 font-bold uppercase tracking-[0.2em] text-xs">{{ __('No leave types configured yet.') }}</p>
+                                            <p class="text-gray-400 font-bold uppercase tracking-[0.2em] text-xs">{{ __('messages.no_leave_types_yet') }}</p>
                                         </div>
                                     </td>
                                 </tr>

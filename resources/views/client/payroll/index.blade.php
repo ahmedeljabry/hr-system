@@ -9,7 +9,7 @@
             <div class="relative z-10 flex flex-col md:flex-row md:items-center md:justify-between gap-6">
                 <div>
                     <h1 class="text-4xl font-extrabold mb-2 tracking-tight text-primary">{{ __('messages.payroll_history') }}</h1>
-                    <p class="text-gray-300 text-lg opacity-90">{{ __('messages.payroll_desc') ?? 'Manage and track your company payroll history.' }}</p>
+                    <p class="text-gray-300 text-lg opacity-90">{{ __('messages.payroll_desc') }}</p>
                 </div>
                 
                 <div class="flex items-center gap-4">
@@ -112,7 +112,7 @@
                                             <svg class="w-16 h-16 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.406 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.406-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                                         </div>
                                         <h3 class="text-xl font-bold text-secondary mb-2">{{ __('messages.no_payroll_runs') }}</h3>
-                                        <p class="text-sm text-gray-400 max-w-xs mx-auto">{{ __('messages.no_payroll_desc') ?? 'Start your first payroll cycle to see the history here.' }}</p>
+                                        <p class="text-sm text-gray-400 max-w-xs mx-auto">{{ __('messages.no_payroll_desc') }}</p>
                                     </div>
                                 </td>
                             </tr>

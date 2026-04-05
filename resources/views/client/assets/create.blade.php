@@ -8,8 +8,8 @@
         <div class="bg-secondary overflow-hidden shadow-2xl rounded-3xl p-10 text-white mb-10 relative group border border-primary/20">
             <div class="relative z-10 flex flex-col md:flex-row md:items-center md:justify-between gap-6">
                 <div>
-                    <h1 class="text-4xl font-extrabold mb-2 tracking-tight text-primary">{{ __('messages.add_asset') ?? __('Add Asset') }}</h1>
-                    <p class="text-gray-300 text-lg opacity-90">{{ __('Register a new organizational asset and assign it to an employee.') }}</p>
+                    <h1 class="text-4xl font-extrabold mb-2 tracking-tight text-primary">{{ __('messages.add_asset') }}</h1>
+                    <p class="text-gray-300 text-lg opacity-90">{{ __('messages.create_asset_desc') }}</p>
                 </div>
                 
                 <div class="flex items-center gap-4">
@@ -58,7 +58,7 @@
                             </div>
                             <input type="text" name="type" id="type" value="{{ old('type') }}" required
                                    class="block w-full bg-gray-50 border-2 border-transparent focus:border-primary focus:bg-white rounded-2xl py-4 ps-14 pe-6 text-secondary font-bold transition-all duration-300 outline-none"
-                                   placeholder="e.g. MacBook Pro M3">
+                                   placeholder="{{ __('messages.asset_type_placeholder') }}">
                         </div>
                     </div>
 
@@ -71,7 +71,7 @@
                             </div>
                             <input type="text" name="serial_number" id="serial_number" value="{{ old('serial_number') }}"
                                    class="block w-full bg-gray-50 border-2 border-transparent focus:border-primary focus:bg-white rounded-2xl py-4 ps-14 pe-6 text-secondary font-mono font-bold transition-all duration-300 outline-none"
-                                   placeholder="Unique Device ID">
+                                   placeholder="{{ __('messages.serial_number_placeholder') }}">
                         </div>
                     </div>
 
@@ -108,7 +108,7 @@
 
                     <!-- Return Date -->
                     <div class="space-y-3">
-                        <label for="returned_date" class="block text-xs font-black text-gray-400 uppercase tracking-[0.2em]">{{ __('Return Date') }}</label>
+                        <label for="returned_date" class="block text-xs font-black text-gray-400 uppercase tracking-[0.2em]">{{ __('messages.return_date') }}</label>
                         <div class="relative group">
                             <div class="absolute inset-y-0 start-0 ps-6 flex items-center pointer-events-none text-gray-400 group-focus-within:text-primary transition-colors">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
@@ -123,7 +123,7 @@
                         <label for="description" class="block text-xs font-black text-gray-400 uppercase tracking-[0.2em]">{{ __('messages.assets_desc') ?? __('Asset Details') }}</label>
                         <textarea name="description" id="description" rows="4"
                                   class="block w-full bg-gray-50 border-2 border-transparent focus:border-primary focus:bg-white rounded-3xl py-4 px-6 text-secondary font-medium transition-all duration-300 outline-none"
-                                  placeholder="Provide conditions, configuration, or other details...">{{ old('description') }}</textarea>
+                                  placeholder="{{ __('messages.asset_desc_placeholder') }}">{{ old('description') }}</textarea>
                     </div>
                 </div>
 

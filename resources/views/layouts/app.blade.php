@@ -62,10 +62,10 @@
                             <a href="/admin/clients" class="text-sm font-semibold text-gray-600 hover:text-secondary hover:underline decoration-primary decoration-2 underline-offset-8 transition-all">{{ __('messages.clients') }}</a>
                         @elseif(Auth::user()->isClient())
                             <a href="/client/dashboard" class="text-sm font-semibold {{ request()->is('client/dashboard') ? 'text-secondary underline decoration-primary decoration-2 underline-offset-8' : 'text-gray-500 hover:text-secondary' }} transition-all">{{ __('messages.dashboard') }}</a>
-                            <a href="{{ route('client.attendance.index') }}" class="text-sm font-semibold {{ request()->routeIs('client.attendance.*') ? 'text-secondary underline decoration-primary decoration-2 underline-offset-8' : 'text-gray-500 hover:text-secondary' }} transition-all">{{ __('Attendance') }}</a>
-                            <a href="{{ route('client.tasks.index') }}" class="text-sm font-semibold {{ request()->routeIs('client.tasks.*') ? 'text-secondary underline decoration-primary decoration-2 underline-offset-8' : 'text-gray-500 hover:text-secondary' }} transition-all">{{ __('Tasks') }}</a>
-                            <a href="{{ route('client.assets.index') }}" class="text-sm font-semibold {{ request()->routeIs('client.assets.*') ? 'text-secondary underline decoration-primary decoration-2 underline-offset-8' : 'text-gray-500 hover:text-secondary' }} transition-all">{{ __('Assets') }}</a>
-                            <a href="{{ route('client.leaves.index') }}" class="text-sm font-semibold {{ request()->routeIs('client.leaves.*') ? 'text-secondary underline decoration-primary decoration-2 underline-offset-8' : 'text-gray-500 hover:text-secondary' }} transition-all">{{ __('Leaves') }}</a>
+                            <a href="{{ route('client.attendance.index') }}" class="text-sm font-semibold {{ request()->routeIs('client.attendance.*') ? 'text-secondary underline decoration-primary decoration-2 underline-offset-8' : 'text-gray-500 hover:text-secondary' }} transition-all">{{ __('messages.attendance') }}</a>
+                            <a href="{{ route('client.tasks.index') }}" class="text-sm font-semibold {{ request()->routeIs('client.tasks.*') ? 'text-secondary underline decoration-primary decoration-2 underline-offset-8' : 'text-gray-500 hover:text-secondary' }} transition-all">{{ __('messages.tasks') }}</a>
+                            <a href="{{ route('client.assets.index') }}" class="text-sm font-semibold {{ request()->routeIs('client.assets.*') ? 'text-secondary underline decoration-primary decoration-2 underline-offset-8' : 'text-gray-500 hover:text-secondary' }} transition-all">{{ __('messages.assets') }}</a>
+                            <a href="{{ route('client.leaves.index') }}" class="text-sm font-semibold {{ request()->routeIs('client.leaves.*') ? 'text-secondary underline decoration-primary decoration-2 underline-offset-8' : 'text-gray-500 hover:text-secondary' }} transition-all">{{ __('messages.leaves_management') }}</a>
                         @elseif(Auth::user()->isEmployee())
                             <a href="/employee/dashboard" class="text-sm font-semibold {{ request()->is('employee/dashboard') ? 'text-secondary underline decoration-primary decoration-2 underline-offset-8' : 'text-gray-500 hover:text-secondary' }} transition-all">{{ __('messages.dashboard') }}</a>
                         @endif
@@ -103,8 +103,8 @@
         <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-4">
             <p>&copy; {{ date('Y') }} {{ __('messages.company_name_localized') }}. {{ __('messages.all_rights_reserved') }}</p>
             <div class="flex items-center gap-4">
-                <a href="#" class="hover:text-secondary transition-colors">{{ __('Privacy Policy') }}</a>
-                <a href="#" class="hover:text-secondary transition-colors">{{ __('Terms of Service') }}</a>
+                <a href="#" class="hover:text-secondary transition-colors">{{ __('messages.privacy_policy') }}</a>
+                <a href="#" class="hover:text-secondary transition-colors">{{ __('messages.terms_of_service') }}</a>
             </div>
         </div>
     </footer>

@@ -8,8 +8,8 @@
         <div class="bg-secondary overflow-hidden shadow-2xl rounded-3xl p-10 text-white mb-10 relative group border border-primary/20">
             <div class="relative z-10 flex flex-col md:flex-row md:items-center md:justify-between gap-6">
                 <div>
-                    <h1 class="text-4xl font-extrabold mb-2 tracking-tight text-primary">{{ __('messages.leave_management') ?? __('Leave Management') }}</h1>
-                    <p class="text-gray-300 text-lg opacity-90">{{ __('messages.leave_management_desc') ?? 'Review and oversee employee leave requests with professional administrative control.' }}</p>
+                    <h1 class="text-4xl font-extrabold mb-2 tracking-tight text-primary">{{ __('messages.leave_management') }}</h1>
+                    <p class="text-gray-300 text-lg opacity-90">{{ __('messages.leave_management_desc') }}</p>
                 </div>
                 
                 <div class="flex items-center gap-4">
@@ -19,7 +19,7 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.066-2.573c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                         </svg>
-                        {{ __('messages.config_leave_types') ?? __('Config Leave Types') }}
+                        {{ __('messages.config_leave_types') }}
                     </a>
                 </div>
             </div>
@@ -56,10 +56,10 @@
             @php
                 $currentStatus = request('status');
                 $tabs = [
-                    null => ['label' => __('All'), 'active' => 'bg-secondary text-white', 'inactive' => 'bg-white text-gray-500 hover:bg-gray-50'],
-                    'pending' => ['label' => __('Pending'), 'active' => 'bg-amber-500 text-white', 'inactive' => 'bg-white text-amber-600 hover:bg-amber-50'],
-                    'approved' => ['label' => __('Approved'), 'active' => 'bg-primary text-secondary', 'inactive' => 'bg-white text-gray-500 hover:bg-primary/10 hover:text-secondary'],
-                    'rejected' => ['label' => __('Rejected'), 'active' => 'bg-red-500 text-white', 'inactive' => 'bg-white text-red-500 hover:bg-red-50'],
+                    null => ['label' => __('messages.all'), 'active' => 'bg-secondary text-white', 'inactive' => 'bg-white text-gray-500 hover:bg-gray-50'],
+                    'pending' => ['label' => __('messages.pending'), 'active' => 'bg-amber-500 text-white', 'inactive' => 'bg-white text-amber-600 hover:bg-amber-50'],
+                    'approved' => ['label' => __('messages.approved'), 'active' => 'bg-primary text-secondary', 'inactive' => 'bg-white text-gray-500 hover:bg-primary/10 hover:text-secondary'],
+                    'rejected' => ['label' => __('messages.rejected'), 'active' => 'bg-red-500 text-white', 'inactive' => 'bg-white text-red-500 hover:bg-red-50'],
                 ];
             @endphp
             @foreach($tabs as $val => $tab)
@@ -131,13 +131,13 @@
                                                   <button type="submit" class="px-6 py-2.5 bg-primary hover:bg-[#8affaa] text-secondary text-xs font-black rounded-xl shadow-lg shadow-primary/20 border-b-2 border-emerald-400 hover:border-emerald-300 transition-all duration-300 hover:-translate-y-1 active:translate-y-0.5 active:border-b-0 uppercase tracking-wider group/approve">
                                                       <span class="flex items-center gap-2">
                                                           <svg class="h-4 w-4 group-hover/approve:scale-125 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" /></svg>
-                                                          {{ __('messages.approve') ?? __('Approve') }}
+                                                          {{ __('messages.approve') }}
                                                       </span>
                                                   </button>
                                               </form>
                                              <form action="{{ route('client.leaves.reject', $req) }}" method="POST" class="inline">
                                                  @csrf
-                                                 <button type="submit" class="p-2.5 text-red-300 hover:text-red-500 hover:bg-red-50 rounded-xl transition-all duration-300" title="{{ __('messages.reject') ?? __('Reject') }}">
+                                                 <button type="submit" class="p-2.5 text-red-300 hover:text-red-500 hover:bg-red-50 rounded-xl transition-all duration-300" title="{{ __('messages.reject') }}">
                                                      <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
                                                  </button>
                                              </form>
@@ -157,7 +157,7 @@
                                         <div class="w-20 h-20 bg-gray-50 rounded-full flex items-center justify-center mb-6">
                                             <svg class="w-10 h-10 text-gray-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
                                         </div>
-                                        <h3 class="text-xl font-black text-secondary tracking-tight mb-2">{{ __('messages.no_leave_requests') ?? __('No Leave Requests Found') }}</h3>
+                                        <h3 class="text-xl font-black text-secondary tracking-tight mb-2">{{ __('messages.no_leave_requests') }}</h3>
                                         <p class="text-sm text-gray-400 max-w-xs mx-auto">{{ __('messages.no_leave_requests_desc') }}</p>
                                     </div>
                                 </td>

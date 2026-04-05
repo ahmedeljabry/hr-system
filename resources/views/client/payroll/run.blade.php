@@ -9,7 +9,7 @@
             <div class="relative z-10 flex flex-col md:flex-row md:items-center md:justify-between gap-6">
                 <div>
                     <h1 class="text-4xl font-extrabold mb-2 tracking-tight text-primary">{{ __('messages.run_payroll') }}</h1>
-                    <p class="text-gray-300 text-lg opacity-90">{{ __('messages.run_payroll_desc') ?? 'Initiate a new payroll cycle for your employees.' }}</p>
+                    <p class="text-gray-300 text-lg opacity-90">{{ __('messages.run_payroll_desc') }}</p>
                 </div>
                 
                 <div class="flex items-center gap-4">

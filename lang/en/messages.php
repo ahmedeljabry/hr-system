@@ -183,4 +183,54 @@ return [
     'no_payroll_runs' => 'No payroll runs issued.',
     'run_payroll' => 'Start Payroll Run',
     'payroll_run_created' => 'Payroll run started successfully.',
+
+    // Footer & Legal
+    'privacy_policy' => 'Privacy Policy',
+    'terms_of_service' => 'Terms of Service',
+    'all_rights_reserved' => 'All Rights Reserved',
+
+    // Dashboard Extras
+    'subscription_status' => 'Subscription Status',
+    'subscription_active' => 'Active Subscription',
+    'subscription_expired' => 'Subscription Expired',
+    'total_registered' => 'Total Registered',
+    'manage_employees' => 'Manage Employees',
+    'manage_payroll' => 'Manage Payroll',
+    'contact_admin_to_renew' => 'Please contact administration to renew your subscription.',
+    'manage_leaves' => 'Manage Leaves',
+    'manage_attendance' => 'Manage Attendance',
+    'all' => 'All',
+    'are_you_sure' => 'Are you sure?',
+
+    // Task Creation
+    'create_task_desc' => 'Enter task details and assign to an employee to begin tracking progress.',
+    'task_title_placeholder' => 'What needs to be done?',
+    'task_desc_placeholder' => 'Provide detailed instructions...',
+
+    // Asset Creation
+    'create_asset_desc' => 'Register a new organizational asset and assign it to an employee.',
+    'asset_type_placeholder' => 'e.g. MacBook Pro M3',
+    'serial_number_placeholder' => 'Unique Device ID',
+    'return_date' => 'Return Date',
+    'asset_desc_placeholder' => 'Provide conditions, configuration, or other details...',
+
+    // Payroll History
+    'payroll_history' => 'Payroll History',
+    'payroll_desc' => 'Manage and track your company payroll history.',
+    'select_month' => 'Select Month',
+    'employee_count' => 'Employee Count',
+    'total_net_payout' => 'Total Net Payout',
+    'run_date' => 'Run Date',
+    'no_payroll_desc' => 'Start your first payroll cycle to see the history here.',
+    'run_payroll' => 'Run Payroll',
+    'run_payroll_desc' => 'Initiate a new payroll cycle for your employees.',
+    'payroll' => 'Payroll',
+    'payroll_history_desc' => 'Detailed view of all employee payslips for this period.',
+    'confirm_payroll' => 'Confirm Payroll',
+    'total_allowances' => 'Total Allowances',
+    'total_deductions' => 'Total Deductions',
+    'net_salary' => 'Net Salary',
+    'no_payslips' => 'No payslips found for this cycle.',
+    'payroll_confirmed' => 'Confirmed',
+    'payroll_draft' => 'Draft',
 ];

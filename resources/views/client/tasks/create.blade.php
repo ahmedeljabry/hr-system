@@ -8,8 +8,8 @@
         <div class="bg-secondary overflow-hidden shadow-2xl rounded-3xl p-10 text-white mb-10 relative group border border-primary/20">
             <div class="relative z-10 flex flex-col md:flex-row md:items-center md:justify-between gap-6">
                 <div>
-                    <h1 class="text-4xl font-extrabold mb-2 tracking-tight text-primary">{{ __('messages.add_task') ?? __('Create Task') }}</h1>
-                    <p class="text-gray-300 text-lg opacity-90">{{ __('Enter task details and assign to an employee to begin tracking progress.') }}</p>
+                    <h1 class="text-4xl font-extrabold mb-2 tracking-tight text-primary">{{ __('messages.add_task') }}</h1>
+                    <p class="text-gray-300 text-lg opacity-90">{{ __('messages.create_task_desc') }}</p>
                 </div>
                 
                 <div class="flex items-center gap-4">
@@ -58,7 +58,7 @@
                             </div>
                             <input type="text" name="title" id="title" value="{{ old('title') }}" required
                                    class="block w-full bg-gray-50 border-2 border-transparent focus:border-primary focus:bg-white rounded-2xl py-4 ps-14 pe-6 text-secondary font-bold transition-all duration-300 outline-none"
-                                   placeholder="{{ __('messages.task_title_placeholder') ?? __('What needs to be done?') }}">
+                                   placeholder="{{ __('messages.task_title_placeholder') }}">
                         </div>
                     </div>
 
@@ -98,7 +98,7 @@
                         <label for="description" class="block text-xs font-black text-gray-400 uppercase tracking-[0.2em]">{{ __('messages.task_description') ?? __('Description') }}</label>
                         <textarea name="description" id="description" rows="4"
                                   class="block w-full bg-gray-50 border-2 border-transparent focus:border-primary focus:bg-white rounded-3xl py-4 px-6 text-secondary font-medium transition-all duration-300 outline-none"
-                                  placeholder="{{ __('Provide detailed instructions...') }}">{{ old('description') }}</textarea>
+                                  placeholder="{{ __('messages.task_desc_placeholder') }}">{{ old('description') }}</textarea>
                     </div>
                 </div>
 

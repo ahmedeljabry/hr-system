@@ -126,6 +126,41 @@
                 </div>
             </div>
         </div>
+    <div class="mt-12 bg-white rounded-[2.5rem] shadow-[0_20px_50px_rgba(0,0,0,0.03)] border border-gray-100 overflow-hidden transition-all duration-500">
+        <div class="px-10 py-7 border-b border-gray-50 bg-gray-50/50 flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <div class="w-2 h-6 bg-primary rounded-full"></div>
+                <h3 class="text-xl font-black text-secondary tracking-tight">{{ __('messages.announcements') }}</h3>
+            </div>
+            <a href="{{ route('client.announcements.index') }}" class="text-xs font-black uppercase tracking-widest text-primary hover:text-primary/70 transition-colors">{{ __('messages.view_all') }}</a>
+        </div>
+        
+        <div class="divide-y divide-gray-50">
+            @forelse($recentAnnouncements as $announcement)
+                <div class="p-10 hover:bg-gray-50 transition-all duration-300 group/announcement">
+                    <div class="flex items-center justify-between gap-6">
+                        <div class="flex-grow">
+                            <div class="flex items-center gap-3 mb-2">
+                                <span class="px-3 py-1 bg-primary/10 text-[9px] font-black text-primary uppercase tracking-widest rounded-full">{{ __('messages.notice') }}</span>
+                                <span class="text-[10px] font-bold text-gray-400">{{ $announcement->published_at->translatedFormat('d M, Y') }}</span>
+                            </div>
+                            <h4 class="text-lg font-black text-secondary mb-2 group-hover/announcement:text-primary transition-colors leading-tight">{{ $announcement->title }}</h4>
+                        </div>
+                        <a href="{{ route('client.announcements.edit', $announcement) }}" class="w-10 h-10 rounded-2xl bg-gray-50 flex items-center justify-center text-gray-400 hover:bg-primary hover:text-secondary transition-all duration-300">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
+                        </a>
+                    </div>
+                </div>
+            @empty
+                <div class="p-20 text-center">
+                    <div class="w-20 h-20 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-6 text-gray-200">
+                        <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10l4 4v10a2 2 0 01-2 2z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 4v4h4"></path></svg>
+                    </div>
+                    <h3 class="text-xl font-black text-secondary tracking-tight mb-2">{{ __('messages.no_announcements_yet') }}</h3>
+                </div>
+            @endforelse
+        </div>
     </div>
+</div>
 </div>
 @endsection

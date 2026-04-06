@@ -76,7 +76,6 @@
                                         @php
                                             $displayName = $asset->employee ? $asset->employee->name : __('messages.available');
                                         @endphp
-                                        <x-avatar :name="$displayName ?? '?'" size="xs" class="rounded-lg shadow-sm border border-gray-100" />
                                         <span class="text-sm font-bold text-gray-600">{{ $displayName ?: __('messages.inventory') ?? __('Inventory') }}</span>
                                     </div>
                                 </td>

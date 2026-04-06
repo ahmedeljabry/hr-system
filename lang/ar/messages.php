@@ -45,6 +45,7 @@ return [
 
     // New Module Descriptions
     'dashboard_desc' => 'نظرة شاملة على أداء فريقك والعمليات التشغيلية اليومية.',
+    'announcements_desc' => 'إدارة ونشر الإعلانات لجميع الموظفين في مؤسستك.',
     'employees_desc' => 'إدارة ملفات الموظفين، الوثائق، والبيانات الوظيفية بشكل مركزي.',
     'payroll_desc' => 'معالجة الرواتب، البدلات، والاقتطاعات بدقة وسهولة.',
     'leaves_desc' => 'نظام متكامل لطلب ومراجعة الإجازات بأنواعها المختلفة.',
@@ -429,6 +430,11 @@ return [
     'no_deductions' => 'لا توجد استقطاعات',
     'allowances' => 'البدلات',
     'deductions' => 'الاستقطاعات',
+    'payment_status_label' => 'حالة الدفع',
+    'confirmed_and_paid' => 'تم التأكيد والصرف',
+    'back_to_payslips' => 'العودة للقائمة',
+    'month_label' => 'الشهر',
+    'currency_sar' => 'ريال',
     
     // UI Elements & Dashboard
     'welcome_back' => 'مرحباً بعودتك',
@@ -473,4 +479,14 @@ return [
     'assigned_employee' => 'الموظف المستلم',
     'assets_desc' => 'تفاصيل العهدة',
     'asset_desc_placeholder' => 'تقديم الحالة، الإعدادات، أو تفاصيل أخرى...',
+
+    // Announcements Create Features
+    'broadcast_notice_title' => 'ملاحظة النشر',
+    'broadcast_notice_desc' => 'الإعلانات التي يتم إنشاؤها هنا ستظهر فوراً على لوحات تحكم جميع موظفيك النشطين.',
+    'feature_visible_employees' => 'مرئي لجميع الموظفين',
+    'feature_multi_line' => 'يدعم النصوص المتعددة',
+    'feature_real_time' => 'تحديث فوري',
+    'announcement_title_placeholder' => 'ما هو موضوع هذا الإعلان؟',
+    'announcement_body_placeholder' => 'اكتب محتوى إعلانك هنا...',
+    'save_data' => 'حفظ البيانات',
 ];

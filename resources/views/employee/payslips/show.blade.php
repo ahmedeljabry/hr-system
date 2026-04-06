@@ -12,7 +12,7 @@
                     <h1 class="text-2xl font-black text-secondary tracking-tight">
                         {{ __('messages.payslip_detail') }}
                     </h1>
-                    <p class="text-gray-400 font-bold uppercase tracking-widest text-[10px] mt-1">{{ $payslip->payrollRun->month->translatedFormat('F Y') }}</p>
+                    <p class="text-gray-500 mt-1">{{ $payslip->payrollRun->month->translatedFormat('F Y') }}</p>
                 </div>
             </div>
             <div class="flex items-center gap-4">

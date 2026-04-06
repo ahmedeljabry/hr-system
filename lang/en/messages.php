@@ -50,6 +50,7 @@ return [
 
     // New Module Descriptions
     'dashboard_desc' => 'A comprehensive overview of your team\'s performance and daily operations.',
+    'announcements_desc' => 'Manage and publish company-wide announcements for your employees.',
     'employees_desc' => 'Manage employee profiles, documents, and employment data centrally.',
     'payroll_desc' => 'Process salaries, allowances, and deductions accurately and easily.',
     'leaves_desc' => 'An integrated system for requesting and reviewing various leave types.',
@@ -412,6 +413,11 @@ return [
     'no_deductions' => 'No deductions',
     'allowances' => 'Allowances',
     'deductions' => 'Deductions',
+    'payment_status_label' => 'Payment Status',
+    'confirmed_and_paid' => 'Confirmed & Paid',
+    'back_to_payslips' => 'Back to List',
+    'month_label' => 'Month',
+    'currency_sar' => 'SAR',
     
     // UI Elements & Dashboard
     'welcome_back' => 'Welcome back',
@@ -456,4 +462,14 @@ return [
     'assigned_employee' => 'Assigned Employee',
     'assets_desc' => 'Asset Details',
     'asset_desc_placeholder' => 'Provide conditions, configuration, or other details...',
+
+    // Announcements Create Features
+    'broadcast_notice_title' => 'Broadcast Notice',
+    'broadcast_notice_desc' => 'Announcements created here will be immediately visible on the dashboards of all your active employees.',
+    'feature_visible_employees' => 'Visible to all employees',
+    'feature_multi_line' => 'Supports multi-line text',
+    'feature_real_time' => 'Real-time update',
+    'announcement_title_placeholder' => 'What is this announcement about?',
+    'announcement_body_placeholder' => 'Write the content of your announcement here...',
+    'save_data' => 'Save Data',
 ];

@@ -23,11 +23,14 @@ class DashboardController extends Controller
             $daysUntilExpiry = (int) now()->startOfDay()->diffInDays($client->subscription_end->copy()->startOfDay(), false);
         }
 
+        $recentAnnouncements = $client->announcements()->latest()->take(3)->get();
+
         return view('client.dashboard', compact(
             'client',
             'employeeCount',
             'daysUntilExpiry',
             'showExpiryWarning',
+            'recentAnnouncements',
         ));
     }
 }

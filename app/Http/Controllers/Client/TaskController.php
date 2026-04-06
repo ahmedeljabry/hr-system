@@ -47,8 +47,19 @@ class TaskController extends Controller
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
             'due_date' => 'nullable|date',
-            'status' => 'required|in:todo,in_progress,done',
+            'status' => 'nullable|in:todo,in_progress,done',
+            'attachments.*' => 'nullable|file|max:10240',
         ]);
+
+        $data['status'] = $data['status'] ?? 'todo';
+
+        if ($request->hasFile('attachments')) {
+            $paths = [];
+            foreach ($request->file('attachments') as $file) {
+                $paths[] = $file->store('task_attachments', 'public');
+            }
+            $data['attachments'] = $paths;
+        }
 
         // Validate employee belongs to this client
         if (!empty($data['employee_id'])) {
@@ -81,7 +92,17 @@ class TaskController extends Controller
             'description' => 'nullable|string',
             'due_date' => 'nullable|date',
             'status' => 'required|in:todo,in_progress,done',
+            'attachments.*' => 'nullable|file|max:10240', // 10MB max per file
         ]);
+
+        if ($request->hasFile('attachments')) {
+            $existingAttachments = $task->attachments ?? [];
+            $newPaths = [];
+            foreach ($request->file('attachments') as $file) {
+                $newPaths[] = $file->store('task_attachments', 'public');
+            }
+            $data['attachments'] = array_merge($existingAttachments, $newPaths);
+        }
 
         // Validate employee belongs to this client
         if (!empty($data['employee_id'])) {

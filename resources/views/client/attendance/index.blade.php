@@ -8,8 +8,8 @@
         <div class="bg-secondary overflow-hidden shadow-xl rounded-[2.5rem] p-10 text-white mb-10 relative group">
             <div class="relative z-10 flex flex-col md:flex-row md:items-center md:justify-between gap-6">
                 <div>
-                    <h1 class="text-4xl font-black mb-2 tracking-tight text-white">{{ __('messages.attendance') ?? __('Attendance') }}</h1>
-                    <p class="text-blue-100 text-lg opacity-90">{{ __('messages.attendance_desc') ?? 'Track and manage your team\'s daily attendance with professional precision.' }}</p>
+                    <h1 class="text-4xl font-black mb-2 tracking-tight text-white">{{ __('messages.attendance') }}</h1>
+                    <p class="text-blue-100 text-lg opacity-90">{{ __('messages.attendance_desc') }}</p>
                 </div>
                 
                 <!-- Date Filter in Hero -->
@@ -20,7 +20,7 @@
                                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
                             </div>
                             <div>
-                                <p class="text-[10px] font-black uppercase tracking-widest text-blue-200 mb-0.5">{{ __('messages.select_date') ?? __('Select Date') }}</p>
+                                <p class="text-[10px] font-black uppercase tracking-widest text-blue-200 mb-0.5">{{ __('messages.select_date') }}</p>
                                 <p class="text-sm font-black text-white whitespace-nowrap">{{ \Carbon\Carbon::parse($date)->translatedFormat('d F Y') }}</p>
                             </div>
                         </div>
@@ -94,12 +94,12 @@
                     <table class="min-w-full">
                         <thead>
                             <tr class="bg-gray-50/50 border-b border-gray-100">
-                                <th class="px-10 py-7 text-left text-[11px] font-black text-gray-400 uppercase tracking-[0.2em] {{ app()->getLocale() == 'ar' ? 'text-right' : '' }}">{{ __('messages.employee_name') ?? __('Employee') }}</th>
-                                <th class="px-4 py-7 text-center text-[11px] font-black text-gray-400 uppercase tracking-[0.2em]">{{ __('messages.present') ?? __('Present') }}</th>
-                                <th class="px-4 py-7 text-center text-[11px] font-black text-gray-400 uppercase tracking-[0.2em]">{{ __('messages.late') ?? __('Late') }}</th>
-                                <th class="px-4 py-7 text-center text-[11px] font-black text-gray-400 uppercase tracking-[0.2em]">{{ __('messages.absent') ?? __('Absent') }}</th>
-                                <th class="px-4 py-7 text-center text-[11px] font-black text-gray-400 uppercase tracking-[0.2em]">{{ __('messages.leave') ?? __('Leave') }}</th>
-                                <th class="px-10 py-7 text-left text-[11px] font-black text-gray-400 uppercase tracking-[0.2em] {{ app()->getLocale() == 'ar' ? 'text-right' : '' }}">{{ __('messages.notes') ?? __('Notes') }}</th>
+                                <th class="px-10 py-7 text-left text-[11px] font-black text-gray-400 uppercase tracking-[0.2em] {{ app()->getLocale() == 'ar' ? 'text-right' : '' }}">{{ __('messages.employee_name') }}</th>
+                                <th class="px-4 py-7 text-center text-[11px] font-black text-gray-400 uppercase tracking-[0.2em]">{{ __('messages.present') }}</th>
+                                <th class="px-4 py-7 text-center text-[11px] font-black text-gray-400 uppercase tracking-[0.2em]">{{ __('messages.late') }}</th>
+                                <th class="px-4 py-7 text-center text-[11px] font-black text-gray-400 uppercase tracking-[0.2em]">{{ __('messages.absent') }}</th>
+                                <th class="px-4 py-7 text-center text-[11px] font-black text-gray-400 uppercase tracking-[0.2em]">{{ __('messages.leave') }}</th>
+                                <th class="px-10 py-7 text-left text-[11px] font-black text-gray-400 uppercase tracking-[0.2em] {{ app()->getLocale() == 'ar' ? 'text-right' : '' }}">{{ __('messages.notes') }}</th>
 
                             </tr>
                         </thead>
@@ -140,7 +140,7 @@
                                             <div class="w-12 h-12 rounded-2xl bg-gray-50 border-2 border-transparent peer-checked:bg-emerald-500 peer-checked:border-emerald-200 flex items-center justify-center text-gray-300 peer-checked:text-white transition-all duration-300 group-hover/opt:scale-110 shadow-sm group-hover/opt:shadow-emerald-100">
                                                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
                                             </div>
-                                            <span class="mt-2 text-[8px] font-black uppercase tracking-widest text-gray-400 peer-checked:text-emerald-600 opacity-0 peer-checked:opacity-100 transition-all">{{ __('messages.present') ?? __('Present') }}</span>
+                                            <span class="mt-2 text-[8px] font-black uppercase tracking-widest text-gray-400 peer-checked:text-emerald-600 opacity-0 peer-checked:opacity-100 transition-all">{{ __('messages.present') }}</span>
                                         </label>
                                     </td>
                                     <td class="px-4 py-7 text-center">
@@ -152,7 +152,7 @@
                                             <div class="w-12 h-12 rounded-2xl bg-gray-50 border-2 border-transparent peer-checked:bg-amber-500 peer-checked:border-amber-200 flex items-center justify-center text-gray-300 peer-checked:text-white transition-all duration-300 group-hover/opt:scale-110 shadow-sm group-hover/opt:shadow-amber-100">
                                                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                                             </div>
-                                            <span class="mt-2 text-[8px] font-black uppercase tracking-widest text-gray-400 peer-checked:text-amber-600 opacity-0 peer-checked:opacity-100 transition-all">{{ __('messages.late') ?? __('Late') }}</span>
+                                            <span class="mt-2 text-[8px] font-black uppercase tracking-widest text-gray-400 peer-checked:text-amber-600 opacity-0 peer-checked:opacity-100 transition-all">{{ __('messages.late') }}</span>
                                         </label>
                                     </td>
                                     <td class="px-4 py-7 text-center">
@@ -164,7 +164,7 @@
                                             <div class="w-12 h-12 rounded-2xl bg-gray-50 border-2 border-transparent peer-checked:bg-rose-500 peer-checked:border-rose-200 flex items-center justify-center text-gray-300 peer-checked:text-white transition-all duration-300 group-hover/opt:scale-110 shadow-sm group-hover/opt:shadow-rose-100">
                                                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M6 18L18 6M6 6l12 12"></path></svg>
                                             </div>
-                                            <span class="mt-2 text-[8px] font-black uppercase tracking-widest text-gray-400 peer-checked:text-rose-600 opacity-0 peer-checked:opacity-100 transition-all">{{ __('messages.absent') ?? __('Absent') }}</span>
+                                            <span class="mt-2 text-[8px] font-black uppercase tracking-widest text-gray-400 peer-checked:text-rose-600 opacity-0 peer-checked:opacity-100 transition-all">{{ __('messages.absent') }}</span>
                                         </label>
                                     </td>
                                     <td class="px-4 py-7 text-center">
@@ -176,14 +176,14 @@
                                             <div class="w-12 h-12 rounded-2xl bg-gray-50 border-2 border-transparent peer-checked:bg-blue-500 peer-checked:border-blue-200 flex items-center justify-center text-gray-300 peer-checked:text-white transition-all duration-300 group-hover/opt:scale-110 shadow-sm group-hover/opt:shadow-blue-100">
                                                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
                                             </div>
-                                            <span class="mt-2 text-[8px] font-black uppercase tracking-widest text-gray-400 peer-checked:text-blue-600 opacity-0 peer-checked:opacity-100 transition-all">{{ __('messages.leave') ?? __('Leave') }}</span>
+                                            <span class="mt-2 text-[8px] font-black uppercase tracking-widest text-gray-400 peer-checked:text-blue-600 opacity-0 peer-checked:opacity-100 transition-all">{{ __('messages.leave') }}</span>
                                         </label>
                                     </td>
                                     <td class="px-10 py-7 whitespace-nowrap">
                                         <div class="relative">
                                             <input type="text" name="attendance[{{ $employee->id }}][notes]" 
                                                 value="{{ old("attendance.{$employee->id}.notes", $record?->notes) }}"
-                                                placeholder="{{ __('messages.add_note_placeholder') ?? __('Add note...') }}"
+                                                placeholder="{{ __('messages.add_note_placeholder') }}"
                                                 @change="saveAttendance({{ $employee->id }}, null, $el.value)"
                                                 class="block w-full bg-gray-50/50 border-2 border-transparent focus:border-blue-500/20 focus:bg-white rounded-2xl py-3 px-5 text-xs font-bold text-secondary transition-all duration-300 outline-none shadow-sm">
                                         </div>
@@ -197,7 +197,7 @@
                                             <div class="w-24 h-24 bg-blue-50 rounded-full flex items-center justify-center mb-6">
                                                 <svg class="w-12 h-12 text-blue-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
                                             </div>
-                                            <h3 class="text-2xl font-black text-secondary tracking-tight mb-2">{{ __('messages.no_employees_attendance') ?? __('No employees found.') }}</h3>
+                                            <h3 class="text-2xl font-black text-secondary tracking-tight mb-2">{{ __('messages.no_employees_attendance') }}</h3>
                                             <a href="{{ route('client.employees.create') }}" class="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 font-black text-sm transition-colors mt-4">
                                                 {{ __('messages.add_employee') }}
                                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>

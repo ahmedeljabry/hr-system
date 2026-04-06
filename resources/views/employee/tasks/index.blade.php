@@ -29,6 +29,9 @@
                         <th class="px-10 py-7 text-center text-[11px] font-black text-gray-400 uppercase tracking-[0.2em]">
                             {{ __('Status') }}
                         </th>
+                        <th class="px-10 py-7 text-right text-[11px] font-black text-gray-400 uppercase tracking-[0.2em] {{ app()->getLocale() == 'ar' ? 'text-left' : '' }}">
+                            {{ __('Actions') }}
+                        </th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-50">
@@ -40,7 +43,21 @@
                                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" /></svg>
                                     </div>
                                     <div>
-                                        <div class="text-base font-black text-secondary tracking-tight group-hover/row:text-blue-600 transition-colors uppercase">{{ $task->title }}</div>
+                                        <div class="flex items-center gap-2">
+                                            <div class="text-base font-black text-secondary tracking-tight group-hover/row:text-blue-600 transition-colors uppercase">{{ $task->title }}</div>
+                                            @if($task->attachments && count($task->attachments) > 0)
+                                                <div class="relative group/att">
+                                                    <div class="w-5 h-5 rounded-lg bg-blue-100 flex items-center justify-center" title="{{ count($task->attachments) }} {{ __('Attachments') }}">
+                                                        <svg class="w-3 h-3 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" />
+                                                        </svg>
+                                                    </div>
+                                                    @if(count($task->attachments) > 1)
+                                                        <span class="absolute -top-1.5 -right-1.5 bg-blue-600 text-white text-[7px] font-black w-3.5 h-3.5 rounded-full flex items-center justify-center border border-white">{{ count($task->attachments) }}</span>
+                                                    @endif
+                                                </div>
+                                            @endif
+                                        </div>
                                         <div class="text-sm text-gray-400 font-medium leading-relaxed mt-1 max-w-xl">{{ $task->description }}</div>
                                     </div>
                                 </div>
@@ -64,6 +81,17 @@
                                 <span class="px-5 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest border shadow-sm {{ $statusConfig }}">
                                     {{ __($task->status) }}
                                 </span>
+                            </td>
+                            <td class="px-10 py-7 whitespace-nowrap text-right">
+                                @if($task->attachments && count($task->attachments) > 0)
+                                    <a href="{{ Storage::url($task->attachments[0]) }}" target="_blank"
+                                       class="inline-flex items-center gap-2 px-4 py-2 bg-blue-50 hover:bg-blue-500 hover:text-white text-blue-600 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all duration-300 shadow-sm">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                        </svg>
+                                        {{ count($task->attachments) > 1 ? __('View All') : __('Download') }}
+                                    </a>
+                                @endif
                             </td>
                         </tr>
                     @empty

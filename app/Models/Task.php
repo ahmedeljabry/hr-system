@@ -17,10 +17,12 @@ class Task extends Model
         'description',
         'due_date',
         'status',
+        'attachments',
     ];
 
     protected $casts = [
         'due_date' => 'date',
+        'attachments' => 'array',
     ];
 
     public function client()

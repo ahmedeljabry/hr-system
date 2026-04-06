@@ -41,5 +41,9 @@ return [
         'password' => 'كلمة المرور',
         'company_name' => 'اسم الشركة',
         'subscription_end' => 'تاريخ انتهاء الاشتراك',
+        'status' => 'الحالة',
+        'title' => 'العنوان',
+        'description' => 'الوصف',
+        'due_date' => 'تاريخ الاستحقاق',
     ],
 ];

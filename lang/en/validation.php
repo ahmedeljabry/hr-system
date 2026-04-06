@@ -41,5 +41,9 @@ return [
         'password' => 'password',
         'company_name' => 'company name',
         'subscription_end' => 'subscription end date',
+        'status' => 'status',
+        'title' => 'title',
+        'description' => 'description',
+        'due_date' => 'due date',
     ],
 ];

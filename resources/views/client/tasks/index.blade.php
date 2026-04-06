@@ -61,7 +61,21 @@
                                             {{ substr($task->title, 0, 1) }}
                                         </div>
                                         <div>
-                                            <div class="text-base font-black text-secondary tracking-tight">{{ $task->title }}</div>
+                                            <div class="flex items-center gap-2">
+                                                <div class="text-base font-black text-secondary tracking-tight">{{ $task->title }}</div>
+                                                @if($task->attachments && count($task->attachments) > 0)
+                                                    <div class="relative group/att">
+                                                        <div class="w-5 h-5 rounded-lg bg-primary/20 flex items-center justify-center" title="{{ count($task->attachments) }} {{ __('attachments') }}">
+                                                            <svg class="w-3 h-3 text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" />
+                                                            </svg>
+                                                        </div>
+                                                        @if(count($task->attachments) > 1)
+                                                            <span class="absolute -top-1.5 -right-1.5 bg-secondary text-primary text-[7px] font-black w-3.5 h-3.5 rounded-full flex items-center justify-center border border-white">{{ count($task->attachments) }}</span>
+                                                        @endif
+                                                    </div>
+                                                @endif
+                                            </div>
                                             <div class="text-[10px] text-gray-400 font-bold uppercase tracking-widest truncate max-w-xs">{{ $task->description }}</div>
                                         </div>
                                     </div>
@@ -98,35 +112,59 @@
                                     </span>
                                 </td>
                                 <td class="px-8 py-6 whitespace-nowrap">
-                                    <div class="flex items-center justify-end gap-3 {{ app()->getLocale() == 'ar' ? 'justify-start' : '' }}">
+                                    <div class="flex items-center justify-end gap-3">
+                                        @if($task->attachments && count($task->attachments) > 0)
+                                            <a href="{{ Storage::url($task->attachments[0]) }}" target="_blank"
+                                               class="w-10 h-10 rounded-2xl bg-primary/10 text-primary-dark hover:bg-primary transition-all duration-300 flex items-center justify-center hover:scale-110 active:scale-95 group/file shadow-sm"
+                                               title="{{ count($task->attachments) > 1 ? __('messages.view_all_attachments') ?? __('View all attachments') : __('messages.view_attachment') }}">
+                                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                                </svg>
+                                            </a>
+                                        @endif
                                         <a href="{{ route('client.tasks.edit', $task) }}" 
-                                           class="p-2.5 text-gray-400 hover:text-secondary hover:bg-gray-100 rounded-xl transition-all duration-300 group/edit">
-                                            <svg class="h-5 w-5 group-hover/edit:scale-110 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>
+                                           class="w-10 h-10 rounded-2xl bg-secondary/5 text-secondary hover:bg-secondary hover:text-white transition-all duration-300 flex items-center justify-center hover:scale-110 active:scale-95 group/edit shadow-sm">
+                                            <svg class="w-5 h-5 group-hover/edit:rotate-12 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                            </svg>
                                         </a>
-                                        <form action="{{ route('client.tasks.destroy', $task) }}" method="POST" class="inline" onsubmit="return confirm('{{ __('messages.are_you_sure') }}')">
+                                        <form id="delete-task-{{ $task->id }}" action="{{ route('client.tasks.destroy', $task) }}" method="POST" class="hidden">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="p-2.5 text-red-300 hover:text-red-500 hover:bg-red-50 rounded-xl transition-all duration-300 group/del">
-                                                <svg class="h-5 w-5 group-hover/del:rotate-12 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
-                                            </button>
                                         </form>
+                                        <button type="button" 
+                                                onclick="Swal.fire({
+                                                    title: '{{ __('messages.are_you_sure') }}',
+                                                    text: '{{ __('messages.confirm_delete') }}',
+                                                    icon: 'warning',
+                                                    showCancelButton: true,
+                                                    confirmButtonColor: '#ef4444',
+                                                    cancelButtonColor: '#0ea5e9',
+                                                    confirmButtonText: '{{ __('messages.yes_delete') }}',
+                                                    cancelButtonText: '{{ __('messages.cancel') }}',
+                                                    reverseButtons: true
+                                                }).then((result) => {
+                                                    if (result.isConfirmed) {
+                                                        document.getElementById('delete-task-{{ $task->id }}').submit();
+                                                    }
+                                                })"
+                                                class="w-10 h-10 rounded-2xl bg-rose-50 text-rose-500 hover:bg-rose-500 hover:text-white transition-all duration-300 flex items-center justify-center hover:scale-110 active:scale-95 group/delete shadow-sm">
+                                            <svg class="w-5 h-5 group-hover/delete:shake transition-all duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                            </svg>
+                                        </button>
                                     </div>
                                 </td>
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="5" class="px-8 py-24 text-center">
-                                    <div class="flex flex-col items-center">
-                                        <div class="w-20 h-20 bg-gray-50 rounded-full flex items-center justify-center mb-6">
-                                            <svg class="w-10 h-10 text-gray-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" /></svg>
-                                        </div>
-                                        <h3 class="text-xl font-black text-secondary tracking-tight mb-2">{{ __('messages.no_tasks') }}</h3>
-                                        <p class="text-sm text-gray-400 max-w-xs mx-auto mb-6">{{ __('messages.tasks_empty_desc') }}</p>
-                                        <a href="{{ route('client.tasks.create') }}" class="inline-flex items-center gap-2 text-primary hover:text-primary/80 font-black text-sm transition-colors">
-                                            {{ __('messages.add_task') }}
-                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"></path></svg>
-                                        </a>
+                                <td colspan="5" class="px-8 py-20 text-center">
+                                    <div class="w-24 h-24 bg-gray-50 rounded-[2rem] flex items-center justify-center mx-auto mb-6">
+                                        <svg class="w-10 h-10 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+                                        </svg>
                                     </div>
+                                    <p class="text-xl font-black text-secondary/30">{{ __('messages.no_tasks_found') }}</p>
                                 </td>
                             </tr>
                         @endforelse

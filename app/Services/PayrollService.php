@@ -60,7 +60,13 @@ class PayrollService
                 $allowances = $employee->salaryComponents->where('type', 'allowance');
                 $deductions = $employee->salaryComponents->where('type', 'deduction');
 
-                $totalAllowances = $allowances->sum('amount');
+                $housingAllowance = (float) $employee->housing_allowance;
+                $transportationAllowance = (float) $employee->transportation_allowance;
+                $otherAllowancesOnModel = (float) $employee->other_allowances;
+
+                $totalExtraAllowances = $allowances->sum('amount');
+                $totalAllowances = $totalExtraAllowances + $housingAllowance + $transportationAllowance + $otherAllowancesOnModel;
+                
                 $totalDeductions = $deductions->sum('amount');
                 $basicSalary = (float) $employee->basic_salary;
                 $netSalary = max(0, $basicSalary + $totalAllowances - $totalDeductions);
@@ -69,6 +75,9 @@ class PayrollService
                     'payroll_run_id' => $run->id,
                     'employee_id' => $employee->id,
                     'basic_salary' => $basicSalary,
+                    'housing_allowance' => $housingAllowance,
+                    'transportation_allowance' => $transportationAllowance,
+                    'other_allowances' => $otherAllowancesOnModel + $totalExtraAllowances, // Summing dynamic components into other
                     'total_allowances' => $totalAllowances,
                     'total_deductions' => $totalDeductions,
                     'net_salary' => $netSalary,

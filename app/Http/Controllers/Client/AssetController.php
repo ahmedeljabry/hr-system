@@ -60,7 +60,7 @@ class AssetController extends Controller
         $data['client_id'] = $client->id;
         Asset::create($data);
 
-        return redirect()->route('client.assets.index')->with('success', __('Asset recorded successfully.'));
+        return redirect()->route('client.assets.index')->with('success', __('messages.asset_created'));
     }
 
     public function edit(Asset $asset)
@@ -94,7 +94,7 @@ class AssetController extends Controller
 
         $asset->update($data);
 
-        return redirect()->route('client.assets.index')->with('success', __('Asset updated successfully.'));
+        return redirect()->route('client.assets.index')->with('success', __('messages.asset_updated'));
     }
 
     public function destroy(Asset $asset)
@@ -103,6 +103,6 @@ class AssetController extends Controller
         abort_unless($asset->client_id === $client->id, 403, __('messages.unauthorized'));
 
         $asset->delete();
-        return redirect()->route('client.assets.index')->with('success', __('Asset deleted successfully.'));
+        return redirect()->route('client.assets.index')->with('success', __('messages.asset_deleted'));
     }
 }

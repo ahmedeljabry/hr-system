@@ -75,9 +75,12 @@
                         <tr class="bg-gray-50/50 border-b border-gray-100">
                             <th class="px-8 py-6 text-start text-xs font-black text-gray-400 uppercase tracking-[0.2em]">{{ __('messages.employee_name') }}</th>
                             <th class="px-8 py-6 text-start text-xs font-black text-gray-400 uppercase tracking-[0.2em]">{{ __('messages.basic_salary') }}</th>
-                            <th class="px-8 py-6 text-start text-xs font-black text-gray-400 uppercase tracking-[0.2em] text-green-600/70">{{ __('messages.total_allowances') }}</th>
+                            <th class="px-8 py-6 text-start text-xs font-black text-gray-400 uppercase tracking-[0.2em] text-emerald-600/70">{{ __('messages.housing_allowance') }}</th>
+                            <th class="px-8 py-6 text-start text-xs font-black text-gray-400 uppercase tracking-[0.2em] text-emerald-600/70">{{ __('messages.transportation_allowance') }}</th>
+                            <th class="px-8 py-6 text-start text-xs font-black text-gray-400 uppercase tracking-[0.2em] text-emerald-600/70">{{ __('messages.other_allowances') }}</th>
                             <th class="px-8 py-6 text-start text-xs font-black text-gray-400 uppercase tracking-[0.2em] text-red-600/70">{{ __('messages.total_deductions') }}</th>
-                            <th class="px-8 py-6 text-end text-xs font-black text-gray-400 uppercase tracking-[0.2em]">{{ __('messages.net_salary') }}</th>
+                            <th class="px-8 py-6 text-end text-xs font-black text-gray-400 uppercase tracking-[0.2em]">{{ __('messages.total_salary') }}</th>
+                            <th class="px-8 py-6 text-end text-xs font-black text-gray-400 uppercase tracking-[0.2em] text-blue-600/70">{{ __('messages.net_salary') }}</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-50">
@@ -92,15 +95,30 @@
                                     </div>
                                 </td>
                                 <td class="px-8 py-6 text-gray-500 font-bold font-mono">{{ number_format($payslip->basic_salary, 2) }}</td>
-                                <td class="px-8 py-6 text-green-600 font-black font-mono">
+                                <td class="px-8 py-6 text-emerald-600 font-black font-mono">
                                     <div class="inline-flex items-center">
-                                        <span class="text-xs me-1">+</span>{{ number_format($payslip->total_allowances, 2) }}
+                                        <span class="text-xs me-1">+</span>{{ number_format($payslip->housing_allowance, 2) }}
+                                    </div>
+                                </td>
+                                <td class="px-8 py-6 text-emerald-600 font-black font-mono">
+                                    <div class="inline-flex items-center">
+                                        <span class="text-xs me-1">+</span>{{ number_format($payslip->transportation_allowance, 2) }}
+                                    </div>
+                                </td>
+                                <td class="px-8 py-6 text-emerald-600 font-black font-mono">
+                                    <div class="inline-flex items-center">
+                                        <span class="text-xs me-1">+</span>{{ number_format($payslip->other_allowances, 2) }}
                                     </div>
                                 </td>
                                 <td class="px-8 py-6 text-red-600 font-black font-mono">
                                     <div class="inline-flex items-center">
                                         <span class="text-xs me-1">-</span>{{ number_format($payslip->total_deductions, 2) }}
                                     </div>
+                                </td>
+                                <td class="px-8 py-6 text-end">
+                                    <span class="font-bold text-gray-600 font-mono">
+                                        {{ number_format($payslip->basic_salary + $payslip->total_allowances, 2) }}
+                                    </span>
                                 </td>
                                 <td class="px-8 py-6 text-end">
                                     <span class="bg-secondary/5 group-hover:bg-primary group-hover:text-secondary px-6 py-2 rounded-xl font-black text-secondary transition-all duration-300 font-mono text-lg">

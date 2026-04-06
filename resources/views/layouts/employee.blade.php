@@ -57,7 +57,7 @@
         </div>
     </aside>
     <main class="flex-1 w-full mt-16 md:mt-0 p-6 pb-24 md:pb-6 overflow-y-auto h-screen">
-        <div class="max-w-6xl mx-auto">
+        <div class="max-w-full mx-auto px-4 md:px-10">
             <div class="hidden md:flex items-center justify-end gap-4 mb-6">
                 <a href="/lang/{{ app()->getLocale() == 'ar' ? 'en' : 'ar' }}" 
                    class="px-4 py-2 bg-white rounded-[1.25rem] shadow-sm text-xs font-black uppercase tracking-widest text-gray-500 hover:text-secondary border border-gray-100 transition-all flex items-center gap-2">

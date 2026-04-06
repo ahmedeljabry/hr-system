@@ -59,24 +59,48 @@
                 </div>
                 <h3 class="text-sm font-black text-secondary uppercase tracking-widest">{{ __('messages.allowances') }}</h3>
             </div>
-            <div class="space-y-4">
-                @forelse($payslip->lineItems->where('type', 'allowance') as $item)
-                <div class="flex justify-between items-center group">
-                    <span class="text-sm font-bold text-gray-500 group-hover:text-secondary transition-colors">{{ $item->component_name }}</span>
-                    <span class="text-sm font-mono font-black text-green-600">+{{ number_format($item->amount, 2) }}</span>
+            <div class=\"space-y-4\">
+                <!-- Standard Allowances -->
+                @if($payslip->housing_allowance > 0)
+                <div class=\"flex justify-between items-center group\">
+                    <span class=\"text-sm font-bold text-gray-500 group-hover:text-secondary transition-colors\">{{ __('messages.housing_allowance') }}</span>
+                    <span class=\"text-sm font-mono font-black text-green-600\">+{{ number_format($payslip->housing_allowance, 2) }}</span>
                 </div>
-                @empty
-                <div class="py-4 text-center bg-gray-50 rounded-2xl border border-dashed border-gray-200">
-                    <p class="text-xs font-bold text-gray-400 italic">-- {{ __('messages.no_allowances') }} --</p>
+                @endif
+
+                @if($payslip->transportation_allowance > 0)
+                <div class=\"flex justify-between items-center group\">
+                    <span class=\"text-sm font-bold text-gray-500 group-hover:text-secondary transition-colors\">{{ __('messages.transportation_allowance') }}</span>
+                    <span class=\"text-sm font-mono font-black text-green-600\">+{{ number_format($payslip->transportation_allowance, 2) }}</span>
                 </div>
-                @endforelse
+                @endif
+
+                @if($payslip->other_allowances > 0)
+                <div class=\"flex justify-between items-center group\">
+                    <span class=\"text-sm font-bold text-gray-500 group-hover:text-secondary transition-colors\">{{ __('messages.other_allowances') }}</span>
+                    <span class=\"text-sm font-mono font-black text-green-600\">+{{ number_format($payslip->other_allowances, 2) }}</span>
+                </div>
+                @endif
+
+                <!-- Additional Line Items -->
+                @foreach($payslip->lineItems->where('type', 'allowance') as $item)
+                <div class=\"flex justify-between items-center group\">
+                    <span class=\"text-sm font-bold text-gray-500 group-hover:text-secondary transition-colors\">{{ $item->component_name }}</span>
+                    <span class=\"text-sm font-mono font-black text-green-600\">+{{ number_format($item->amount, 2) }}</span>
+                </div>
+                @endforeach
+
+                @if($payslip->total_allowances == 0 && $payslip->housing_allowance == 0 && $payslip->transportation_allowance == 0 && $payslip->other_allowances == 0)
+                <div class=\"py-4 text-center bg-gray-50 rounded-2xl border border-dashed border-gray-200\">
+                    <p class=\"text-xs font-bold text-gray-400 italic\">-- {{ __('messages.no_allowances') }} --</p>
+                </div>
+                @endif
             </div>
-            @if($payslip->lineItems->where('type', 'allowance')->count() > 0)
-            <div class="pt-6 border-t border-gray-100 flex justify-between items-center">
-                <span class="text-xs font-black text-secondary uppercase tracking-widest">{{ __('messages.total_allowances') }}</span>
-                <span class="text-lg font-mono font-black text-green-600">{{ number_format($payslip->total_allowances, 2) }}</span>
+            
+            <div class=\"pt-6 border-t border-gray-100 flex justify-between items-center\">
+                <span class=\"text-xs font-black text-secondary uppercase tracking-widest\">{{ __('messages.total_allowances') }}</span>
+                <span class=\"text-lg font-mono font-black text-green-600\">{{ number_format($payslip->total_allowances, 2) }}</span>
             </div>
-            @endif
         </div>
 
         <!-- Deductions -->

@@ -1,7 +1,7 @@
 @extends('layouts.employee')
 
 @section('content')
-<div class="max-w-4xl mx-auto py-10">
+<div class="space-y-10 py-10">
     <!-- Premium Hero Section -->
     <div class="bg-secondary overflow-hidden shadow-2xl rounded-[2.5rem] p-10 text-white mb-10 relative group border border-primary/20">
         <div class="relative z-10 flex flex-col md:flex-row md:items-center md:justify-between gap-6">

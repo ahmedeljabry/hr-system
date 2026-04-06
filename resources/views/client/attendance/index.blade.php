@@ -113,7 +113,7 @@
                                     <td class="px-10 py-7 whitespace-nowrap">
                                         <div class="flex items-center gap-4">
                                             @php
-                                                $displayName = app()->getLocale() == 'ar' ? $employee->name_ar : ($employee->name_en ?? $employee->name_ar);
+                                                $displayName = $employee->name;
                                             @endphp
                                             <a href="{{ route('client.employees.show', $employee) }}" class="flex items-center gap-4 group/profile">
                                                 <div class="relative">

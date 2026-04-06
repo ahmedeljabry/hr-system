@@ -74,7 +74,7 @@
                                 <td class="px-8 py-6 whitespace-nowrap">
                                     <div class="flex items-center gap-2">
                                         @php
-                                            $displayName = $asset->employee ? (app()->getLocale() == 'ar' ? $asset->employee->name_ar : ($asset->employee->name_en ?? $asset->employee->name_ar)) : null;
+                                            $displayName = $asset->employee ? $asset->employee->name : __('messages.available');
                                         @endphp
                                         <x-avatar :name="$displayName ?? '?'" size="xs" class="rounded-lg shadow-sm border border-gray-100" />
                                         <span class="text-sm font-bold text-gray-600">{{ $displayName ?: __('messages.inventory') ?? __('Inventory') }}</span>

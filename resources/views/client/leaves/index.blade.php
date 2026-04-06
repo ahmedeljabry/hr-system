@@ -90,7 +90,7 @@
                                 <td class="px-10 py-7 whitespace-nowrap">
                                     <div class="flex items-center gap-4">
                                         @php
-                                            $displayName = app()->getLocale() == 'ar' ? $req->employee->name_ar : ($req->employee->name_en ?? $req->employee->name_ar);
+                                            $displayName = $req->employee ? $req->employee->name : __('messages.deleted_employee');
                                         @endphp
                                         <x-avatar :name="$displayName" size="md" class="rounded-2xl shadow-sm border border-gray-100 group-hover/row:border-primary transition-all" />
                                         <div class="text-base font-black text-secondary tracking-tight capitalize group-hover/row:text-primary transition-colors">{{ $displayName }}</div>

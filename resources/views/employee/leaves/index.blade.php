@@ -10,13 +10,13 @@
                     </div>
                     
                     <a href="{{ route('employee.leaves.create') }}" 
-                       class="inline-flex items-center px-8 py-4 bg-primary text-secondary hover:bg-primary/90 text-sm font-black rounded-2xl shadow-xl transition-all duration-300 hover:-translate-y-1 active:scale-95 group/btn">
-                        <div class="bg-white/20 p-1.5 rounded-lg mr-3 group-hover/btn:bg-white group-hover/btn:text-secondary transition-colors">
-                            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
+                       class="inline-flex items-center px-10 py-5 bg-primary text-secondary hover:bg-[#8affaa] text-lg font-black rounded-[2.5rem] shadow-[0_20px_50px_rgba(var(--color-primary-rgb),0.3)] hover:shadow-[0_25px_60px_rgba(var(--color-primary-rgb),0.5)] transition-all duration-500 hover:-translate-y-1 active:scale-[0.98] group/btn">
+                        <span class="tracking-tight">{{ __('messages.request_leave') }}</span>
+                        <div class="bg-black/5 p-3 rounded-2xl ms-5 group-hover/btn:bg-black/10 transition-colors shadow-inner">
+                            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="4">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
                             </svg>
                         </div>
-                        {{ __('Request Leave') }}
                     </a>
                 </div>
                 <!-- Decorative background elements -->

@@ -83,7 +83,7 @@
                                 <td class="px-8 py-6 whitespace-nowrap">
                                     <div class="flex items-center gap-2">
                                         @php
-                                            $displayName = $task->employee ? (app()->getLocale() == 'ar' ? $task->employee->name_ar : ($task->employee->name_en ?? $task->employee->name_ar)) : null;
+                                            $displayName = $task->employee ? $task->employee->name : __('messages.unassigned');
                                         @endphp
                                         <x-avatar :name="$displayName ?? '?'" size="xs" class="rounded-lg shadow-sm border border-gray-100" />
                                         <span class="text-sm font-bold text-gray-600">{{ $displayName ?: __('messages.unassigned') }}</span>

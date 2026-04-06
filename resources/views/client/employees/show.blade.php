@@ -8,9 +8,9 @@
         <div class="bg-secondary overflow-hidden shadow-2xl rounded-3xl p-10 text-white mb-10 relative group border border-primary/20">
             <div class="relative z-10 flex flex-col md:flex-row md:items-center md:justify-between gap-6">
                 <div class="flex items-center gap-6">
-                    <x-avatar :name="app()->getLocale() == 'ar' ? $employee->name_ar : ($employee->name_en ?? $employee->name_ar)" size="2xl" class="shadow-2xl border-4 border-white/10" />
+                    <x-avatar :name="$employee->name" size="2xl" class="shadow-2xl border-4 border-white/10" />
                     <div>
-                        <h1 class="text-4xl font-extrabold mb-1 tracking-tight text-primary">{{ app()->getLocale() == 'ar' ? $employee->name_ar : ($employee->name_en ?? $employee->name_ar) }}</h1>
+                        <h1 class="text-4xl font-extrabold mb-1 tracking-tight text-primary">{{ $employee->name }}</h1>
                         <p class="text-gray-300 text-lg flex items-center gap-2 opacity-90">
                             <span class="inline-flex items-center px-4 py-1.5 rounded-xl text-xs font-black uppercase tracking-widest bg-primary/10 text-primary border border-primary/20">
                                 {{ $employee->position }}

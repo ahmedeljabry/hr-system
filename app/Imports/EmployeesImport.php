@@ -12,9 +12,7 @@ use Maatwebsite\Excel\Concerns\SkipsFailures;
 use Maatwebsite\Excel\Concerns\SkipsErrors;
 use Maatwebsite\Excel\Concerns\Importable;
 
-use Maatwebsite\Excel\Concerns\WithStartRow;
-
-class EmployeesImport implements ToModel, WithValidation, SkipsOnFailure, SkipsOnError, WithStartRow
+class EmployeesImport implements ToModel, WithValidation, SkipsOnFailure, SkipsOnError, WithHeadingRow
 {
     use SkipsFailures, SkipsErrors, Importable;
 
@@ -22,28 +20,19 @@ class EmployeesImport implements ToModel, WithValidation, SkipsOnFailure, SkipsO
     {
     }
 
-    public function startRow(): int
-    {
-        return 2;
-    }
-
     public function model(array $row): ?Employee
     {
-        // Skip empty or mostly empty rows
-        if (empty(array_filter($row))) {
-            return null;
-        }
+        // $row is now an associative array with keys like 'employee_name_arabic' 
+        // derived from the first row's cells.
 
-        // $row is now a numeric array (Column A = $row[0], Column B = $row[1]...)
-        
-        $email = $row[2];
+        $email = $row['email_address'] ?? null;
         if (!$email) return null;
 
         $user = \App\Models\User::firstOrCreate(
-            ['email' => $email], // Column C: Email Address
+            ['email' => $email],
             [
-                'name' => $row[1] ?? $row[0], // Column B: Name (En)
-                'password' => $row[3], // Column D: Password
+                'name' => $row['employee_name_english'] ?? ($row['employee_name_arabic'] ?? 'Employee'),
+                'password' => $row['password'] ?? 'password123',
                 'role' => 'employee',
                 'client_id' => $this->clientId,
             ]
@@ -52,20 +41,20 @@ class EmployeesImport implements ToModel, WithValidation, SkipsOnFailure, SkipsO
         return new Employee([
             'client_id' => $this->clientId,
             'user_id' => $user->id,
-            'name_ar' => $row[0], // Column A
-            'name_en' => $row[1], // Column B
-            'email' => $row[2], // Column C
-            'position' => $row[4], // Column E: Position
-            'national_id_number' => $row[5], // Column F: National ID
-            'phone' => $row[6] ?? null, // Column G: Phone
-            'emergency_phone' => $row[7] ?? null, // Column H: Emergency
-            'bank_iban' => $row[8] ?? null, // Column I: IBAN
-            'basic_salary' => $this->sanitizeNumber($row[9]), // Column J: Basic Salary
-            'housing_allowance' => $this->sanitizeNumber($row[10]) ?? 0, // Column K
-            'transportation_allowance' => $this->sanitizeNumber($row[11]) ?? 0, // Column L
-            'other_allowances' => $this->sanitizeNumber($row[12]) ?? 0, // Column M
-            'date_of_birth' => $this->parseDate($row[13] ?? null), // Column N
-            'hire_date' => $this->parseDate($row[14] ?? null), // Column O
+            'name_ar' => $row['employee_name_arabic'] ?? null,
+            'name_en' => $row['employee_name_english'] ?? null,
+            'email' => $email,
+            'position' => $row['position'] ?? null,
+            'national_id_number' => $row['national_id_residency_number'] ?? null,
+            'phone' => $row['phone_number'] ?? null,
+            'emergency_phone' => $row['emergency_phone'] ?? null,
+            'bank_iban' => $row['bank_iban'] ?? null,
+            'basic_salary' => $this->sanitizeNumber($row['basic_salary'] ?? 0),
+            'housing_allowance' => $this->sanitizeNumber($row['housing_allowance'] ?? 0),
+            'transportation_allowance' => $this->sanitizeNumber($row['transportation_allowance'] ?? 0),
+            'other_allowances' => $this->sanitizeNumber($row['other_allowances'] ?? 0),
+            'date_of_birth' => $this->parseDate($row['date_of_birth'] ?? null),
+            'hire_date' => $this->parseDate($row['hire_date'] ?? null),
         ]);
     }
 
@@ -73,6 +62,8 @@ class EmployeesImport implements ToModel, WithValidation, SkipsOnFailure, SkipsO
     {
         if ($value === null || $value === '') return 0;
         // Strip out anything that's not a digit or a decimal point
+        // Using strval and handling scientific notation safely
+        if (is_numeric($value)) return (float)$value;
         $cleanValue = preg_replace('/[^0-9.]/', '', strval($value));
         return is_numeric($cleanValue) ? floatval($cleanValue) : 0;
     }
@@ -80,38 +71,39 @@ class EmployeesImport implements ToModel, WithValidation, SkipsOnFailure, SkipsO
     private function parseDate($value)
     {
         if (!$value) return null;
-        if (\PhpOffice\PhpSpreadsheet\Shared\Date::isDateTimeFormatCode($value)) {
+        if (is_numeric($value)) {
             return \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($value);
         }
-        return $value;
+        try {
+            return \Carbon\Carbon::parse($value);
+        } catch (\Exception $e) {
+            return null;
+        }
     }
 
     public function rules(): array
     {
         return [
-            '0' => ['required', 'string', 'max:255'], // Employee Name (Arabic)
-            '1' => ['required', 'string', 'max:255'], // Employee Name (English)
-            '2' => ['required', 'email'], // Email Address
-            '3' => ['required', 'min:8'], // Password
-            '4' => ['required', 'string', 'max:255'], // Position
-            '5' => ['required', 'max:100'], // National ID
-            // We'll validate numeric fields but they might have currency strings, 
-            // the sanitizeNumber in model handles it, 
-            // but for rules, let's just make it loose or pre-clean.
-            '9' => ['required'], // Basic Salary
+            'employee_name_arabic' => ['required', 'string', 'max:255'],
+            'employee_name_english' => ['required', 'string', 'max:255'],
+            'email_address' => ['required', 'email'],
+            'password' => ['required', 'min:8'],
+            'position' => ['required', 'string', 'max:255'],
+            'national_id_residency_number' => ['required', 'max:100'],
+            'basic_salary' => ['required'],
         ];
     }
 
     public function customValidationAttributes(): array
     {
         return [
-            '0' => __('messages.name_ar'),
-            '1' => __('messages.name_en'),
-            '2' => __('messages.email'),
-            '3' => __('messages.password'),
-            '4' => __('messages.position'),
-            '5' => __('messages.national_id_number'),
-            '9' => __('messages.basic_salary'),
+            'employee_name_arabic' => __('messages.name_ar'),
+            'employee_name_english' => __('messages.name_en'),
+            'email_address' => __('messages.email'),
+            'password' => __('messages.password'),
+            'position' => __('messages.position'),
+            'national_id_residency_number' => __('messages.national_id_number'),
+            'basic_salary' => __('messages.basic_salary'),
         ];
     }
 

@@ -6,12 +6,12 @@
     <div class="bg-secondary rounded-[2.5rem] shadow-xl p-10 text-white relative overflow-hidden group">
         <div class="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
             <div>
-                <h1 class="text-4xl font-black mb-2 tracking-tight">{{ __('Welcome back') }}, {{ Auth::user()->name }}! 👋</h1>
-                <p class="text-primary/70 text-lg opacity-90 font-medium">{{ __('Here is a summary of your portal') }}</p>
+                <h1 class="text-4xl font-black mb-2 tracking-tight">{{ __('messages.welcome_back') }}, {{ Auth::user()->employee ? Auth::user()->employee->name : Auth::user()->name }}! 👋</h1>
+                <p class="text-primary/70 text-lg opacity-90 font-medium">{{ __('messages.portal_summary') }}</p>
             </div>
             <div class="flex items-center gap-4">
                 <div class="px-6 py-3 bg-white/10 backdrop-blur-md rounded-2xl border border-white/20 text-sm font-bold">
-                    <span class="opacity-60 uppercase tracking-widest text-[10px] block mb-0.5">{{ __('Today') }}</span>
+                    <span class="opacity-60 uppercase tracking-widest text-[10px] block mb-0.5">{{ __('messages.today') }}</span>
                     {{ now()->translatedFormat('d M Y') }}
                 </div>
             </div>
@@ -31,12 +31,12 @@
                     <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path></svg>
                 </div>
                 <div class="flex flex-col items-end">
-                    <span class="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-1">{{ __('Pending Tasks') }}</span>
+                    <span class="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-1">{{ __('messages.pending_tasks_label') }}</span>
                     <div class="text-3xl font-black text-secondary">{{ $widgets['pending_tasks'] }}</div>
                 </div>
             </div>
             <div class="text-[10px] font-bold text-gray-400 flex items-center gap-2 group-hover:text-orange-500 transition-colors">
-                {{ __('View All') }}
+                {{ __('messages.view_all') }}
                 <svg class="w-3 h-3 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M9 5l7 7-7 7"></path></svg>
             </div>
         </a>
@@ -48,12 +48,12 @@
                     <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
                 </div>
                 <div class="flex flex-col items-end">
-                    <span class="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-1">{{ __('Assigned Assets') }}</span>
+                    <span class="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-1">{{ __('messages.assigned_assets_label') }}</span>
                     <div class="text-3xl font-black text-secondary">{{ $widgets['assigned_assets'] }}</div>
                 </div>
             </div>
             <div class="text-[10px] font-bold text-gray-400 flex items-center gap-2 group-hover:text-primary transition-colors">
-                {{ __('View All') }}
+                {{ __('messages.view_all') }}
                 <svg class="w-3 h-3 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M9 5l7 7-7 7"></path></svg>
             </div>
         </a>
@@ -88,18 +88,18 @@
                     <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
                 </div>
                 <div class="flex flex-col items-end">
-                    <span class="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-1">{{ __('Leave Balance') }}</span>
+                    <span class="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-1">{{ __('messages.leave_balance_label') }}</span>
                     <div class="text-3xl font-black text-secondary">
                         @if($widgets['leave_balance'] !== null)
-                            {{ $widgets['leave_balance'] }} <span class="text-[10px] font-bold text-gray-300 lowercase">{{ __('days') }}</span>
+                            {{ $widgets['leave_balance'] }} <span class="text-[10px] font-bold text-gray-300 lowercase">{{ __('messages.days_count') }}</span>
                         @else
-                            <span class="text-xs font-bold text-gray-300 italic">{{ __('No data available') }}</span>
+                            <span class="text-xs font-bold text-gray-300 italic">{{ __('messages.no_data') }}</span>
                         @endif
                     </div>
                 </div>
             </div>
             <div class="text-[10px] font-bold text-gray-400 flex items-center gap-2 group-hover:text-primary transition-colors">
-                {{ __('messages.request_leave') }}
+                {{ __('messages.request_leave_btn') }}
                 <svg class="w-3 h-3 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M9 5l7 7-7 7"></path></svg>
             </div>
         </a>
@@ -130,7 +130,7 @@
                                 <p class="text-gray-500 text-sm leading-relaxed line-clamp-2">{!! nl2br(e(Str::limit($announcement->body, 200))) !!}</p>
                                 <div class="mt-5">
                                     <a href="/employee/announcements" class="text-[10px] font-black uppercase tracking-widest text-gray-400 group-hover/announcement:text-primary flex items-center gap-2 transition-all">
-                                        {{ __('messages.read_more') }}
+                                        {{ __('messages.read_more_btn') }}
                                         <svg class="w-3 h-3 group-hover/announcement:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M9 5l7 7-7 7"></path></svg>
                                     </a>
                                 </div>
@@ -146,7 +146,7 @@
                         <div class="w-20 h-20 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-6">
                             <svg class="w-10 h-10 text-gray-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 01-2-2v-5a2 2 0 012-2h5m5 4h5a2 2 0 012 2v5a2 2 0 01-2 2h-5m-5 4h5a2 2 0 012 2v5a2 2 0 01-2 2h-5m-5-4h5a2 2 0 012 2v5a2 2 0 01-2 2h-5z"></path></svg>
                         </div>
-                        <h3 class="text-xl font-black text-secondary tracking-tight">{{ __('No announcements yet.') }}</h3>
+                        <h3 class="text-xl font-black text-secondary tracking-tight">{{ __('messages.no_announcements_yet') }}</h3>
                     </div>
                 @endforelse
             </div>
@@ -157,22 +157,30 @@
             <div class="bg-secondary rounded-[2.5rem] p-8 text-white shadow-xl shadow-secondary/20 relative overflow-hidden group">
                 <h3 class="text-xl font-black mb-4 relative z-10">{{ __('messages.quick_actions') }}</h3>
                 <div class="space-y-3 relative z-10">
-                    <a href="{{ route('employee.leaves.create') }}" class="flex items-center justify-between p-4 bg-white/10 hover:bg-white/20 border border-white/5 rounded-2xl transition-all duration-300 group/btn">
-                        <span class="text-sm font-bold">{{ __('Request Leave') }}</span>
-                        <svg class="w-5 h-5 group-hover/btn:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"></path></svg>
+                    <a href="{{ route('employee.leaves.create') }}" class="flex items-center justify-between p-4 bg-primary hover:bg-[#8affaa] text-secondary rounded-[1.8rem] shadow-[0_15px_40px_rgba(var(--color-primary-rgb),0.2)] hover:shadow-[0_20px_50px_rgba(var(--color-primary-rgb),0.4)] transition-all duration-500 hover:-translate-y-1 active:scale-[0.98] group/btn border-b-4 border-emerald-500/30">
+                        <span class="text-sm font-black uppercase tracking-tight ml-4">{{ __('messages.request_leave_btn') }}</span>
+                        <div class="w-10 h-10 rounded-2xl bg-black/5 flex items-center justify-center group-hover/btn:bg-black/10 transition-colors">
+                            <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="3">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"></path>
+                            </svg>
+                        </div>
                     </a>
-                    <a href="/employee/tasks" class="flex items-center justify-between p-4 bg-white/10 hover:bg-white/20 border border-white/5 rounded-2xl transition-all duration-300 group/btn">
-                        <span class="text-sm font-bold">{{ __('My Tasks') }}</span>
-                        <svg class="w-5 h-5 group-hover/btn:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path></svg>
+                    <a href="/employee/tasks" class="flex items-center justify-between p-5 bg-white/10 hover:bg-white/20 border border-white/5 rounded-[1.5rem] transition-all duration-500 group/btn">
+                        <span class="text-sm font-black uppercase tracking-tight text-white/90">{{ __('messages.my_tasks_btn') }}</span>
+                        <div class="w-8 h-8 rounded-xl bg-white/10 flex items-center justify-center group-hover/btn:scale-110 transition-transform duration-500">
+                           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path></svg>
+                        </div>
                     </a>
                     
                     <form method="POST" action="{{ route('logout') }}" id="dash-logout-form">
                         @csrf
-                        <button type="submit" class="w-full flex items-center justify-between p-4 bg-red-500/20 hover:bg-red-500/30 border border-white/10 rounded-2xl transition-all duration-300 group/logout">
-                            <span class="text-sm font-bold text-white">{{ __('Logout') }}</span>
-                            <svg class="w-5 h-5 text-white group-hover/logout:translate-x-1 rtl:group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6-4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
-                            </svg>
+                        <button type="submit" class="w-full flex items-center justify-between p-5 bg-red-500/10 hover:bg-red-500/20 border border-red-500/20 rounded-[1.5rem] transition-all duration-500 group/logout">
+                            <span class="text-sm font-black uppercase tracking-tight text-red-100">{{ __('messages.logout_btn') }}</span>
+                            <div class="w-8 h-8 rounded-xl bg-red-500/20 flex items-center justify-center group-hover/logout:translate-x-1 rtl:group-hover:-translate-x-1 transition-transform">
+                                <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6-4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
+                                </svg>
+                            </div>
                         </button>
                     </form>
                 </div>
@@ -180,7 +188,7 @@
             </div>
 
             <div class="bg-white rounded-[2.5rem] p-8 border border-gray-100 shadow-[0_20px_50px_rgba(0,0,0,0.03)]">
-                <h3 class="text-lg font-black text-secondary tracking-tight mb-4">{{ __('messages.need_help') }}</h3>
+                <h3 class="text-lg font-black text-secondary tracking-tight mb-4">{{ __('messages.need_help_title') }}</h3>
                 <p class="text-sm text-gray-500 leading-relaxed mb-6">{{ __('messages.support_text') }}</p>
                 <a href="mailto:support@company.com" class="inline-flex items-center gap-2 text-secondary font-black text-xs uppercase tracking-widest hover:text-secondary/80 transition-colors">
                     {{ __('messages.contact_hr') }}

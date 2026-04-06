@@ -8,7 +8,7 @@
             <div class="relative">
                 <div class="absolute inset-0 bg-primary/20 rounded-3xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
                 <div class="relative bg-gray-50 rounded-3xl p-1 border-2 border-white shadow-sm overflow-hidden group-hover:rotate-3 transition-transform duration-500">
-                    <x-avatar :name="app()->getLocale() == 'ar' ? $employee->name_ar : ($employee->name_en ?? $employee->name_ar)" size="xl" class="rounded-2xl" />
+                    <x-avatar :name="$employee->name" size="xl" class="rounded-2xl" />
                 </div>
             </div>
             <div class="flex flex-col items-end gap-2">
@@ -22,7 +22,7 @@
         <!-- Name & Position -->
         <div class="mb-8">
             <h3 class="text-2xl font-black text-secondary leading-tight mb-2 group-hover:text-primary transition-colors duration-300">
-                {{ app()->getLocale() == 'ar' ? $employee->name_ar : ($employee->name_en ?? $employee->name_ar) }}
+                {{ $employee->name }}
             </h3>
             <div class="flex items-center text-gray-400 font-bold text-sm">
                 <svg class="w-4 h-4 me-2 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">

@@ -1,9 +1,9 @@
 <tr class="hover:bg-gray-50/50 transition-all duration-300">
     <td class="px-8 py-6 whitespace-nowrap">
         <div class="flex items-center gap-4">
-            <x-avatar :name="app()->getLocale() == 'ar' ? $employee->name_ar : ($employee->name_en ?? $employee->name_ar)" size="md" class="rounded-2xl shadow-sm border border-gray-100" />
+            <x-avatar :name="$employee->name" size="md" class="rounded-2xl shadow-sm border border-gray-100" />
             <div>
-                <div class="text-base font-black text-secondary tracking-tight capitalize">{{ app()->getLocale() == 'ar' ? $employee->name_ar : ($employee->name_en ?? $employee->name_ar) }}</div>
+                <div class="text-base font-black text-secondary tracking-tight capitalize">{{ $employee->name }}</div>
                 <div class="text-[10px] text-gray-400 font-bold uppercase tracking-widest">{{ $employee->position }}</div>
             </div>
         </div>

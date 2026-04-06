@@ -11,6 +11,21 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
+        $middleware->redirectTo(
+            guests: '/login',
+            users: function () {
+                $user = auth()->user();
+                if (!$user) return '/login';
+
+                return match ($user->role) {
+                    'super_admin' => '/admin/dashboard',
+                    'client' => '/client/dashboard',
+                    'employee' => '/employee/dashboard',
+                    default => '/login',
+                };
+            }
+        );
+
         $middleware->web(append: [
             \App\Http\Middleware\SetLocale::class,
         ]);

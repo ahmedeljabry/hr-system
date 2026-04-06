@@ -466,4 +466,11 @@ return [
     'attendance_updated' => 'تم تحديث سجلات الحضور بنجاح.',
     'employee_already_has_account' => 'تم إنشاء حساب لهذا الموظف مسبقاً.',
     'employee_account_created' => 'تم إنشاء حساب الدخول للموظف بنجاح.',
+    'asset_information' => 'معلومات العهدة والأصل',
+    'asset_type_placeholder' => 'مثل: ماك بوك برو M3',
+    'serial_number_placeholder' => 'رقم تعريف الجهاز الفريد',
+    'purchase_date' => 'تاريخ الشراء / الاستلام',
+    'assigned_employee' => 'الموظف المستلم',
+    'assets_desc' => 'تفاصيل العهدة',
+    'asset_desc_placeholder' => 'تقديم الحالة، الإعدادات، أو تفاصيل أخرى...',
 ];

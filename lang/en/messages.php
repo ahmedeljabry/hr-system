@@ -449,4 +449,11 @@ return [
     'attendance_updated' => 'Attendance records updated successfully.',
     'employee_already_has_account' => 'An account already exists for this employee.',
     'employee_account_created' => 'Employee login account created successfully.',
+    'asset_information' => 'Asset Information',
+    'asset_type_placeholder' => 'e.g. MacBook Pro M3',
+    'serial_number_placeholder' => 'Unique Device ID',
+    'purchase_date' => 'Purchase Date',
+    'assigned_employee' => 'Assigned Employee',
+    'assets_desc' => 'Asset Details',
+    'asset_desc_placeholder' => 'Provide conditions, configuration, or other details...',
 ];

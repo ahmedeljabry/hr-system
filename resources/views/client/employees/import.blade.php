@@ -94,11 +94,12 @@
                                     <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
                                 </svg>
                             </div>
-                            <div class="flex text-sm text-gray-600 justify-center">
+                            <div class="flex flex-col text-sm text-gray-600 justify-center items-center gap-3">
                                 <label for="file" class="relative cursor-pointer bg-primary/10 hover:bg-primary/20 rounded-xl font-black text-secondary focus-within:outline-none transition-all duration-300">
                                     <span class="px-6 py-3 inline-block">{{ __('messages.choose_file') }}</span>
                                     <input id="file" name="file" type="file" class="sr-only" accept=".xlsx,.xls">
                                 </label>
+                                <p id="file-name" class="text-xs font-bold text-primary hidden truncate max-w-xs px-4 py-2 bg-primary/5 rounded-lg border border-primary/10 animate-in fade-in zoom-in duration-300"></p>
                             </div>
                             <p class="text-xs font-bold text-gray-400 uppercase tracking-widest mt-2">{{ __('messages.excel_size_hint') }}</p>
                         </div>
@@ -148,4 +149,18 @@
         </div>
     </div>
 </div>
+
+<script>
+    document.getElementById('file').addEventListener('change', function(e) {
+        const fileName = e.target.files[0] ? e.target.files[0].name : '';
+        const nameDisplay = document.getElementById('file-name');
+        
+        if (fileName) {
+            nameDisplay.textContent = fileName;
+            nameDisplay.classList.remove('hidden');
+        } else {
+            nameDisplay.classList.add('hidden');
+        }
+    });
+</script>
 @endsection

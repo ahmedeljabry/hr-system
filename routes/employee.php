@@ -13,6 +13,7 @@ Route::middleware(['auth', 'role:employee', 'check_subscription'])->prefix('empl
 
     // Read-Only Portals
     Route::get('/tasks', [\App\Http\Controllers\Employee\TaskController::class, 'index'])->name('tasks.index');
+    Route::patch('/tasks/{task}/status', [\App\Http\Controllers\Employee\TaskController::class, 'updateStatus'])->name('tasks.updateStatus');
     Route::get('/assets', [\App\Http\Controllers\Employee\AssetController::class, 'index'])->name('assets.index');
     Route::get('/announcements', [\App\Http\Controllers\Employee\AnnouncementController::class, 'index'])->name('announcements.index');
     Route::get('/leaves', [\App\Http\Controllers\Employee\LeaveController::class, 'index'])->name('leaves.index');

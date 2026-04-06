@@ -80,7 +80,11 @@
                     
                     <div class="space-y-4">
                         <div class="flex items-center justify-between text-xs font-bold">
-                            <span class="text-secondary tracking-tight">{{ $balance['type']->name }}</span>
+                            @php
+                                $cTypeKey = 'messages.' . strtolower(str_replace(' ', '_', $balance['type']->name));
+                                $cTypeName = Lang::has($cTypeKey) ? __($cTypeKey) : $balance['type']->name;
+                            @endphp
+                            <span class="text-secondary tracking-tight">{{ $cTypeName }}</span>
                             <span class="text-{{ $color }}-600 bg-{{ $color }}-50 px-3 py-1 rounded-full outline outline-1 outline-{{ $color }}-100">{{ $balance['used_days'] }} / {{ $balance['max_days'] > 0 ? $balance['max_days'] : '∞' }}</span>
                         </div>
                         
@@ -133,9 +137,13 @@
                         @forelse($requests as $req)
                             <tr class="hover:bg-gray-50/50 transition-all duration-300">
                                 <td class="px-10 py-7 whitespace-nowrap">
+                                    @php
+                                        $rTypeKey = 'messages.' . strtolower(str_replace(' ', '_', $req->leaveType->name));
+                                        $rTypeName = Lang::has($rTypeKey) ? __($rTypeKey) : $req->leaveType->name;
+                                    @endphp
                                     <div class="flex items-center gap-3">
                                         <div class="w-1.5 h-6 bg-blue-500 rounded-full opacity-40"></div>
-                                        <span class="text-base font-black text-secondary tracking-tight capitalize">{{ $req->leaveType->name }}</span>
+                                        <span class="text-base font-black text-secondary tracking-tight capitalize">{{ $rTypeName }}</span>
                                     </div>
                                 </td>
                                 <td class="px-10 py-7 whitespace-nowrap">

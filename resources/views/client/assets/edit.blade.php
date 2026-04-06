@@ -2,14 +2,14 @@
 
 @section('content')
 <div class="py-12">
-    <div class="max-w-5xl mx-auto sm:px-6 lg:px-8">
+    <div class="max-w-full mx-auto">
         
         <!-- Premium Hero Section -->
         <div class="bg-secondary overflow-hidden shadow-2xl rounded-3xl p-10 text-white mb-10 relative group border border-primary/20">
             <div class="relative z-10 flex flex-col md:flex-row md:items-center md:justify-between gap-6">
                 <div>
-                    <h1 class="text-4xl font-extrabold mb-2 tracking-tight text-primary">{{ __('messages.edit_component') ?? __('Edit Asset') }}</h1>
-                    <p class="text-gray-300 text-lg opacity-90">{{ __('Update asset details and custody information.') }}</p>
+                    <h1 class="text-4xl font-extrabold mb-2 tracking-tight text-primary">{{ __('messages.edit_asset') ?? __('Edit Asset') }}</h1>
+                    <p class="text-gray-300 text-lg opacity-90">{{ __('messages.back') }} <a href="{{ route('client.assets.index') }}" class="text-primary hover:underline font-bold">{{ __('messages.assets') }}</a></p>
                 </div>
                 
                 <div class="flex items-center gap-4">
@@ -45,86 +45,111 @@
 
         <!-- Main Form Card -->
         <div class="bg-white rounded-[2.5rem] shadow-[0_20px_50px_rgba(0,0,0,0.04)] border border-gray-100/50 overflow-hidden transition-all duration-500">
-            <form method="POST" action="{{ route('client.assets.update', $asset) }}" class="p-12 space-y-10">
+            <form method="POST" action="{{ route('client.assets.update', $asset) }}" class="p-12 space-y-16">
                 @csrf
                 @method('PUT')
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
-                    <!-- Asset Type/Name -->
-                    <div class="space-y-3">
-                        <label for="type" class="block text-xs font-black text-gray-400 uppercase tracking-[0.2em]">{{ __('messages.asset_type') ?? __('Property Type') }} <span class="text-primary">*</span></label>
-                        <div class="relative group">
-                            <div class="absolute inset-y-0 start-0 ps-6 flex items-center pointer-events-none text-gray-400 group-focus-within:text-primary transition-colors">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path></svg>
-                            </div>
-                            <input type="text" name="type" id="type" value="{{ old('type', $asset->type) }}" required
-                                   class="block w-full bg-gray-50 border-2 border-transparent focus:border-primary focus:bg-white rounded-2xl py-4 ps-14 pe-6 text-secondary font-bold transition-all duration-300 outline-none"
-                                   placeholder="e.g. MacBook Pro M3">
+                <!-- Section: Asset Information -->
+                <div class="space-y-10">
+                    <div class="flex items-center gap-4 pb-4 border-b border-gray-50">
+                        <div class="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center">
+                            <svg class="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
+                            </svg>
                         </div>
+                        <h2 class="text-xl font-black text-secondary tracking-tight">{{ __('messages.asset_information') ?? __('Asset Information') }}</h2>
                     </div>
 
-                    <!-- Serial Number -->
-                    <div class="space-y-3">
-                        <label for="serial_number" class="block text-xs font-black text-gray-400 uppercase tracking-[0.2em]">{{ __('messages.serial_number') ?? __('Serial Number') }}</label>
-                        <div class="relative group">
-                            <div class="absolute inset-y-0 start-0 ps-6 flex items-center pointer-events-none text-gray-400 group-focus-within:text-primary transition-colors">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 20l4-16m2 16l4-16M6 9h14M4 15h14"></path></svg>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+                        <!-- Asset Type/Name -->
+                        <div class="space-y-3">
+                            <label for="type" class="block text-xs font-black text-gray-400 uppercase tracking-[0.2em]">{{ __('messages.asset_type') ?? __('Property Type') }} <span class="text-primary">*</span></label>
+                            <div class="relative group">
+                                <div class="absolute inset-y-0 {{ app()->getLocale() == 'ar' ? 'right-3' : 'left-3' }} flex items-center pointer-events-none transition-all duration-300">
+                                    <div class="w-8 h-8 rounded-xl bg-primary/10 group-focus-within:bg-primary/20 flex items-center justify-center transition-all duration-300 group-focus-within:scale-110">
+                                        <svg class="w-4 h-4 text-primary/60 group-focus-within:text-primary transition-colors duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path></svg>
+                                    </div>
+                                </div>
+                                <input type="text" name="type" id="type" value="{{ old('type', $asset->type) }}" required
+                                       class="block w-full bg-gray-50 border-2 border-transparent focus:border-primary focus:bg-white rounded-2xl py-4 {{ app()->getLocale() == 'ar' ? 'pr-14 pl-6' : 'pl-14 pr-6' }} text-secondary font-bold transition-all duration-300 outline-none"
+                                       placeholder="{{ __('messages.asset_type_placeholder') }}">
                             </div>
-                            <input type="text" name="serial_number" id="serial_number" value="{{ old('serial_number', $asset->serial_number) }}"
-                                   class="block w-full bg-gray-50 border-2 border-transparent focus:border-primary focus:bg-white rounded-2xl py-4 ps-14 pe-6 text-secondary font-mono font-bold transition-all duration-300 outline-none"
-                                   placeholder="Unique Device ID">
                         </div>
-                    </div>
 
-                    <!-- Custodian -->
-                    <div class="md:col-span-2 space-y-3">
-                        <label for="employee_id" class="block text-xs font-black text-gray-400 uppercase tracking-[0.2em]">{{ __('messages.assigned_employee') ?? __('Custodian') }}</label>
-                        <div class="relative group">
-                            <div class="absolute inset-y-0 start-0 ps-6 flex items-center pointer-events-none text-gray-400 group-focus-within:text-primary transition-colors">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+                        <!-- Serial Number -->
+                        <div class="space-y-3">
+                            <label for="serial_number" class="block text-xs font-black text-gray-400 uppercase tracking-[0.2em]">{{ __('messages.serial_number') ?? __('Serial Number') }}</label>
+                            <div class="relative group">
+                                <div class="absolute inset-y-0 {{ app()->getLocale() == 'ar' ? 'right-3' : 'left-3' }} flex items-center pointer-events-none transition-all duration-300">
+                                    <div class="w-8 h-8 rounded-xl bg-primary/10 group-focus-within:bg-primary/20 flex items-center justify-center transition-all duration-300 group-focus-within:scale-110">
+                                        <svg class="w-4 h-4 text-primary/60 group-focus-within:text-primary transition-colors duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 20l4-16m2 16l4-16M6 9h14M4 15h14"></path></svg>
+                                    </div>
+                                </div>
+                                <input type="text" name="serial_number" id="serial_number" value="{{ old('serial_number', $asset->serial_number) }}"
+                                       class="block w-full bg-gray-50 border-2 border-transparent focus:border-primary focus:bg-white rounded-2xl py-4 {{ app()->getLocale() == 'ar' ? 'pr-14 pl-6' : 'pl-14 pr-6' }} text-secondary font-mono font-bold transition-all duration-300 outline-none"
+                                       placeholder="{{ __('messages.serial_number_placeholder') }}">
                             </div>
-                            <select name="employee_id" id="employee_id"
-                                    class="block w-full bg-gray-50 border-2 border-transparent focus:border-primary focus:bg-white rounded-2xl py-4 ps-14 pe-6 text-secondary font-bold transition-all duration-300 outline-none appearance-none">
-                                <option value="">{{ __('messages.inventory') ?? __('Inventory (Company)') }}</option>
-                                @foreach($employees as $employee)
-                                    <option value="{{ $employee->id }}" {{ old('employee_id', $asset->employee_id) == $employee->id ? 'selected' : '' }}>
-                                        {{ $employee->name }}
-                                    </option>
-                                @endforeach
-                            </select>
                         </div>
-                    </div>
 
-                    <!-- Assignment Date -->
-                    <div class="space-y-3">
-                        <label for="assigned_date" class="block text-xs font-black text-gray-400 uppercase tracking-[0.2em]">{{ __('messages.purchase_date') ?? __('Assignment Date') }} <span class="text-primary">*</span></label>
-                        <div class="relative group">
-                            <div class="absolute inset-y-0 start-0 ps-6 flex items-center pointer-events-none text-gray-400 group-focus-within:text-primary transition-colors">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                        <!-- Custodian -->
+                        <div class="md:col-span-2 space-y-3">
+                            <label for="employee_id" class="block text-xs font-black text-gray-400 uppercase tracking-[0.2em]">{{ __('messages.assigned_employee') ?? __('Custodian') }}</label>
+                            <div class="relative group">
+                                <div class="absolute inset-y-0 {{ app()->getLocale() == 'ar' ? 'right-3' : 'left-3' }} flex items-center pointer-events-none transition-all duration-300">
+                                    <div class="w-8 h-8 rounded-xl bg-primary/10 group-focus-within:bg-primary/20 flex items-center justify-center transition-all duration-300 group-focus-within:scale-110">
+                                        <svg class="w-4 h-4 text-primary/60 group-focus-within:text-primary transition-colors duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+                                    </div>
+                                </div>
+                                <select name="employee_id" id="employee_id"
+                                        class="block w-full bg-gray-50 border-2 border-transparent focus:border-primary focus:bg-white rounded-2xl py-4 {{ app()->getLocale() == 'ar' ? 'pr-14 pl-6' : 'pl-14 pr-6' }} text-secondary font-bold transition-all duration-300 outline-none appearance-none">
+                                    <option value="">{{ __('messages.inventory') ?? __('Inventory (Company)') }}</option>
+                                    @foreach($employees as $employee)
+                                        <option value="{{ $employee->id }}" {{ old('employee_id', $asset->employee_id) == $employee->id ? 'selected' : '' }}>
+                                            {{ $employee->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                                <div class="absolute inset-y-0 {{ app()->getLocale() == 'ar' ? 'left-6' : 'right-6' }} flex items-center pointer-events-none text-gray-400">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M19 9l-7 7-7-7"></path></svg>
+                                </div>
                             </div>
-                            <input type="date" name="assigned_date" id="assigned_date" value="{{ old('assigned_date', $asset->assigned_date->format('Y-m-d')) }}" required
-                                   class="block w-full bg-gray-50 border-2 border-transparent focus:border-primary focus:bg-white rounded-2xl py-4 ps-14 pe-6 text-secondary font-bold transition-all duration-300 outline-none">
                         </div>
-                    </div>
 
-                    <!-- Return Date -->
-                    <div class="space-y-3">
-                        <label for="returned_date" class="block text-xs font-black text-gray-400 uppercase tracking-[0.2em]">{{ __('Return Date') }}</label>
-                        <div class="relative group">
-                            <div class="absolute inset-y-0 start-0 ps-6 flex items-center pointer-events-none text-gray-400 group-focus-within:text-primary transition-colors">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                        <!-- Assignment Date -->
+                        <div class="space-y-3">
+                            <label for="assigned_date" class="block text-xs font-black text-gray-400 uppercase tracking-[0.2em]">{{ __('messages.purchase_date') ?? __('Assignment Date') }} <span class="text-primary">*</span></label>
+                            <div class="relative group">
+                                <div class="absolute inset-y-0 {{ app()->getLocale() == 'ar' ? 'right-3' : 'left-3' }} flex items-center pointer-events-none transition-all duration-300">
+                                    <div class="w-8 h-8 rounded-xl bg-orange-50 group-focus-within:bg-orange-100 flex items-center justify-center transition-all duration-300 group-focus-within:scale-110">
+                                        <svg class="w-4 h-4 text-orange-400 group-focus-within:text-orange-600 transition-colors duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                                    </div>
+                                </div>
+                                <input type="date" name="assigned_date" id="assigned_date" value="{{ old('assigned_date', $asset->assigned_date->format('Y-m-d')) }}" required
+                                       class="block w-full bg-gray-50 border-2 border-transparent focus:border-primary focus:bg-white rounded-2xl py-4 {{ app()->getLocale() == 'ar' ? 'pr-14 pl-6' : 'pl-14 pr-6' }} text-secondary font-bold transition-all duration-300 outline-none">
                             </div>
-                            <input type="date" name="returned_date" id="returned_date" value="{{ old('returned_date', $asset->returned_date?->format('Y-m-d')) }}"
-                                   class="block w-full bg-gray-50 border-2 border-transparent focus:border-primary focus:bg-white rounded-2xl py-4 ps-14 pe-6 text-secondary font-bold transition-all duration-300 outline-none">
                         </div>
-                    </div>
 
-                    <!-- Description -->
-                    <div class="md:col-span-2 space-y-3">
-                        <label for="description" class="block text-xs font-black text-gray-400 uppercase tracking-[0.2em]">{{ __('messages.assets_desc') ?? __('Asset Details') }}</label>
-                        <textarea name="description" id="description" rows="4"
-                                  class="block w-full bg-gray-50 border-2 border-transparent focus:border-primary focus:bg-white rounded-3xl py-4 px-6 text-secondary font-medium transition-all duration-300 outline-none"
-                                  placeholder="Provide conditions, configuration, or other details...">{{ old('description', $asset->description) }}</textarea>
+                        <!-- Return Date -->
+                        <div class="space-y-3">
+                            <label for="returned_date" class="block text-xs font-black text-gray-400 uppercase tracking-[0.2em]">{{ __('messages.return_date') }}</label>
+                            <div class="relative group">
+                                <div class="absolute inset-y-0 {{ app()->getLocale() == 'ar' ? 'right-3' : 'left-3' }} flex items-center pointer-events-none transition-all duration-300">
+                                    <div class="w-8 h-8 rounded-xl bg-rose-50 group-focus-within:bg-rose-100 flex items-center justify-center transition-all duration-300 group-focus-within:scale-110">
+                                        <svg class="w-4 h-4 text-rose-400 group-focus-within:text-rose-600 transition-colors duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                                    </div>
+                                </div>
+                                <input type="date" name="returned_date" id="returned_date" value="{{ old('returned_date', $asset->returned_date?->format('Y-m-d')) }}"
+                                       class="block w-full bg-gray-50 border-2 border-transparent focus:border-primary focus:bg-white rounded-2xl py-4 {{ app()->getLocale() == 'ar' ? 'pr-14 pl-6' : 'pl-14 pr-6' }} text-secondary font-bold transition-all duration-300 outline-none">
+                            </div>
+                        </div>
+
+                        <!-- Description -->
+                        <div class="md:col-span-2 space-y-3">
+                            <label for="description" class="block text-xs font-black text-gray-400 uppercase tracking-[0.2em]">{{ __('messages.assets_desc') ?? __('Asset Details') }}</label>
+                            <textarea name="description" id="description" rows="4"
+                                      class="block w-full bg-gray-50 border-2 border-transparent focus:border-primary focus:bg-white rounded-3xl py-4 px-6 text-secondary font-medium transition-all duration-300 outline-none"
+                                      placeholder="{{ __('messages.asset_desc_placeholder') }}">{{ old('description', $asset->description) }}</textarea>
+                        </div>
                     </div>
                 </div>
 

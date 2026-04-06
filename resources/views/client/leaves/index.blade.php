@@ -99,12 +99,15 @@
                                 <td class="px-10 py-7 whitespace-nowrap">
                                     <div class="flex items-center gap-3">
                                         <span class="w-2 h-2 rounded-full bg-primary opacity-50"></span>
-                                        <span class="text-sm font-bold text-gray-600">{{ $req->leaveType ? __('messages.' . strtolower(str_replace(' ', '_', $req->leaveType->name))) ?? __($req->leaveType->name) : __('N/A') }}</span>
+                                        @php
+                                            $typeKey = 'messages.' . strtolower(str_replace(' ', '_', $req->leaveType->name));
+                                        @endphp
+                                        <span class="text-sm font-bold text-gray-600">{{ Lang::has($typeKey) ? __($typeKey) : $req->leaveType->name }}</span>
                                     </div>
                                 </td>
                                 <td class="px-10 py-7 whitespace-nowrap">
                                     <div class="text-sm font-black text-secondary/70">
-                                        {{ $req->start_date->format('M d, Y') }} — {{ $req->end_date->format('M d, Y') }}
+                                        {{ $req->start_date->translatedFormat('d M, Y') }} — {{ $req->end_date->translatedFormat('d M, Y') }}
                                     </div>
                                     <div class="text-[9px] font-black uppercase text-gray-400 tracking-tighter">{{ $req->start_date->diffInDays($req->end_date) + 1 }} {{ __('messages.days') }}</div>
                                 </td>
@@ -138,7 +141,7 @@
                                      @else
                                          <div class="flex flex-col items-end {{ app()->getLocale() == 'ar' ? 'items-start' : '' }} opacity-50">
                                              <span class="text-[9px] font-black uppercase text-gray-400 tracking-[0.1em] mb-1 italic">{{ __('messages.decision_recorded') }}</span>
-                                             <span class="text-[10px] text-secondary font-bold">{{ $req->reviewed_at?->format('M d, Y') }}</span>
+                                             <span class="text-[10px] text-secondary font-bold">{{ $req->reviewed_at?->translatedFormat('d M, Y') }}</span>
                                          </div>
                                      @endif
                                  </td>

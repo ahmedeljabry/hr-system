@@ -47,11 +47,10 @@ class TaskController extends Controller
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
             'due_date' => 'nullable|date',
-            'status' => 'nullable|in:todo,in_progress,done',
             'attachments.*' => 'nullable|file|max:10240',
         ]);
 
-        $data['status'] = $data['status'] ?? 'todo';
+        $data['status'] = 'todo';
 
         if ($request->hasFile('attachments')) {
             $paths = [];
@@ -91,7 +90,6 @@ class TaskController extends Controller
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
             'due_date' => 'nullable|date',
-            'status' => 'required|in:todo,in_progress,done',
             'attachments.*' => 'nullable|file|max:10240', // 10MB max per file
         ]);
 

@@ -60,7 +60,11 @@
     <div class="mb-10 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
         @foreach($balanceSummary as $balance)
             <div class="bg-white rounded-3xl p-6 text-center border border-gray-100 shadow-[0_10px_30px_rgba(0,0,0,0.02)] hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group">
-                <p class="text-[10px] font-black uppercase tracking-[0.2em] text-gray-400 mb-2 transition-colors group-hover:text-primary">{{ $balance['type']->name }}</p>
+                @php
+                    $typeKey = 'messages.' . strtolower(str_replace(' ', '_', $balance['type']->name));
+                    $typeDisplayName = Lang::has($typeKey) ? __($typeKey) : $balance['type']->name;
+                @endphp
+                <p class="text-[10px] font-black uppercase tracking-[0.2em] text-gray-400 mb-2 transition-colors group-hover:text-primary">{{ $typeDisplayName }}</p>
                 <div class="flex flex-col items-center">
                     <span class="text-3xl font-black text-secondary leading-none mb-1">{{ $balance['remaining'] }}</span>
                     <span class="text-[10px] font-bold text-gray-300 uppercase tracking-widest">{{ __('messages.left') }}</span>
@@ -96,8 +100,12 @@
                             class="block w-full bg-gray-50/50 border-2 border-transparent focus:border-primary/30 focus:bg-white focus:ring-8 focus:ring-primary/5 rounded-3xl py-5 {{ app()->getLocale() == 'ar' ? 'pr-18 pl-12' : 'pl-18 pr-12' }} text-secondary font-black transition-all duration-300 outline-none appearance-none cursor-pointer">
                             <option value="">{{ __('messages.select_leave_type') }}</option>
                             @foreach($leaveTypes as $type)
+                                @php
+                                    $typeItemKey = 'messages.' . strtolower(str_replace(' ', '_', $type->name));
+                                    $typeItemName = Lang::has($typeItemKey) ? __($typeItemKey) : $type->name;
+                                @endphp
                                 <option value="{{ $type->id }}" {{ old('leave_type_id') == $type->id ? 'selected' : '' }}>
-                                    {{ $type->name }} ({{ $type->max_days_per_year > 0 ? $type->max_days_per_year . ' ' . __('messages.days_per_year') : __('messages.unlimited') }})
+                                    {{ $typeItemName }} ({{ $type->max_days_per_year > 0 ? $type->max_days_per_year . ' ' . __('messages.days_per_year') : __('messages.unlimited') }})
                                 </option>
                             @endforeach
                         </select>

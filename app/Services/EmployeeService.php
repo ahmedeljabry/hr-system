@@ -135,17 +135,51 @@ class EmployeeService
 
     public function delete(int $clientId, int $employeeId): bool
     {
-        $employee = $this->find($clientId, $employeeId);
+        $employee = Employee::where('client_id', $clientId)->findOrFail($employeeId);
 
         return \Illuminate\Support\Facades\DB::transaction(function () use ($employee) {
-            // Delete associated user account if it exists
+            // 1. Delete associated user account if it exists
             if ($employee->user) {
+                // Ensure User is hard deleted
                 $employee->user->delete();
             }
 
-            // Optionally clean up other documents if any
-            // We keep them in storage for soft deletes, but they could be archived.
+            // 2. Delete Leave Balances
+            \App\Models\LeaveBalance::where('employee_id', $employee->id)->delete();
 
+            // 3. Delete Leave Requests
+            \App\Models\LeaveRequest::where('employee_id', $employee->id)->delete();
+
+            // 4. Delete Attendance Records
+            \App\Models\Attendance::where('employee_id', $employee->id)->delete();
+
+            // 5. Delete Payslips & Payslip Line Items
+            $payslips = \App\Models\Payslip::where('employee_id', $employee->id)->get();
+            foreach ($payslips as $payslip) {
+                $payslip->lineItems()->delete();
+                $payslip->delete();
+            }
+
+            // 6. Delete Salary Components
+            \App\Models\SalaryComponent::where('employee_id', $employee->id)->delete();
+
+            // 7. Unlink Assets (Asset remains in company but unassigned)
+            \App\Models\Asset::where('employee_id', $employee->id)->update(['employee_id' => null]);
+
+            // 8. Unlink Tasks (Task remains but unassigned)
+            \App\Models\Task::where('employee_id', $employee->id)->update(['employee_id' => null]);
+
+            // 9. Clean up any files from storage (optional but good practice)
+            if ($employee->national_id_image) Storage::disk('private')->delete($employee->national_id_image);
+            if ($employee->contract_image) Storage::disk('private')->delete($employee->contract_image);
+            if ($employee->cv_file) Storage::disk('private')->delete($employee->cv_file);
+            if ($employee->other_documents) {
+                foreach ($employee->other_documents as $doc) {
+                    Storage::disk('private')->delete($doc);
+                }
+            }
+
+            // 10. Delete the Employee record itself
             return (bool) $employee->delete();
         });
     }

@@ -71,16 +71,22 @@
                                 </div>
                             </td>
                             <td class="px-10 py-7 whitespace-nowrap text-center">
-                                @php
-                                    $statusConfig = [
-                                        'todo' => 'bg-gray-100 text-gray-500 border-gray-200',
-                                        'in_progress' => 'bg-blue-100 text-blue-600 border-blue-200',
-                                        'done' => 'bg-emerald-100 text-emerald-600 border-emerald-200',
-                                    ][$task->status] ?? 'bg-gray-100 text-gray-500 border-gray-200';
-                                @endphp
-                                <span class="px-5 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest border shadow-sm {{ $statusConfig }}">
-                                    {{ __($task->status) }}
-                                </span>
+                                <div x-data="{ status: '{{ $task->status }}' }">
+                                    <form action="{{ route('employee.tasks.updateStatus', $task) }}" method="POST">
+                                        @csrf
+                                        @method('PATCH')
+                                        <select name="status" @change="$el.form.submit()"
+                                            class="px-5 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest border transition-all duration-300 appearance-none cursor-pointer focus:ring-0 focus:outline-none shadow-sm {{ 
+                                                $task->status == 'todo' ? 'bg-gray-100 text-gray-500 border-gray-200 hover:bg-gray-200' : 
+                                                ($task->status == 'in_progress' ? 'bg-blue-100 text-blue-600 border-blue-200 hover:bg-blue-200' : 
+                                                'bg-emerald-100 text-emerald-600 border-emerald-200 hover:bg-emerald-200')
+                                            }}">
+                                            <option value="todo" {{ $task->status == 'todo' ? 'selected' : '' }}>{{ __('messages.todo') ?? __('To Do') }}</option>
+                                            <option value="in_progress" {{ $task->status == 'in_progress' ? 'selected' : '' }}>{{ __('messages.in_progress') ?? __('In Progress') }}</option>
+                                            <option value="done" {{ $task->status == 'done' ? 'selected' : '' }}>{{ __('messages.done') ?? __('Done') }}</option>
+                                        </select>
+                                    </form>
+                                </div>
                             </td>
                             <td class="px-10 py-7 whitespace-nowrap text-right">
                                 @if($task->attachments && count($task->attachments) > 0)

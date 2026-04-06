@@ -162,29 +162,6 @@
                                 </div>
                             </div>
 
-                            <!-- Status -->
-                            <div class="md:col-span-2 space-y-4">
-                                <label for="status"
-                                    class="block text-xs font-black text-gray-400 uppercase tracking-[0.2em]">{{ __('messages.status') ?? __('Status') }}</label>
-                                <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
-                                    @foreach (['todo', 'in_progress', 'done'] as $status)
-                                        <label class="cursor-pointer group relative">
-                                            <input type="radio" name="status" value="{{ $status }}"
-                                                {{ old('status', $task->status) == $status ? 'checked' : '' }}
-                                                class="peer hidden">
-                                            <div
-                                                class="p-4 rounded-2xl border-2 border-gray-100 bg-gray-50 text-center transition-all duration-300 peer-checked:border-primary peer-checked:bg-white peer-checked:shadow-lg peer-checked:shadow-primary/20 group-hover:border-primary/30">
-                                                <div
-                                                    class="w-6 h-6 rounded-full border-2 border-gray-200 mx-auto mb-3 flex items-center justify-center peer-checked:border-primary transition-colors duration-300 group-hover:border-primary/40 relative">
-                                                    <div class="w-3 h-3 rounded-full bg-primary scale-0 peer-checked:scale-100 transition-transform duration-300 absolute"></div>
-                                                </div>
-                                                <span
-                                                    class="block text-xs font-black uppercase tracking-widest text-gray-400 peer-checked:text-secondary group-hover:text-secondary/70 transition-colors duration-300">{{ __($status) }}</span>
-                                            </div>
-                                        </label>
-                                    @endforeach
-                                </div>
-                            </div>
 
                             <!-- Description -->
                             <div class="md:col-span-2 space-y-3">

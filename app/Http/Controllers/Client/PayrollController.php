@@ -60,4 +60,11 @@ class PayrollController extends Controller
                 ->with('error', $e->getMessage());
         }
     }
+
+    public function destroy(int $payrollRun)
+    {
+        $this->service->deleteRun($this->getClientId(), $payrollRun);
+        return redirect()->route('client.payroll.index')
+            ->with('success', __('messages.payroll_deleted_success'));
+    }
 }

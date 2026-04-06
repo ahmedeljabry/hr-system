@@ -10,6 +10,14 @@
             :subtitle="__('messages.payroll_desc')"
         >
             <x-slot name="actions">
+                <a href="{{ route('client.deductions.index') }}" 
+                   class="inline-flex items-center px-6 py-3 bg-rose-500 hover:bg-rose-600 text-white text-xs font-black rounded-xl shadow-[0_10px_25px_rgba(244,63,94,0.3)] hover:shadow-[0_15px_30px_rgba(244,63,94,0.4)] transition-all duration-300 hover:-translate-y-1 active:translate-y-0 group/discount me-3">
+                    <svg class="w-4 h-4 me-2 group-hover/discount:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                    {{ __('messages.discounted') }}
+                </a>
+
                 <a href="{{ route('client.payroll.create') }}" 
                    class="inline-flex items-center px-6 py-3 bg-primary hover:bg-primary/90 text-secondary text-xs font-black rounded-xl shadow-lg transition-all duration-300 hover:-translate-y-1 active:translate-y-0 group/add">
                     <svg class="w-4 h-4 me-2 group-hover/add:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -58,7 +66,8 @@
                     </thead>
                     <tbody class="divide-y divide-gray-50">
                         @forelse($runs as $run)
-                            <tr class="hover:bg-gray-50/50 transition-all duration-300 group cursor-pointer" onclick="window.location='{{ route('client.payroll.show', $run->id) }}'">
+                            <tr class="hover:bg-gray-50/50 transition-all duration-300 group cursor-pointer" 
+                                onclick="if(!event.target.closest('button, a')) window.location='{{ route('client.payroll.show', $run->id) }}'">
                                 <td class="px-8 py-6 whitespace-nowrap">
                                     <div class="flex items-center">
                                         <div class="w-10 h-10 bg-primary/10 rounded-xl flex items-center justify-center me-4 group-hover:bg-primary transition-colors duration-500">
@@ -90,10 +99,36 @@
                                     <div class="text-[10px] font-bold text-gray-400 uppercase tracking-wider">{{ $run->created_at->format('Y-m-d H:i') }}</div>
                                 </td>
                                 <td class="px-8 py-6 whitespace-nowrap text-end rtl:text-left">
-                                    <div class="flex justify-end opacity-0 group-hover:opacity-100 transition-all duration-300 translate-x-4 group-hover:translate-x-0">
-                                        <a href="{{ route('client.payroll.show', $run->id) }}" class="p-2 text-primary hover:text-secondary hover:bg-primary rounded-xl transition-all duration-300">
+                                    <div class="flex justify-end items-center gap-2 opacity-0 group-hover:opacity-100 transition-all duration-300 translate-x-4 group-hover:translate-x-0">
+                                        <a href="{{ route('client.payroll.show', $run->id) }}" class="p-2 text-primary hover:text-secondary hover:bg-primary rounded-xl transition-all duration-300" title="{{ __('messages.view') }}">
                                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
                                         </a>
+
+                                        <form id="delete-payroll-{{ $run->id }}" action="{{ route('client.payroll.destroy', $run->id) }}" method="POST" style="display: none;">
+                                            @csrf
+                                            @method('DELETE')
+                                        </form>
+                                        <button type="button" 
+                                                onclick="Swal.fire({
+                                                    title: '{{ __('messages.are_you_sure') }}',
+                                                    text: '{{ __('messages.delete_confirm', ['month' => $run->month->format('M Y')]) }}',
+                                                    icon: 'warning',
+                                                    showCancelButton: true,
+                                                    confirmButtonColor: '#f43f5e',
+                                                    cancelButtonColor: '#0ea5e9',
+                                                    confirmButtonText: '{{ __('messages.yes_delete') }}',
+                                                    cancelButtonText: '{{ __('messages.cancel') }}',
+                                                    reverseButtons: true
+                                                }).then((result) => {
+                                                    if (result.isConfirmed) {
+                                                        document.getElementById('delete-payroll-{{ $run->id }}').submit();
+                                                    }
+                                                })"
+                                                class="p-2 text-rose-500 hover:text-white hover:bg-rose-500 rounded-xl transition-all duration-300" title="{{ __('messages.delete') }}">
+                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                            </svg>
+                                        </button>
                                     </div>
                                 </td>
                             </tr>

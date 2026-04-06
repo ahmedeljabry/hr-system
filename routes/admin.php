@@ -17,5 +17,4 @@ Route::middleware(['auth', 'role:super_admin'])->prefix('admin')->name('admin.')
     Route::get('/users/{user}/edit', [UserController::class, 'edit'])->name('users.edit');
     Route::patch('/users/{user}', [UserController::class, 'update'])->name('users.update');
 
-    Route::resource('/reminder-phrases', \App\Http\Controllers\Admin\ReminderPhraseController::class)->except(['show', 'destroy']);
 });

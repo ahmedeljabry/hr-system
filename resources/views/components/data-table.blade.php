@@ -44,15 +44,15 @@
             }
         }
     }"
-    class="w-full bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden relative"
+    class="w-full bg-white rounded-[2.5rem] shadow-[0_20px_50px_rgba(0,0,0,0.04)] border border-gray-100/50 overflow-hidden relative"
 >
     <!-- Header Tools -->
-    <div class="px-6 py-4 border-b border-gray-100 flex flex-col sm:flex-row justify-between items-center bg-gray-50/50">
+    <div class="px-10 py-6 border-b border-gray-50 flex flex-col sm:flex-row justify-between items-center bg-gray-50/30">
         <div class="relative w-full sm:w-72">
             <input 
                 type="text" 
                 x-model="search" 
-                placeholder="{{ __('Search...') }}"
+                placeholder="{{ __('messages.search') ?? 'Search...' }}"
                 class="w-full px-4 py-2 bg-white border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-all outline-none"
             >
             <div class="absolute inset-y-0 inline-end-0 pe-3 flex items-center pointer-events-none">
@@ -99,30 +99,31 @@
                     </tr>
                 </template>
                 <tr x-show="!loading && data.length === 0">
-                    <td colspan="100%" class="px-6 py-12 text-center text-gray-500">
-                        {{ __('No records found.') }}
+                    <td colspan="100%" class="px-6 py-12 text-center text-gray-500 font-medium">
+                        {{ __('messages.no_records_found') ?? 'No records found.' }}
                     </td>
                 </tr>
             </tbody>
         </table>
     </div>
 
-    <!-- Pagination Settings -->
-    <div class="px-6 py-4 border-t border-gray-100 bg-gray-50/50 flex flex-col md:flex-row items-center justify-between">
-        <span class="text-sm text-gray-600 mb-4 md:mb-0">
-            {{ __('Showing results dynamically') }}
-        </span>
-        <div class="flex items-center space-x-1 rtl:space-x-reverse">
+    <div class="px-10 py-5 border-t border-gray-50 flex flex-col md:flex-row items-center justify-between text-xs font-black uppercase tracking-widest text-gray-400">
+        <div class="flex items-center gap-3">
+            <span class="w-1.5 h-1.5 rounded-full bg-primary/30"></span>
+            {{ __('messages.showing_results_dynamically') ?? 'Showing results dynamically' }}
+        </div>
+        <div class="flex items-center gap-1.5 rtl:space-x-reverse mt-4 md:mt-0">
             <template x-for="link in links">
                 <button 
                     @click.prevent="fetchData(link.url)" 
-                    x-html="link.label" 
                     :disabled="!link.url || link.active"
                     :class="[
-                        'px-3 py-1 rounded text-sm transition-colors',
-                        link.active ? 'bg-primary text-white' : (link.url ? 'bg-white border text-gray-700 hover:bg-gray-50' : 'text-gray-400')
+                        'px-4 py-2.5 rounded-xl transition-all duration-300 font-black',
+                        link.active ? 'bg-primary text-secondary shadow-[0_4px_15px_rgba(255,184,0,0.2)]' : (link.url ? 'bg-white border border-gray-100 text-gray-400 hover:bg-gray-50 hover:text-secondary' : 'opacity-30 cursor-not-allowed')
                     ]"
-                ></button>
+                >
+                    <span x-html="link.label.replace('pagination.previous', '{{ __('pagination.previous') }}').replace('pagination.next', '{{ __('pagination.next') }}')"></span>
+                </button>
             </template>
         </div>
     </div>

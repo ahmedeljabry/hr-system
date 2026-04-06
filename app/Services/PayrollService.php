@@ -113,4 +113,18 @@ class PayrollService
 
         return $run->fresh();
     }
+
+    public function deleteRun(int $clientId, int $runId): bool
+    {
+        $run = PayrollRun::where('client_id', $clientId)->findOrFail($runId);
+
+        // Delete dependencies (Payslips will cascade delete line items if configured, but let's be safe)
+        return DB::transaction(function () use ($run) {
+            foreach ($run->payslips as $payslip) {
+                $payslip->lineItems()->delete();
+                $payslip->delete();
+            }
+            return $run->delete();
+        });
+    }
 }

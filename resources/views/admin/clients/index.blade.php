@@ -1,13 +1,14 @@
 @extends('layouts.admin')
 
 @section('content')
-<div class="mb-8">
-    <div class="flex justify-between items-center mb-8">
-        <h1 class="text-3xl font-bold text-gray-900">{{ __('Clients') }}</h1>
-        <a href="{{ route('admin.dashboard') }}" class="text-secondary hover:text-secondary/80 font-medium">
-            ← {{ __('Back to Dashboard') }}
-        </a>
-    </div>
+<div class="pt-8 pb-12">
+    <div class="w-full">
+        <!-- Standard Header -->
+        <x-dashboard-sub-header 
+            :title="__('messages.clients_management') ?? 'Clients Management'" 
+            :subtitle="__('messages.manage_client_subscriptions_description') ?? 'Manage client subscriptions and view organization details.'"
+        />
+
 
     @if(session('success'))
         <div class="mb-6 bg-green-50 border border-green-100 text-green-600 px-6 py-4 rounded-2xl shadow-sm flex items-center">
@@ -20,15 +21,15 @@
 
     <x-data-table endpoint="{{ route('admin.clients.index') }}">
         <x-slot name="head">
-            <th class="px-6 py-5 text-start text-xs font-extrabold text-gray-500 uppercase tracking-widest">{{ __('Company Name') }}</th>
-            <th class="px-6 py-5 text-start text-xs font-extrabold text-gray-500 uppercase tracking-widest">{{ __('Subscription Status') }}</th>
-            <th class="px-6 py-5 text-start text-xs font-extrabold text-gray-500 uppercase tracking-widest">{{ __('Employees') }}</th>
-            <th class="px-6 py-5 text-end text-xs font-extrabold text-gray-500 uppercase tracking-widest">{{ __('Actions') }}</th>
+            <th class="px-6 py-5 text-start text-xs font-extrabold text-gray-500 uppercase tracking-widest">{{ __('messages.company_name') ?? 'Company Name' }}</th>
+            <th class="px-6 py-5 text-start text-xs font-extrabold text-gray-500 uppercase tracking-widest">{{ __('messages.status') ?? 'Status' }}</th>
+            <th class="px-6 py-5 text-start text-xs font-extrabold text-gray-500 uppercase tracking-widest">{{ __('messages.employees') ?? 'Employees' }}</th>
+            <th class="px-6 py-5 text-end text-xs font-extrabold text-gray-500 uppercase tracking-widest">{{ __('messages.actions') ?? 'Actions' }}</th>
         </x-slot>
         <x-slot name="body">
             <td class="px-6 py-6 whitespace-nowrap">
                 <div class="flex items-center">
-                    <div class="bg-primary/20 text-secondary w-10 h-10 rounded-xl flex items-center justify-center font-bold me-3 text-lg lowercase" x-text="item.name.substring(0, 1)"></div>
+                    <div class="bg-primary/20 text-secondary w-10 h-10 rounded-xl flex items-center justify-center font-bold me-3 text-lg" :text-content="item.name.substring(0, 1)"></div>
                     <div>
                         <div class="text-sm font-bold text-gray-900" x-text="item.name"></div>
                         <div class="text-xs text-gray-400">ID: #<span x-text="item.id"></span></div>
@@ -42,12 +43,13 @@
                           'bg-green-100 text-green-700': item.status === 'active',
                           'bg-amber-100 text-amber-700': item.status === 'suspended',
                           'bg-red-100 text-red-700': item.status === 'expired'
-                      }" x-text="item.status"></span>
+                      }" x-text="item.status === 'active' ? '{{ __('messages.active') }}' : (item.status === 'suspended' ? '{{ __('messages.suspended') }}' : '{{ __('messages.expired') }}')"></span>
             </td>
             <td class="px-6 py-6 whitespace-nowrap text-sm text-gray-900 font-bold" x-text="item.employees_count"></td>
             <td class="px-6 py-6 whitespace-nowrap text-end text-sm font-medium">
-                <a :href="`/admin/clients/${item.id}`" class="text-secondary hover:text-secondary/80 font-medium">
-                    {{ __('View Details') }}
+                <a :href="`/admin/clients/${item.id}`" class="text-secondary hover:text-secondary/80 font-black uppercase text-xs tracking-widest flex items-center justify-end group gap-2">
+                    <span>{{ __('messages.view_details') ?? 'View Details' }}</span>
+                    <svg class="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M9 5l7 7-7 7"></path></svg>
                 </a>
             </td>
         </x-slot>

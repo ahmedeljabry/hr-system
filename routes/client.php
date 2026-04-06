@@ -32,6 +32,13 @@ Route::middleware(['auth', 'role:client', 'check_subscription'])->prefix('client
     Route::post('/payroll/run', [\App\Http\Controllers\Client\PayrollController::class, 'store'])->name('payroll.store');
     Route::get('/payroll/{payrollRun}', [\App\Http\Controllers\Client\PayrollController::class, 'show'])->name('payroll.show');
     Route::post('/payroll/{payrollRun}/confirm', [\App\Http\Controllers\Client\PayrollController::class, 'confirm'])->name('payroll.confirm');
+    Route::delete('/payroll/{payrollRun}', [\App\Http\Controllers\Client\PayrollController::class, 'destroy'])->name('payroll.destroy');
+    
+    // Deductions
+    Route::get('/deductions', [\App\Http\Controllers\Client\DeductionController::class, 'index'])->name('deductions.index');
+    Route::get('/deductions/create', [\App\Http\Controllers\Client\DeductionController::class, 'create'])->name('deductions.create');
+    Route::post('/deductions', [\App\Http\Controllers\Client\DeductionController::class, 'store'])->name('deductions.store');
+    Route::delete('/deductions/{deduction}', [\App\Http\Controllers\Client\DeductionController::class, 'destroy'])->name('deductions.destroy');
 
 
     // Secure file serving (tenant-scoped)

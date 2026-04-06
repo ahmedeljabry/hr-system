@@ -16,15 +16,8 @@
         </svg>
     </button>
 
-    <!-- Logo / Brand -->
-    <div class="h-16 flex items-center justify-center border-b border-gray-50 flex-shrink-0">
-        <a href="{{ route('admin.dashboard') }}" class="flex items-center justify-center">
-            <x-application-logo class="w-8 h-8 fill-current text-primary" />
-            <span x-show="!collapsed" x-transition.opacity.duration.300ms class="ms-3 text-xl font-outfit font-bold text-text-main whitespace-nowrap">
-                {{ config('app.name', 'HR System') }}
-            </span>
-        </a>
-    </div>
+    <!-- Empty Brand Area -->
+    <div class="h-16 flex items-center justify-center border-b border-gray-50 flex-shrink-0"></div>
 
     <!-- Navigation -->
     <nav class="flex-1 px-3 py-6 space-y-1 overflow-y-auto">

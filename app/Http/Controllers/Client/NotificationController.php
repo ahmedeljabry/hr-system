@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Employee;
+namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
 use App\Services\NotificationService;
@@ -14,15 +14,15 @@ class NotificationController extends Controller
 
     public function api(): JsonResponse
     {
-        $employeeId = auth()->user()->employee->id;
-        $notifications = $this->service->getNotifications($employeeId, 10, false);
+        $clientId = auth()->user()->client->id;
+        $notifications = $this->service->getNotifications($clientId, 10, true);
         return response()->json(['data' => $notifications->items()]);
     }
 
     public function read(int $notificationId): JsonResponse
     {
-        $employeeId = auth()->user()->employee->id;
-        $success = $this->service->markAsRead($notificationId, $employeeId, false);
+        $clientId = auth()->user()->client->id;
+        $success = $this->service->markAsRead($notificationId, $clientId, true);
         return response()->json(['success' => $success]);
     }
 }

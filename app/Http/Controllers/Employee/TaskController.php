@@ -38,7 +38,7 @@ class TaskController extends Controller
             'status' => 'required|in:todo,in_progress,done',
         ]);
 
-        $task->update(['status' => $request->status]);
+        $this->taskService->updateTaskStatus($task, $request->status);
 
         return back()->with('success', __('Task status updated.'));
     }

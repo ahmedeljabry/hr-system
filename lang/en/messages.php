@@ -505,4 +505,13 @@ return [
     'reviewer_comment' => 'Reviewer Comment',
     'download' => 'Download',
     'dates' => 'Dates',
+    'notifications' => 'Notifications',
+    'no_notifications' => 'No notifications yet.',
+    'all_caught_up' => 'All caught up!',
+    'leave_request_submitted' => 'Leave Request Submitted',
+    'task_status_updated' => 'Task Status Updated',
+    'task_assigned' => 'New Task Assigned',
+    'leave_request_approved' => 'Leave Request Approved',
+    'leave_request_rejected' => 'Leave Request Rejected',
+    'new_announcement' => 'New Announcement',
 ];

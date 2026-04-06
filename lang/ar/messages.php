@@ -517,4 +517,13 @@ return [
     'reviewer_comment' => 'تعليق المراجع',
     'download' => 'تنزيل',
     'dates' => 'التواريخ',
+    'notifications' => 'الإشعارات',
+    'no_notifications' => 'لا توجد إشعارات حتى الآن.',
+    'all_caught_up' => 'أنت مطلع على كل شيء!',
+    'leave_request_submitted' => 'تم تقديم طلب إجازة جديد',
+    'task_status_updated' => 'تم تحديث حالة المهمة',
+    'task_assigned' => 'تم تعيين مهمة جديدة لك',
+    'leave_request_approved' => 'تمت الموافقة على طلب الإجازة',
+    'leave_request_rejected' => 'تم رفض طلب الإجازة',
+    'new_announcement' => 'إعلان جديد',
 ];

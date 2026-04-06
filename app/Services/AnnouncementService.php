@@ -8,6 +8,8 @@ use App\Models\Employee;
 
 class AnnouncementService
 {
+    public function __construct(protected NotificationService $notificationService) {}
+
     public function getForClient(Client $client, int $perPage = 10)
     {
         return $client->announcements()->latest('published_at')->paginate($perPage);
@@ -15,7 +17,22 @@ class AnnouncementService
 
     public function create(Client $client, array $data)
     {
-        return $client->announcements()->create($data);
+        $announcement = $client->announcements()->create($data);
+
+        // Notify all employees of this client
+        $employees = $client->employees;
+        foreach ($employees as $employee) {
+            $this->notificationService->createNotification([
+                'employee_id' => $employee->id,
+                'type' => 'new_announcement',
+                'title' => __('messages.new_announcement'),
+                'message' => $announcement->title,
+                'related_type' => Announcement::class,
+                'related_id' => $announcement->id,
+            ]);
+        }
+
+        return $announcement;
     }
 
     public function update(Announcement $announcement, array $data)

@@ -13,6 +13,7 @@ class Notification extends Model
 
     protected $fillable = [
         'employee_id',
+        'client_id',
         'type',
         'title',
         'message',
@@ -30,6 +31,11 @@ class Notification extends Model
         return $this->belongsTo(Employee::class);
     }
 
+    public function client(): BelongsTo
+    {
+        return $this->belongsTo(Client::class);
+    }
+
     public function related(): MorphTo
     {
         return $this->morphTo();
@@ -43,5 +49,10 @@ class Notification extends Model
     public function scopeForEmployee($query, int $employeeId)
     {
         return $query->where('employee_id', $employeeId);
+    }
+
+    public function scopeForClient($query, int $clientId)
+    {
+        return $query->where('client_id', $clientId);
     }
 }

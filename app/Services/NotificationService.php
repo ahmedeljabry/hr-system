@@ -9,25 +9,28 @@ class NotificationService
     /**
      * Get the unread notification count for an employee.
      */
-    public function getUnreadCount(int $employeeId): int
+    public function getUnreadCount(int $id, bool $isClient = false): int
     {
-        return Notification::forEmployee($employeeId)->unread()->count();
+        $query = $isClient ? Notification::forClient($id) : Notification::forEmployee($id);
+        return $query->unread()->count();
     }
 
     /**
      * Get paginated notifications for an employee.
      */
-    public function getNotifications(int $employeeId, int $perPage = 15)
+    public function getNotifications(int $id, int $perPage = 15, bool $isClient = false)
     {
-        return Notification::forEmployee($employeeId)->latest()->paginate($perPage);
+        $query = $isClient ? Notification::forClient($id) : Notification::forEmployee($id);
+        return $query->latest()->paginate($perPage);
     }
 
     /**
      * Mark a specific notification as read.
      */
-    public function markAsRead(int $notificationId, int $employeeId): bool
+    public function markAsRead(int $notificationId, int $id, bool $isClient = false): bool
     {
-        $notification = Notification::forEmployee($employeeId)->findOrFail($notificationId);
+        $query = $isClient ? Notification::forClient($id) : Notification::forEmployee($id);
+        $notification = $query->findOrFail($notificationId);
         if (is_null($notification->read_at)) {
             $notification->read_at = now();
             return $notification->save();

@@ -30,10 +30,7 @@
     <!-- Form Panel -->
     <div class="w-full md:w-1/2 flex flex-col justify-center items-center p-8 bg-surface overflow-y-auto">
         <div class="w-full max-w-md">
-            <div class="mb-8 text-start">
-                <a href="/" class="inline-block mb-6">
-                    <x-application-logo class="w-20 h-20 fill-current text-primary" />
-                </a>
+            <div class="mb-8 text-start pt-12">
                 <h1 class="text-3xl font-outfit font-bold text-secondary mb-2">{{ $title }}</h1>
                 @if($subtitle)
                     <p class="text-gray-500 font-inter">{{ $subtitle }}</p>

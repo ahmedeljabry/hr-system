@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\DB;
 
 class LeaveService
 {
+    public function __construct(protected NotificationService $notificationService) {}
     /**
      * Get all leave types for a client.
      */
@@ -66,7 +67,7 @@ class LeaveService
             throw new \InvalidArgumentException(__('Insufficient leave balance. You have :remaining days remaining.', ['remaining' => $remaining]));
         }
 
-        return LeaveRequest::create([
+        $leaveRequest = LeaveRequest::create([
             'employee_id' => $employee->id,
             'leave_type_id' => $leaveType->id,
             'client_id' => $employee->client_id,
@@ -75,6 +76,18 @@ class LeaveService
             'reason' => $data['reason'] ?? null,
             'status' => 'pending',
         ]);
+
+        // Notify Client
+        $this->notificationService->createNotification([
+            'client_id' => $employee->client_id,
+            'type' => 'leave_request_submitted',
+            'title' => __('messages.leave_request_submitted'),
+            'message' => __(':name has submitted a new leave request.', ['name' => $employee->name]),
+            'related_type' => LeaveRequest::class,
+            'related_id' => $leaveRequest->id,
+        ]);
+
+        return $leaveRequest;
     }
 
     /**
@@ -100,6 +113,21 @@ class LeaveService
             );
             $balance->increment('used_days', $leaveRequest->days_count);
 
+            $leaveRequest->fresh();
+
+            // Notify Employee
+            $this->notificationService->createNotification([
+                'employee_id' => $leaveRequest->employee_id,
+                'type' => 'leave_request_approved',
+                'title' => __('messages.leave_request_approved'),
+                'message' => __('Your leave request from :start to :end has been approved.', [
+                    'start' => $leaveRequest->start_date->format('d M'),
+                    'end' => $leaveRequest->end_date->format('d M'),
+                ]),
+                'related_type' => LeaveRequest::class,
+                'related_id' => $leaveRequest->id,
+            ]);
+
             return $leaveRequest->fresh();
         });
     }
@@ -117,6 +145,21 @@ class LeaveService
             'status' => 'rejected',
             'reviewer_comment' => $comment,
             'reviewed_at' => now(),
+        ]);
+
+        $leaveRequest->fresh();
+
+        // Notify Employee
+        $this->notificationService->createNotification([
+            'employee_id' => $leaveRequest->employee_id,
+            'type' => 'leave_request_rejected',
+            'title' => __('messages.leave_request_rejected'),
+            'message' => __('Your leave request from :start to :end has been rejected.', [
+                'start' => $leaveRequest->start_date->format('d M'),
+                'end' => $leaveRequest->end_date->format('d M'),
+            ]),
+            'related_type' => LeaveRequest::class,
+            'related_id' => $leaveRequest->id,
         ]);
 
         return $leaveRequest->fresh();

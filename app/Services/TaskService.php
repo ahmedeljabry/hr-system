@@ -9,12 +9,25 @@ use Illuminate\Support\Collection;
 
 class TaskService
 {
+    public function __construct(protected NotificationService $notificationService) {}
     /**
      * Create or assign a task.
      */
     public function createTask(array $data, Client $client): Task
     {
-        return Task::create($data);
+        $task = Task::create($data);
+
+        // Notify Employee
+        $this->notificationService->createNotification([
+            'employee_id' => $task->employee_id,
+            'type' => 'task_assigned',
+            'title' => __('messages.task_assigned'),
+            'message' => __('You have been assigned a new task: :title', ['title' => $task->title]),
+            'related_type' => Task::class,
+            'related_id' => $task->id,
+        ]);
+
+        return $task;
     }
 
     /**
@@ -23,5 +36,31 @@ class TaskService
     public function getTasksForEmployee(Employee $employee): Collection
     {
         return Task::where('employee_id', $employee->id)->get();
+    }
+
+    /**
+     * Update task status (by employee).
+     */
+    public function updateTaskStatus(Task $task, string $status): bool
+    {
+        $updated = $task->update(['status' => $status]);
+        
+        if ($updated) {
+            // Notify Client
+            $this->notificationService->createNotification([
+                'client_id' => $task->employee->client_id,
+                'type' => 'task_status_updated',
+                'title' => __('messages.task_status_updated'),
+                'message' => __(':name has updated the status of task ":title" to :status.', [
+                    'name' => $task->employee->name,
+                    'title' => $task->title,
+                    'status' => __('messages.status_' . $status),
+                ]),
+                'related_type' => Task::class,
+                'related_id' => $task->id,
+            ]);
+        }
+        
+        return $updated;
     }
 }

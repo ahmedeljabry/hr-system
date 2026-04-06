@@ -32,9 +32,18 @@ class AppServiceProvider extends ServiceProvider
         \Illuminate\Support\Facades\View::composer('layouts.employee', function ($view) {
             if (auth()->check() && auth()->user()->employee) {
                 $service = app(\App\Services\NotificationService::class);
-                $view->with('employee_notifications_count', $service->getUnreadCount(auth()->user()->employee->id));
+                $view->with('employee_notifications_count', $service->getUnreadCount(auth()->user()->employee->id, false));
             } else {
                 $view->with('employee_notifications_count', 0);
+            }
+        });
+
+        \Illuminate\Support\Facades\View::composer('layouts.app', function ($view) {
+            if (auth()->check() && auth()->user()->client) {
+                $service = app(\App\Services\NotificationService::class);
+                $view->with('client_notifications_count', $service->getUnreadCount(auth()->user()->client->id, true));
+            } else {
+                $view->with('client_notifications_count', 0);
             }
         });
     }

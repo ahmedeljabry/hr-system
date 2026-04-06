@@ -42,18 +42,12 @@
         @endif
     </style>
 </head>
-<body class="bg-gray-50 text-gray-900 antialiased min-h-screen flex flex-col">
+<body class="bg-gray-50 text-gray-900 antialiased min-h-screen flex flex-col" x-data="{ mobileMenu: false }">
 
     <nav class="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-100 py-3 px-6 shadow-sm">
         <div class="max-w-full mx-auto px-4 sm:px-6 lg:px-10 flex justify-between items-center">
-            <!-- Brand / Logo -->
-            <div class="flex items-center">
-                <a href="/" class="group flex items-center gap-3">
-                    <div class="bg-primary/10 p-2 rounded-lg group-hover:bg-primary/20 transition-colors">
-                        <x-application-logo class="w-7 h-7 text-secondary" />
-                    </div>
-                </a>
-            </div>
+            <!-- Empty Brand Area -->
+            <div></div>
 
             <!-- Nav Links & Switcher -->
             <div class="flex items-center gap-8">
@@ -78,6 +72,9 @@
 
                 <div class="flex items-center gap-4 border-s border-gray-100 ps-4">
                     @auth
+                        @if(Auth::user()->isClient())
+                            <x-notification-bell :count="$client_notifications_count ?? 0" />
+                        @endif
                         <form method="POST" action="/logout" class="inline">
                             @csrf
                             <button type="submit" class="text-xs font-bold uppercase tracking-wider text-red-500 hover:text-red-600 transition-colors px-3 py-1.5 rounded-full hover:bg-red-50">
@@ -112,6 +109,10 @@
             </div>
         </div>
     </footer>
+
+    @if(auth()->check() && auth()->user()->isClient())
+        <x-notification-panel apiUrl="/client/notifications/api" readUrl="/client/notifications" />
+    @endif
 
     @stack('scripts')
 </body>

@@ -579,4 +579,10 @@ return [
     'pending' => 'Pending',
     'applied' => 'Applied',
     'deduction_deleted' => 'Deduction record removed successfully.',
+    'my_deductions' => 'My Deductions',
+    'my_deductions_desc' => 'View a detailed history of salary discounts applied to your records.',
+    'deduction_amount' => 'Deduction Amount',
+    'deduction_reason' => 'Deduction Reason',
+    'no_deductions_found' => 'No deductions found.',
+    'no_deductions_desc' => 'You do not have any salary deductions recorded at the moment.',
 ];

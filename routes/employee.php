@@ -20,6 +20,9 @@ Route::middleware(['auth', 'role:employee', 'check_subscription'])->prefix('empl
     Route::get('/leaves/create', [\App\Http\Controllers\Employee\LeaveController::class, 'create'])->name('leaves.create');
     Route::post('/leaves', [\App\Http\Controllers\Employee\LeaveController::class, 'store'])->name('leaves.store');
 
+    // Deductions
+    Route::get('/deductions', [\App\Http\Controllers\Employee\DeductionController::class, 'index'])->name('deductions.index');
+
     // Notifications API
     Route::get('/notifications/api', [\App\Http\Controllers\Employee\NotificationController::class, 'api'])->name('notifications.api');
     Route::post('/notifications/{notification}/read', [\App\Http\Controllers\Employee\NotificationController::class, 'read'])->name('notifications.read');

@@ -592,4 +592,10 @@ return [
     'pending' => 'قيد الانتظار',
     'applied' => 'تم التطبيق',
     'deduction_deleted' => 'تم حذف سجل الخصم بنجاح.',
+    'my_deductions' => 'خصوماتي',
+    'my_deductions_desc' => 'عرض سجل مفصل للخصومات المالية المطبقة على سجلات راتبك.',
+    'deduction_amount' => 'مبلغ الخصم',
+    'deduction_reason' => 'سبب الخصم',
+    'no_deductions_found' => 'لا توجد خصومات.',
+    'no_deductions_desc' => 'لا يوجد لديك أي خصومات مسجلة في الوقت الحالي.',
 ];

@@ -1,34 +1,16 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="py-12">
-        <div class="max-w-full mx-auto">
+<div class="pt-8 pb-12">
+    <div class="max-w-full mx-auto">
+        
+        <!-- Standard Header -->
+        <x-dashboard-sub-header 
+            :title="__('messages.edit_employee')" 
+            :subtitle="__('messages.employees')"
+            :backLink="route('client.employees.index')"
+        />
 
-            <!-- Premium Hero Section -->
-            <div
-                class="bg-secondary overflow-hidden shadow-2xl rounded-3xl p-10 text-white mb-10 relative group border border-primary/20">
-                <div class="relative z-10 flex flex-col md:flex-row md:items-center md:justify-between gap-6">
-                    <div>
-                        <h1 class="text-4xl font-extrabold mb-2 tracking-tight text-primary">
-                            {{ __('messages.edit_employee') }}</h1>
-                        <p class="text-gray-300 text-lg opacity-90">{{ __('messages.back') }} <a
-                                href="{{ route('client.employees.index') }}"
-                                class="text-primary hover:underline font-bold">{{ __('messages.employees') }}</a></p>
-                    </div>
-
-                    <div class="flex items-center gap-4">
-                        <a href="{{ route('client.employees.index') }}"
-                            class="inline-flex items-center px-6 py-3 bg-white/10 hover:bg-white/20 border border-white/20 text-white text-sm font-bold rounded-2xl transition-all duration-300 backdrop-blur-md group/back">
-                            <svg class="w-5 h-5 me-2 group-hover/back:-translate-x-1 transition-transform rtl:group-hover/back:translate-x-1"
-                                fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
-                            </svg>
-                            {{ __('messages.back') }}
-                        </a>
-                    </div>
-                </div>
-            </div>
 
             @if ($errors->any())
                 <div class="mb-8 animate-in fade-in slide-in-from-top-4 duration-500">

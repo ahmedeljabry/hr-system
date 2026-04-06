@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="py-12">
+<div class="pt-8 pb-12">
     <div class="w-full">
         
         <!-- Expiry Warning Banner -->
@@ -21,16 +21,13 @@
             </div>
         @endif
 
-        <!-- Welcome Banner -->
-        <div class="bg-secondary overflow-hidden shadow-2xl rounded-3xl p-10 text-white mb-8 relative group border border-primary/20">
-            <div class="relative z-10">
-                <h1 class="text-4xl font-extrabold mb-2 tracking-tight text-primary">{{ __('messages.dashboard') }}</h1>
-                <p class="text-gray-300 text-lg opacity-90">{{ __('messages.welcome') }}, {{ Auth::user()->name }}</p>
-            </div>
-            <!-- Animated decorative overlays -->
-            <div class="absolute top-[-2rem] right-[-2rem] w-48 h-48 bg-primary opacity-5 rounded-full transition-transform duration-700 group-hover:scale-110"></div>
-            <div class="absolute bottom-[-1rem] left-[10%] w-24 h-24 bg-primary opacity-5 rounded-full transition-transform duration-500 group-hover:-translate-y-4"></div>
-        </div>
+        <!-- Standard Header -->
+        <x-dashboard-sub-header 
+            :title="__('messages.dashboard')" 
+            :subtitle="__('messages.welcome') . ', ' . Auth::user()->name"
+        />
+
+
 
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
             <!-- Client Info Card -->

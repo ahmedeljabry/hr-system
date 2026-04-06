@@ -1,33 +1,26 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="py-12">
+<div class="pt-8 pb-12">
     <div class="w-full">
         
-        <!-- Premium Hero Section -->
-        <div class="bg-secondary overflow-hidden shadow-xl rounded-[2.5rem] p-10 text-white mb-10 relative group">
-            <div class="relative z-10 flex flex-col md:flex-row md:items-center md:justify-between gap-6">
-                <div>
-                    <h1 class="text-4xl font-black mb-2 tracking-tight text-white">{{ __('messages.leave_management') }}</h1>
-                    <p class="text-primary text-lg opacity-90">{{ __('messages.leave_management_desc') }}</p>
-                </div>
-                
-                <div class="flex items-center gap-4">
-                    <a href="{{ route('client.leaves.types') }}" 
-                       class="inline-flex items-center px-10 py-5 bg-emerald-500 hover:bg-emerald-600 border-b-4 border-emerald-700 text-white text-sm font-black rounded-2xl shadow-[0_20px_50px_rgba(16,185,129,0.3)] transition-all duration-500 hover:-translate-y-2 active:translate-y-1 active:border-b-0 group/config">
-                        <svg class="w-5 h-5 me-3 group-hover/config:rotate-90 transition-transform duration-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.066-2.573c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                        </svg>
-                        {{ __('messages.config_leave_types') }}
-                    </a>
-                </div>
-            </div>
-            
-            <!-- Animated decorative overlays -->
-            <div class="absolute top-[-3rem] right-[-3rem] w-64 h-64 bg-white opacity-5 rounded-full transition-transform duration-1000 group-hover:scale-125"></div>
-            <div class="absolute bottom-[-1rem] left-[10%] w-32 h-32 bg-indigo-400 opacity-10 rounded-full transition-transform duration-700 group-hover:-translate-y-8"></div>
-        </div>
+        <!-- Standard Header -->
+        <x-dashboard-sub-header 
+            :title="__('messages.leave_management')" 
+            :subtitle="__('messages.leave_management_desc')"
+        >
+            <x-slot name="actions">
+                <a href="{{ route('client.leaves.types') }}" 
+                   class="inline-flex items-center px-6 py-3 bg-white/10 hover:bg-white/20 border border-white/20 text-white text-xs font-black rounded-xl backdrop-blur-md transition-all duration-300 hover:-translate-y-1 active:translate-y-0 group/config">
+                    <svg class="w-4 h-4 me-2 group-hover/config:rotate-90 transition-transform duration-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.066-2.573c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    </svg>
+                    {{ __('messages.config_leave_types') }}
+                </a>
+            </x-slot>
+        </x-dashboard-sub-header>
+
 
         @if($pendingCount > 0)
         <div class="mb-8 animate-in fade-in slide-in-from-top-4 duration-500">

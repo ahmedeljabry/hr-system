@@ -1,29 +1,25 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="mb-12 bg-secondary rounded-[2.5rem] p-10 relative overflow-hidden shadow-2xl shadow-secondary/20">
-    <!-- Decorative Elements -->
-    <div class="absolute top-[-2rem] right-[-2rem] w-40 h-40 bg-white/5 rounded-full blur-3xl"></div>
-    <div class="absolute bottom-[-2rem] left-[-2rem] w-40 h-40 bg-primary/10 rounded-full blur-2xl"></div>
+<div class="pt-8 pb-12">
+    <div class="w-full">
+        
+        <!-- Standard Header -->
+        <x-dashboard-sub-header 
+            :title="__('messages.announcements')" 
+            :subtitle="__('messages.announcements_desc')"
+        >
+            <x-slot name="actions">
+                <a href="{{ route('client.announcements.create') }}" 
+                   class="inline-flex items-center px-6 py-3 bg-primary hover:bg-primary/90 text-secondary text-xs font-black rounded-xl shadow-lg transition-all duration-300 hover:-translate-y-1 active:translate-y-0 group/add">
+                    <svg class="w-4 h-4 me-2 group-hover/add:rotate-90 transition-transform duration-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M12 4v16m8-8H4" />
+                    </svg>
+                    {{ __('messages.create_announcement') }}
+                </a>
+            </x-slot>
+        </x-dashboard-sub-header>
 
-    <div class="relative z-10 flex flex-col md:flex-row justify-between items-center gap-8 {{ app()->getLocale() == 'ar' ? 'flex-row-reverse' : '' }}">
-        <div class="text-left rtl:text-right">
-            <h1 class="text-3xl md:text-4xl font-black text-white tracking-tight leading-tight mb-2">
-                {{ __('messages.announcements') }}
-            </h1>
-            <p class="text-primary font-bold text-sm opacity-90">
-                {{ __('messages.announcements_desc') }}
-            </p>
-        </div>
-
-        <div>
-            <a href="{{ route('client.announcements.create') }}" class="group flex items-center gap-3 bg-primary px-8 py-4 rounded-2xl font-black text-secondary hover:translate-y-[-4px] transition-all duration-300 shadow-xl shadow-primary/20">
-                <svg class="w-5 h-5 transition-transform group-hover:scale-125" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"></path></svg>
-                {{ __('messages.create_announcement') }}
-            </a>
-        </div>
-    </div>
-</div>
 
 @if(session('success'))
     <div class="mb-8 bg-emerald-50 border border-emerald-100 text-emerald-600 px-6 py-4 rounded-[1.5rem] flex items-center shadow-sm animate-fade-in-down">
@@ -101,5 +97,7 @@
             {{ $announcements->links() }}
         </div>
     @endif
+</div>
+    </div>
 </div>
 @endsection

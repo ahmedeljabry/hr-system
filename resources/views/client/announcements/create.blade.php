@@ -1,27 +1,16 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="mb-10 bg-secondary rounded-[2rem] p-10 text-white relative overflow-hidden group shadow-2xl shadow-secondary/20">
-    <div class="relative z-10 flex items-center justify-between">
-        <div class="flex items-center gap-4 text-start order-1">
-            <div class="w-2 h-12 bg-primary rounded-full shadow-[0_0_15px_rgba(0,200,150,0.4)]"></div>
-            <div class="text-start">
-                <h1 class="text-4xl font-black tracking-tight text-white mb-1">{{ __('messages.create_announcement') }}</h1>
-                <p class="text-primary font-bold text-xs opacity-80 uppercase tracking-widest">{{ __('messages.announcements') }}</p>
-            </div>
-        </div>
-        <div class="order-2">
-            <a href="{{ route('client.announcements.index') }}" class="inline-flex items-center gap-4 px-10 py-5 bg-white/10 hover:bg-white/20 text-white rounded-[2rem] font-black transition-all border border-white/10 backdrop-blur-md shadow-xl group/back">
-                <svg class="w-7 h-7 transition-transform group-hover:-translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
-                </svg>
-                <span class="text-2xl leading-none">{{ __('messages.back') }}</span>
-            </a>
-        </div>
-    </div>
-    <!-- Decorative background element -->
-    <div class="absolute bottom-[-2rem] right-[-2rem] w-48 h-48 bg-primary/10 rounded-full blur-3xl transition-transform duration-1000 group-hover:scale-125"></div>
-</div>
+<div class="pt-8 pb-12">
+    <div class="w-full mx-auto">
+        
+        <!-- Standard Header -->
+        <x-dashboard-sub-header 
+            :title="__('messages.create_announcement')" 
+            :subtitle="__('messages.announcements')"
+            :backLink="route('client.announcements.index')"
+        />
+
 
 <div class="grid grid-cols-1 lg:grid-cols-3 gap-10">
     <!-- Main Form Area (Now on the Left) -->
@@ -92,5 +81,6 @@
             <div class="absolute top-[-5rem] left-[-5rem] w-48 h-48 bg-primary/5 rounded-full blur-3xl group-hover:scale-150 transition-transform duration-1000"></div>
         </div>
     </div>
+</div>
 </div>
 @endsection

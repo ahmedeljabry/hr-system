@@ -1,43 +1,27 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="py-12">
+<div class="pt-8 pb-12">
     <div class="w-full">
         
-        <!-- Premium Hero Section -->
-        <div class="bg-secondary overflow-hidden shadow-xl rounded-[2.5rem] p-10 text-white mb-10 relative group">
-            <div class="relative z-10 flex flex-col md:flex-row md:items-center md:justify-between gap-6">
-                <div>
-                    <h1 class="text-4xl font-black mb-2 tracking-tight text-white">{{ __('messages.attendance') }}</h1>
-                    <p class="text-blue-100 text-lg opacity-90">{{ __('messages.attendance_desc') }}</p>
+        <!-- Standard Header -->
+        <x-dashboard-sub-header 
+            :title="__('messages.attendance')" 
+            :subtitle="__('messages.attendance_desc')"
+        >
+            <x-slot name="actions">
+                <div class="flex items-center gap-4 bg-white/5 backdrop-blur-md border border-white/10 p-2 rounded-2xl">
+                    <form method="GET" action="{{ route('client.attendance.index') }}" class="flex items-center gap-3">
+                        <span class="text-[10px] font-black uppercase tracking-widest text-primary/80 ps-2">{{ \Carbon\Carbon::parse($date)->translatedFormat('d M Y') }}</span>
+                        <input type="date" name="date" value="{{ $date }}" 
+                               max="{{ now()->format('Y-m-d') }}"
+                               onchange="this.form.submit()"
+                               class="bg-white/10 border-0 focus:ring-2 focus:ring-primary/50 rounded-xl px-3 py-1.5 text-xs font-bold text-white outline-none cursor-pointer transition-all">
+                    </form>
                 </div>
-                
-                <!-- Date Filter in Hero -->
-                <div class="flex items-center gap-4">
-                    <div class="bg-white/10 backdrop-blur-md border border-white/20 p-4 rounded-3xl flex flex-col md:flex-row items-center gap-4 group/date transition-all hover:bg-white/15">
-                        <div class="flex items-center gap-3">
-                            <div class="w-12 h-12 rounded-2xl bg-white/20 flex items-center justify-center text-white group-hover/date:scale-110 transition-transform">
-                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-                            </div>
-                            <div>
-                                <p class="text-[10px] font-black uppercase tracking-widest text-blue-200 mb-0.5">{{ __('messages.select_date') }}</p>
-                                <p class="text-sm font-black text-white whitespace-nowrap">{{ \Carbon\Carbon::parse($date)->translatedFormat('d F Y') }}</p>
-                            </div>
-                        </div>
-                        <form method="GET" action="{{ route('client.attendance.index') }}">
-                            <input type="date" name="date" value="{{ $date }}" 
-                                   max="{{ now()->format('Y-m-d') }}"
-                                   onchange="this.form.submit()"
-                                   class="bg-white/10 border-2 border-white/20 focus:border-white focus:bg-white/20 rounded-2xl px-5 py-2.5 text-sm font-bold text-white outline-none cursor-pointer transition-all">
-                        </form>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Animated decorative overlays -->
-            <div class="absolute top-[-3rem] right-[-3rem] w-64 h-64 bg-white opacity-5 rounded-full transition-transform duration-1000 group-hover:scale-125"></div>
-            <div class="absolute bottom-[-1rem] left-[10%] w-32 h-32 bg-indigo-400 opacity-10 rounded-full transition-transform duration-700 group-hover:-translate-y-8"></div>
-        </div>
+            </x-slot>
+        </x-dashboard-sub-header>
+
 
         @if(session('success'))
             <div class="mb-8 animate-in fade-in slide-in-from-top-4 duration-500">

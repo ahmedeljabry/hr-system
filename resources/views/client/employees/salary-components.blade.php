@@ -1,34 +1,15 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="py-12 px-6 lg:px-12">
-    <div class="max-w-6xl mx-auto space-y-12">
+<div class="pt-8 pb-12">
+    <div class="max-w-6xl mx-auto sm:px-6 lg:px-8">
         
-        <!-- Premium Hero Section -->
-        <div class="bg-secondary overflow-hidden shadow-2xl rounded-[2.5rem] p-10 text-white relative group border border-primary/20">
-            <div class="relative z-10 flex flex-col md:flex-row md:items-center md:justify-between gap-8">
-                <div class="flex items-center gap-6">
-                    <div class="w-20 h-20 rounded-3xl bg-primary/10 flex items-center justify-center border border-primary/20 backdrop-blur-md">
-                        <svg class="w-10 h-10 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m.599-1c.51-.418.815-1.002.815-1.599 0-1.105-1.343-2-3-2s-3 .895-3 2 1.343 2 3 2m.599 1.599c-.51.418-.815 1.002-.815 1.599 0 1.105 1.343 2 3 2s3-.895 3-2-1.343-2-3-2m-3.599 1.599c.51.418.815 1.002.815 1.599"></path></svg>
-                    </div>
-                    <div>
-                        <h1 class="text-4xl font-extrabold mb-2 tracking-tight text-primary">{{ __('messages.salary_components') }}: {{ $employee->name }}</h1>
-                        <p class="text-gray-300 text-lg font-medium opacity-90">{{ $employee->position }}</p>
-                    </div>
-                </div>
-                
-                <a href="{{ route('client.employees.show', $employee->id) }}" 
-                   class="inline-flex items-center px-6 py-3 bg-white/10 hover:bg-white/20 border border-white/20 text-white text-sm font-bold rounded-2xl transition-all duration-300 backdrop-blur-md group/back self-start md:self-center">
-                    <svg class="w-5 h-5 me-2 group-hover/back:-translate-x-1 transition-transform rtl:group-hover/back:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
-                    </svg>
-                    {{ __('messages.back') }}
-                </a>
-            </div>
-            
-            <!-- Animated decorative overlays -->
-            <div class="absolute top-[-2rem] right-[-2rem] w-48 h-48 bg-primary opacity-5 rounded-full transition-transform duration-700 group-hover:scale-110"></div>
-        </div>
+        <!-- Standard Header -->
+        <x-dashboard-sub-header 
+            :title="__('messages.salary_components') . ': ' . $employee->name" 
+            :subtitle="$employee->position"
+            :backLink="route('client.employees.show', $employee->id)"
+        />
 
         @if(session('success'))
             <div class="animate-in fade-in slide-in-from-top-4 duration-500">

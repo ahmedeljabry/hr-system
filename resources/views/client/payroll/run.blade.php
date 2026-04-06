@@ -1,32 +1,16 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="py-12">
+<div class="pt-8 pb-12">
     <div class="max-w-4xl mx-auto sm:px-6 lg:px-8">
         
-        <!-- Premium Hero Section -->
-        <div class="bg-secondary overflow-hidden shadow-2xl rounded-3xl p-10 text-white mb-10 relative group border border-primary/20">
-            <div class="relative z-10 flex flex-col md:flex-row md:items-center md:justify-between gap-6">
-                <div>
-                    <h1 class="text-4xl font-extrabold mb-2 tracking-tight text-primary">{{ __('messages.run_payroll') }}</h1>
-                    <p class="text-gray-300 text-lg opacity-90">{{ __('messages.run_payroll_desc') }}</p>
-                </div>
-                
-                <div class="flex items-center gap-4">
-                    <a href="{{ route('client.payroll.index') }}" 
-                       class="inline-flex items-center px-6 py-3 bg-white/10 hover:bg-white/20 border border-white/20 text-white text-sm font-bold rounded-2xl transition-all duration-300 backdrop-blur-md group/back">
-                        <svg class="w-5 h-5 me-2 group-hover/back:-translate-x-1 transition-transform rtl:group-hover/back:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
-                        </svg>
-                        {{ __('messages.back') }}
-                    </a>
-                </div>
-            </div>
-            
-            <!-- Animated decorative overlays -->
-            <div class="absolute top-[-2rem] right-[-2rem] w-48 h-48 bg-primary opacity-5 rounded-full transition-transform duration-700 group-hover:scale-110"></div>
-            <div class="absolute bottom-[-1rem] left-[10%] w-24 h-24 bg-primary opacity-5 rounded-full transition-transform duration-500 group-hover:-translate-y-4"></div>
-        </div>
+        <!-- Standard Header -->
+        <x-dashboard-sub-header 
+            :title="__('messages.run_payroll')" 
+            :subtitle="__('messages.run_payroll_desc')"
+            :backLink="route('client.payroll.index')"
+        />
+
 
         @if(session('error'))
             <div class="mb-8 bg-red-50 border border-red-100 p-5 rounded-2xl shadow-sm flex items-center gap-4 animate-in fade-in slide-in-from-top-4 duration-500">

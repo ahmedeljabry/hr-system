@@ -1,62 +1,47 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="py-12">
-    <div class="w-full">
+<div class="pt-8 pb-12">
+    <div class="w-full mx-auto">
         
-        <!-- Premium Hero Section -->
-        <div class="bg-secondary overflow-hidden shadow-2xl rounded-3xl p-10 text-white mb-10 relative group border border-primary/20">
-            <div class="relative z-10 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-8">
-                <div class="space-y-4">
-                    <div class="flex items-center gap-4">
-                        <h1 class="text-4xl font-extrabold tracking-tight text-primary">
-                            {{ __('messages.payroll') }} - {{ $run->month->translatedFormat('F Y') }}
-                        </h1>
-                        <div class="px-4 py-1 rounded-full text-xs font-black uppercase tracking-widest border {{ $run->isConfirmed() ? 'border-primary text-primary bg-primary/10' : 'border-yellow-400 text-yellow-400 bg-yellow-400/10' }}">
+        <!-- Standard Header -->
+        <x-dashboard-sub-header 
+            :title="__('messages.payroll') . ' - ' . $run->month->translatedFormat('F Y')" 
+            :subtitle="__('messages.payroll_history_desc')"
+            :backLink="route('client.payroll.index')"
+        >
+            <x-slot:actions>
+                <div class="flex items-center gap-6">
+                    <!-- Confirmed Status -->
+                    <div class="px-4 py-2 rounded-full text-[10px] font-black uppercase tracking-widest border border-white/20 bg-white/5 backdrop-blur-md {{ $run->isConfirmed() ? 'text-primary' : 'text-yellow-400' }}">
+                        <div class="flex items-center gap-2">
+                            <div class="w-2 h-2 rounded-full {{ $run->isConfirmed() ? 'bg-primary shadow-[0_0_8px_rgba(0,200,150,0.5)]' : 'bg-yellow-400 shadow-[0_0_8px_rgba(250,204,21,0.5)]' }}"></div>
                             {{ $run->isConfirmed() ? __('messages.payroll_confirmed') : __('messages.payroll_draft') }}
                         </div>
                     </div>
-                    <p class="text-gray-400 text-lg max-w-xl">
-                        {{ __('messages.payroll_history_desc') }}
-                    </p>
-                </div>
-                
-                <div class="flex flex-col sm:flex-row flex-wrap items-center gap-6">
+
                     <!-- Stat Item -->
-                    <div class="bg-white/5 backdrop-blur-md border border-white/10 p-6 rounded-2xl flex flex-col items-center">
-                        <span class="text-xs font-black text-gray-400 uppercase tracking-widest mb-1">{{ __('messages.total_net_payout') }}</span>
-                        <span class="text-2xl font-black text-white">
-                            <span class="text-primary text-sm me-1">$</span>{{ number_format($run->payslips->sum('net_salary'), 2) }}
+                    <div class="bg-white/5 backdrop-blur-md border border-white/10 px-6 py-2 rounded-2xl flex flex-col items-center">
+                        <span class="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-0.5">{{ __('messages.total_net_payout') }}</span>
+                        <span class="text-xl font-black text-white">
+                            <span class="text-primary text-xs me-1">$</span>{{ number_format($run->payslips->sum('net_salary'), 2) }}
                         </span>
                     </div>
 
-                    <div class="flex items-center gap-3">
-                        @if($run->isDraft())
-                            <form method="POST" action="{{ route('client.payroll.confirm', $run->id) }}" class="inline-block">
-                                @csrf
-                                <button type="submit" 
-                                        class="inline-flex items-center px-8 py-3 bg-primary hover:bg-primary/90 text-secondary text-sm font-black rounded-2xl shadow-[0_10px_20px_rgba(var(--color-primary-rgb),0.2)] transition-all duration-300 hover:scale-105 group/confirm">
-                                    <svg class="w-5 h-5 me-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path></svg>
-                                    {{ __('messages.confirm_payroll') }}
-                                </button>
-                            </form>
-                        @endif
-                        
-                        <a href="{{ route('client.payroll.index') }}" 
-                           class="inline-flex items-center px-6 py-3 bg-white/10 hover:bg-white/20 border border-white/20 text-white text-sm font-bold rounded-2xl transition-all duration-300 backdrop-blur-md group/back">
-                            <svg class="w-5 h-5 me-2 group-hover/back:-translate-x-1 transition-transform rtl:group-hover/back:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
-                            </svg>
-                            {{ __('messages.back') }}
-                        </a>
-                    </div>
+                    @if($run->isDraft())
+                        <form method="POST" action="{{ route('client.payroll.confirm', $run->id) }}" class="inline-block">
+                            @csrf
+                            <button type="submit" 
+                                    class="inline-flex items-center px-8 py-3 bg-primary hover:bg-[#8affaa] text-secondary text-sm font-black rounded-2xl shadow-[0_10px_30px_rgba(var(--color-primary-rgb),0.3)] transition-all duration-300 hover:scale-105 group/confirm">
+                                <svg class="w-5 h-5 me-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path></svg>
+                                {{ __('messages.confirm_payroll') }}
+                            </button>
+                        </form>
+                    @endif
                 </div>
-            </div>
-            
-            <!-- Animated decorative overlays -->
-            <div class="absolute top-[-2rem] right-[-2rem] w-48 h-48 bg-primary opacity-5 rounded-full transition-transform duration-700 group-hover:scale-110"></div>
-            <div class="absolute bottom-[-1rem] left-[10%] w-24 h-24 bg-primary opacity-5 rounded-full transition-transform duration-500 group-hover:-translate-y-4"></div>
-        </div>
+            </x-slot:actions>
+        </x-dashboard-sub-header>
+
 
         @if(session('success'))
             <div class="mb-8 bg-green-50 border border-green-100 p-5 rounded-2xl shadow-sm flex items-center gap-4 animate-in fade-in slide-in-from-top-4 duration-500">

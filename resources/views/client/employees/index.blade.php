@@ -1,42 +1,35 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="py-12" x-data="{ viewMode: localStorage.getItem('view_mode') || 'grid' }" @view-changed.window="viewMode = $event.detail">
+<div class="pt-8 pb-12" x-data="{ viewMode: localStorage.getItem('view_mode') || 'grid' }" @view-changed.window="viewMode = $event.detail">
     <div class="w-full">
         
-        <!-- Premium Hero Section -->
-        <div class="bg-secondary overflow-hidden shadow-2xl rounded-3xl p-10 text-white mb-10 relative group border border-primary/20">
-            <div class="relative z-10 flex flex-col md:flex-row md:items-center md:justify-between gap-6">
-                <div>
-                    <h1 class="text-4xl font-extrabold mb-2 tracking-tight text-primary">{{ __('messages.employees') }}</h1>
-                    <p class="text-gray-300 text-lg opacity-90">{{ __('messages.total_employees') }}: <span class="text-white font-black">{{ $employees->total() }}</span></p>
-                </div>
-                
-                <div class="flex flex-wrap items-center gap-4">
-                    @if(Route::has('client.employees.import.form'))
-                    <a href="{{ route('client.employees.import.form') }}" 
-                       class="inline-flex items-center px-10 py-4 bg-white hover:bg-white/90 border-b-4 border-gray-200 hover:border-gray-100 text-secondary text-sm font-bold rounded-2xl transition-all duration-300 shadow-[0_15px_35px_rgba(0,0,0,0.1)] hover:-translate-y-1 active:translate-y-1 active:border-b-0 backdrop-blur-md group/btn">
-                        <svg class="w-5 h-5 me-3 text-primary group-hover/btn:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
-                        </svg>
-                        {{ __('messages.import_employees') }}
-                    </a>
-                    @endif
+        <!-- Standard Header -->
+        <x-dashboard-sub-header 
+            :title="__('messages.employees')" 
+            :subtitle="__('messages.total_employees') . ': ' . $employees->total()"
+        >
+            <x-slot name="actions">
+                @if(Route::has('client.employees.import.form'))
+                <a href="{{ route('client.employees.import.form') }}" 
+                   class="inline-flex items-center px-6 py-3 bg-white/10 hover:bg-white/20 border border-white/10 text-white text-xs font-bold rounded-xl transition-all duration-300 backdrop-blur-md group/btn">
+                    <svg class="w-4 h-4 me-2 text-primary group-hover/btn:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                    </svg>
+                    {{ __('messages.import_employees') }}
+                </a>
+                @endif
 
-                    <a href="{{ route('client.employees.create') }}" 
-                       class="inline-flex items-center px-10 py-4 bg-primary hover:bg-[#8affaa] text-secondary text-sm font-black rounded-2xl shadow-[0_20px_50px_rgba(var(--color-primary-rgb),0.3)] hover:shadow-[0_25px_60px_rgba(var(--color-primary-rgb),0.5)] border-b-4 border-emerald-400 hover:border-emerald-300 transition-all duration-500 hover:-translate-y-2 active:translate-y-1 active:border-b-0 group/add">
-                        <svg class="w-5 h-5 me-3 group-hover/add:rotate-90 transition-transform duration-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M12 4v16m8-8H4" />
-                        </svg>
-                        {{ __('messages.add_employee') }}
-                    </a>
-                </div>
-            </div>
-            
-            <!-- Animated decorative overlays -->
-            <div class="absolute top-[-2rem] right-[-2rem] w-48 h-48 bg-primary opacity-5 rounded-full transition-transform duration-700 group-hover:scale-110"></div>
-            <div class="absolute bottom-[-1rem] left-[10%] w-24 h-24 bg-primary opacity-5 rounded-full transition-transform duration-500 group-hover:-translate-y-4"></div>
-        </div>
+                <a href="{{ route('client.employees.create') }}" 
+                   class="inline-flex items-center px-6 py-3 bg-primary hover:bg-primary/90 text-secondary text-xs font-black rounded-xl shadow-lg transition-all duration-300 hover:-translate-y-1 active:translate-y-0 group/add">
+                    <svg class="w-4 h-4 me-2 group-hover/add:rotate-90 transition-transform duration-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M12 4v16m8-8H4" />
+                    </svg>
+                    {{ __('messages.add_employee') }}
+                </a>
+            </x-slot>
+        </x-dashboard-sub-header>
+
 
         @if(session('success'))
             <div class="mb-8 bg-green-50 border border-green-100 p-5 rounded-2xl shadow-sm flex items-center gap-4 animate-in fade-in slide-in-from-top-4 duration-500">

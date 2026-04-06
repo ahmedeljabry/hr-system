@@ -1,50 +1,60 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="py-12" x-data="{}">
-    <div class="w-full">
+<div class="pt-8 pb-12">
+    <div class="w-full mx-auto">
         
-        <!-- Premium Hero Section -->
-        <div class="bg-secondary overflow-hidden shadow-2xl rounded-3xl p-10 text-white mb-10 relative group border border-primary/20">
-            <div class="relative z-10 flex flex-col md:flex-row md:items-center md:justify-between gap-6">
-                <div class="flex items-center gap-6">
-                    <x-avatar :name="$employee->name" size="2xl" class="shadow-2xl border-4 border-white/10" />
-                    <div>
-                        <h1 class="text-4xl font-extrabold mb-1 tracking-tight text-primary">{{ $employee->name }}</h1>
-                        <p class="text-gray-300 text-lg flex items-center gap-2 opacity-90">
-                            <span class="inline-flex items-center px-4 py-1.5 rounded-xl text-xs font-black uppercase tracking-widest bg-primary/10 text-primary border border-primary/20">
-                                {{ $employee->position }}
-                            </span>
-                            <span class="text-white/40">•</span>
-                            <span>{{ __('messages.hire_date') }}: {{ $employee->hire_date->format('d/m/Y') }}</span>
-                        </p>
-                    </div>
+        <!-- Standard Header -->
+        <x-dashboard-sub-header :title="$employee->name">
+            <x-slot:leading>
+                <div class="relative group/avatar">
+                    <x-avatar :name="$employee->name" size="2xl" class="shadow-2xl border-4 border-white/10 group-hover/avatar:border-primary/50 transition-all duration-500" />
+                    <div class="absolute inset-0 rounded-full bg-primary/20 opacity-0 group-hover/avatar:opacity-100 transition-opacity duration-500"></div>
                 </div>
-                
-                <div class="flex flex-wrap items-center gap-4">
+            </x-slot:leading>
 
+            <x-slot:subtitle>
+                <div class="flex flex-wrap items-center gap-3 mt-1">
+                    <span class="inline-flex items-center px-4 py-1.5 rounded-xl text-[10px] font-black uppercase tracking-widest bg-primary/10 text-primary border border-primary/20">
+                        {{ $employee->position }}
+                    </span>
+                    <span class="text-white/40">•</span>
+                    <span class="text-gray-400 font-bold text-xs">{{ __('messages.hire_date') }}: {{ $employee->hire_date->format('d/m/Y') }}</span>
+                </div>
+            </x-slot:subtitle>
+
+            <x-slot:actions>
+                <div class="flex items-center gap-3">
                     <a href="{{ route('client.employees.edit', $employee) }}" 
-                       class="inline-flex items-center px-6 py-3 bg-white/10 hover:bg-white/20 border border-white/20 text-white text-sm font-bold rounded-2xl transition-all duration-300 backdrop-blur-md">
-                        <svg class="w-5 h-5 me-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+                       class="inline-flex items-center px-6 py-3 bg-white/5 hover:bg-white/10 border border-white/10 text-white text-xs font-black rounded-2xl transition-all duration-300 backdrop-blur-md">
+                        <svg class="w-4 h-4 me-2 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                        </svg>
                         {{ __('messages.edit') }}
                     </a>
 
-                    <form id="delete-show-{{ $employee->id }}" action="{{ route('client.employees.destroy', $employee->id) }}" method="POST" style="display: none;">
+                    <form id="delete-show-{{ $employee->id }}" action="{{ route('client.employees.destroy', $employee->id) }}" method="POST" class="hidden">
                         @csrf
                         @method('DELETE')
                     </form>
                     <button type="button" 
                             onclick="if(confirm('{{ __('messages.confirm_delete_employee') }}')) document.getElementById('delete-show-{{ $employee->id }}').submit()"
-                            class="inline-flex items-center px-6 py-3 bg-red-500/10 hover:bg-red-500/20 border border-red-500/20 text-red-100 text-sm font-bold rounded-2xl transition-all duration-300 backdrop-blur-md">
-                        <svg class="w-5 h-5 me-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                            class="inline-flex items-center px-6 py-3 bg-red-500/10 hover:bg-red-500/20 border border-red-500/20 text-red-100 text-xs font-black rounded-2xl transition-all duration-300 backdrop-blur-md">
+                        <svg class="w-4 h-4 me-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                         </svg>
                         {{ __('messages.delete') }}
                     </button>
-
+                    
+                    <a href="{{ route('client.employees.index') }}" 
+                       class="inline-flex items-center px-6 py-3 bg-white/5 hover:bg-white/10 border border-white/10 text-white text-xs font-black rounded-2xl transition-all duration-300 backdrop-blur-md group/back">
+                        <svg class="w-4 h-4 me-2 group-hover/back:-translate-x-1 transition-transform rtl:group-hover/back:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                        </svg>
+                    </a>
                 </div>
-            </div>
-        </div>
+            </x-slot:actions>
+        </x-dashboard-sub-header>
 
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
             <!-- Left Column: Details -->

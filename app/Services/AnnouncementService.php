@@ -25,8 +25,8 @@ class AnnouncementService
             $this->notificationService->createNotification([
                 'employee_id' => $employee->id,
                 'type' => 'new_announcement',
-                'title' => __('messages.new_announcement'),
-                'message' => $announcement->title,
+                'title' => 'messages.new_announcement',
+                'message' => json_encode(['key' => 'messages.announcement_new_msg', 'params' => ['title' => $announcement->title]]),
                 'related_type' => Announcement::class,
                 'related_id' => $announcement->id,
             ]);

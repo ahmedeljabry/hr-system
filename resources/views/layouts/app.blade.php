@@ -45,52 +45,47 @@
 <body class="bg-gray-50 text-gray-900 antialiased min-h-screen flex flex-col" x-data="{ mobileMenu: false }">
 
     <nav class="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-100 py-3 px-6 shadow-sm">
-        <div class="max-w-full mx-auto px-4 sm:px-6 lg:px-10 flex justify-between items-center">
-            <!-- Empty Brand Area -->
-            <div></div>
+        <div class="max-w-full mx-auto px-4 sm:px-6 lg:px-10 flex justify-between items-center h-16">
+            
+            <!-- Main Navigation Links (Start Side) -->
+            <div class="hidden md:flex items-center gap-8">
+                @auth
+                    @if(Auth::user()->isSuperAdmin())
+                        <a href="/admin/clients" class="text-sm font-bold text-secondary hover:text-primary transition-all">{{ __('messages.clients') }}</a>
+                    @elseif(Auth::user()->isClient())
+                        <a href="/client/dashboard" class="text-sm font-bold {{ request()->is('client/dashboard') ? 'text-primary border-b-2 border-primary pb-1' : 'text-secondary hover:text-primary transition-all' }}">{{ __('messages.dashboard') }}</a>
+                        <a href="{{ route('client.attendance.index') }}" class="text-sm font-bold {{ request()->routeIs('client.attendance.*') ? 'text-primary border-b-2 border-primary pb-1' : 'text-secondary hover:text-primary transition-all' }}">{{ __('messages.attendance') }}</a>
+                        <a href="{{ route('client.tasks.index') }}" class="text-sm font-bold {{ request()->routeIs('client.tasks.*') ? 'text-primary border-b-2 border-primary pb-1' : 'text-secondary hover:text-primary transition-all' }}">{{ __('messages.tasks') }}</a>
+                        <a href="{{ route('client.assets.index') }}" class="text-sm font-bold {{ request()->routeIs('client.assets.*') ? 'text-primary border-b-2 border-primary pb-1' : 'text-secondary hover:text-primary transition-all' }}">{{ __('messages.assets') }}</a>
+                        <a href="{{ route('client.leaves.index') }}" class="text-sm font-bold {{ request()->routeIs('client.leaves.*') ? 'text-primary border-b-2 border-primary pb-1' : 'text-secondary hover:text-primary transition-all' }}">{{ __('messages.leaves_management') }}</a>
+                        <a href="{{ route('client.announcements.index') }}" class="text-sm font-bold {{ request()->routeIs('client.announcements.*') ? 'text-primary border-b-2 border-primary pb-1' : 'text-secondary hover:text-primary transition-all' }}">{{ __('messages.announcements') }}</a>
+                    @elseif(Auth::user()->isEmployee())
+                        <a href="/employee/dashboard" class="text-sm font-bold {{ request()->is('employee/dashboard') ? 'text-primary border-b-2 border-primary pb-1' : 'text-secondary hover:text-primary transition-all' }}">{{ __('messages.dashboard') }}</a>
+                    @endif
+                @endauth
+            </div>
 
-            <!-- Nav Links & Switcher -->
-            <div class="flex items-center gap-8">
-                
-                <!-- Main Navigation -->
-                <div class="hidden md:flex items-center gap-6">
-                    @auth
-                        @if(Auth::user()->isSuperAdmin())
-                            <a href="/admin/clients" class="text-sm font-semibold text-gray-600 hover:text-secondary hover:underline decoration-primary decoration-2 underline-offset-8 transition-all">{{ __('messages.clients') }}</a>
-                        @elseif(Auth::user()->isClient())
-                            <a href="/client/dashboard" class="text-sm font-semibold {{ request()->is('client/dashboard') ? 'text-secondary underline decoration-primary decoration-2 underline-offset-8' : 'text-gray-500 hover:text-secondary' }} transition-all">{{ __('messages.dashboard') }}</a>
-                            <a href="{{ route('client.attendance.index') }}" class="text-sm font-semibold {{ request()->routeIs('client.attendance.*') ? 'text-secondary underline decoration-primary decoration-2 underline-offset-8' : 'text-gray-500 hover:text-secondary' }} transition-all">{{ __('messages.attendance') }}</a>
-                            <a href="{{ route('client.tasks.index') }}" class="text-sm font-semibold {{ request()->routeIs('client.tasks.*') ? 'text-secondary underline decoration-primary decoration-2 underline-offset-8' : 'text-gray-500 hover:text-secondary' }} transition-all">{{ __('messages.tasks') }}</a>
-                            <a href="{{ route('client.assets.index') }}" class="text-sm font-semibold {{ request()->routeIs('client.assets.*') ? 'text-secondary underline decoration-primary decoration-2 underline-offset-8' : 'text-gray-500 hover:text-secondary' }} transition-all">{{ __('messages.assets') }}</a>
-                            <a href="{{ route('client.leaves.index') }}" class="text-sm font-semibold {{ request()->routeIs('client.leaves.*') ? 'text-secondary underline decoration-primary decoration-2 underline-offset-8' : 'text-gray-500 hover:text-secondary' }} transition-all">{{ __('messages.leaves_management') }}</a>
-                            <a href="{{ route('client.announcements.index') }}" class="text-sm font-semibold {{ request()->routeIs('client.announcements.*') ? 'text-secondary underline decoration-primary decoration-2 underline-offset-8' : 'text-gray-500 hover:text-secondary' }} transition-all">{{ __('messages.announcements') }}</a>
-                        @elseif(Auth::user()->isEmployee())
-                            <a href="/employee/dashboard" class="text-sm font-semibold {{ request()->is('employee/dashboard') ? 'text-secondary underline decoration-primary decoration-2 underline-offset-8' : 'text-gray-500 hover:text-secondary' }} transition-all">{{ __('messages.dashboard') }}</a>
-                        @endif
-                    @endauth
-                </div>
+            <!-- Account Actions & Lang (End Side) -->
+            <div class="flex items-center gap-6">
+                @auth
+                    @if(Auth::user()->isClient())
+                        <x-notification-bell :count="$client_notifications_count ?? 0" />
+                    @endif
+                    <form method="POST" action="/logout" class="inline">
+                        @csrf
+                        <button type="submit" class="text-xs font-black uppercase text-red-500 hover:text-red-600 transition-colors">
+                            {{ __('messages.logout') }}
+                        </button>
+                    </form>
+                @endauth
 
-                <div class="flex items-center gap-4 border-s border-gray-100 ps-4">
-                    @auth
-                        @if(Auth::user()->isClient())
-                            <x-notification-bell :count="$client_notifications_count ?? 0" />
-                        @endif
-                        <form method="POST" action="/logout" class="inline">
-                            @csrf
-                            <button type="submit" class="text-xs font-bold uppercase tracking-wider text-red-500 hover:text-red-600 transition-colors px-3 py-1.5 rounded-full hover:bg-red-50">
-                                {{ __('messages.logout') }}
-                            </button>
-                        </form>
-                    @endauth
-
-                    <!-- Lang Switcher -->
-                    <div class="px-2">
-                        @if(app()->getLocale() == 'ar')
-                            <a href="/lang/en" class="text-xs font-bold text-gray-400 hover:text-secondary transition-colors">EN</a>
-                        @else
-                            <a href="/lang/ar" class="text-xs font-bold text-gray-400 hover:text-secondary transition-colors">عربي</a>
-                        @endif
-                    </div>
+                <!-- Lang Switcher -->
+                <div class="ps-6 border-s border-gray-100 flex items-center">
+                    @if(app()->getLocale() == 'ar')
+                        <a href="/lang/en" class="text-xs font-bold text-gray-400 hover:text-secondary transition-colors">EN</a>
+                    @else
+                        <a href="/lang/ar" class="text-xs font-bold text-gray-400 hover:text-secondary transition-colors">عربي</a>
+                    @endif
                 </div>
             </div>
         </div>

@@ -45,50 +45,45 @@
 <body class="bg-gray-50 text-gray-900 antialiased min-h-screen flex flex-col" x-data="{ mobileMenu: false }">
 
     <nav class="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-100 py-3 px-6 shadow-sm">
-        <div class="max-w-full mx-auto px-4 sm:px-6 lg:px-10 flex justify-between items-center">
-            <!-- Empty Brand Area -->
-            <div></div>
+        <div class="max-w-full mx-auto px-4 sm:px-6 lg:px-10 flex justify-between items-center h-16">
+            
+            <!-- Main Navigation Links (Start Side) -->
+            <div class="hidden xl:flex items-center gap-8">
+                <a href="{{ route('employee.dashboard') }}" class="text-sm font-bold {{ request()->routeIs('employee.dashboard') ? 'text-primary border-b-2 border-primary pb-1' : 'text-secondary hover:text-primary transition-all' }}">{{ __('messages.dashboard') }}</a>
+                <a href="{{ route('employee.profile.index') }}" class="text-sm font-bold {{ request()->routeIs('employee.profile.*') ? 'text-primary border-b-2 border-primary pb-1' : 'text-secondary hover:text-primary transition-all' }}">{{ __('messages.profile') }}</a>
+                <a href="{{ route('employee.payslips.index') }}" class="text-sm font-bold {{ request()->routeIs('employee.payslips.*') ? 'text-primary border-b-2 border-primary pb-1' : 'text-secondary hover:text-primary transition-all' }}">{{ __('messages.payslips') }}</a>
+                <a href="{{ route('employee.tasks.index') }}" class="text-sm font-bold {{ request()->routeIs('employee.tasks.*') ? 'text-primary border-b-2 border-primary pb-1' : 'text-secondary hover:text-primary transition-all' }}">{{ __('messages.tasks') }}</a>
+                <a href="{{ route('employee.assets.index') }}" class="text-sm font-bold {{ request()->routeIs('employee.assets.*') ? 'text-primary border-b-2 border-primary pb-1' : 'text-secondary hover:text-primary transition-all' }}">{{ __('messages.assets') }}</a>
+                <a href="{{ route('employee.leaves.index') }}" class="text-sm font-bold {{ request()->routeIs('employee.leaves.*') ? 'text-primary border-b-2 border-primary pb-1' : 'text-secondary hover:text-primary transition-all' }}">{{ __('messages.leaves') }}</a>
+                <a href="{{ route('employee.announcements.index') }}" class="text-sm font-bold {{ request()->routeIs('employee.announcements.*') ? 'text-primary border-b-2 border-primary pb-1' : 'text-secondary hover:text-primary transition-all' }}">{{ __('messages.announcements') }}</a>
+            </div>
 
-            <!-- Nav Links & Switcher -->
-            <div class="flex items-center gap-8">
-                
-                <!-- Main Navigation -->
-                <div class="hidden xl:flex items-center gap-6">
-                    <a href="{{ route('employee.dashboard') }}" class="text-sm font-semibold {{ request()->routeIs('employee.dashboard') ? 'text-secondary underline decoration-primary decoration-2 underline-offset-8' : 'text-gray-500 hover:text-secondary' }} transition-all">{{ __('messages.dashboard') }}</a>
-                    <a href="{{ route('employee.profile.index') }}" class="text-sm font-semibold {{ request()->routeIs('employee.profile.*') ? 'text-secondary underline decoration-primary decoration-2 underline-offset-8' : 'text-gray-500 hover:text-secondary' }} transition-all">{{ __('messages.profile') }}</a>
-                    <a href="{{ route('employee.payslips.index') }}" class="text-sm font-semibold {{ request()->routeIs('employee.payslips.*') ? 'text-secondary underline decoration-primary decoration-2 underline-offset-8' : 'text-gray-500 hover:text-secondary' }} transition-all">{{ __('messages.payslips') }}</a>
-                    <a href="{{ route('employee.tasks.index') }}" class="text-sm font-semibold {{ request()->routeIs('employee.tasks.*') ? 'text-secondary underline decoration-primary decoration-2 underline-offset-8' : 'text-gray-500 hover:text-secondary' }} transition-all">{{ __('messages.tasks') }}</a>
-                    <a href="{{ route('employee.assets.index') }}" class="text-sm font-semibold {{ request()->routeIs('employee.assets.*') ? 'text-secondary underline decoration-primary decoration-2 underline-offset-8' : 'text-gray-500 hover:text-secondary' }} transition-all">{{ __('messages.assets') }}</a>
-                    <a href="{{ route('employee.leaves.index') }}" class="text-sm font-semibold {{ request()->routeIs('employee.leaves.*') ? 'text-secondary underline decoration-primary decoration-2 underline-offset-8' : 'text-gray-500 hover:text-secondary' }} transition-all">{{ __('messages.leaves') }}</a>
-                    <a href="{{ route('employee.announcements.index') }}" class="text-sm font-semibold {{ request()->routeIs('employee.announcements.*') ? 'text-secondary underline decoration-primary decoration-2 underline-offset-8' : 'text-gray-500 hover:text-secondary' }} transition-all">{{ __('messages.announcements') }}</a>
-                </div>
+            <!-- Account Actions & Lang (End Side) -->
+            <div class="flex items-center gap-6">
+                <!-- Notification Bell -->
+                <x-notification-bell :count="$employee_notifications_count ?? 0" />
 
-                <div class="flex items-center gap-4 border-s border-gray-100 ps-4">
-                    <!-- Notification Bell -->
-                    <x-notification-bell :count="$employee_notifications_count ?? 0" />
-
-                    <!-- Logout Button (Desktop) -->
-                    <form method="POST" action="{{ route('logout') }}" class="hidden md:inline">
-                        @csrf
-                        <button type="submit" class="text-xs font-bold uppercase tracking-wider text-red-500 hover:text-red-600 transition-colors px-3 py-1.5 rounded-full hover:bg-red-50">
-                            {{ __('messages.logout') }}
-                        </button>
-                    </form>
-
-                    <!-- Lang Switcher -->
-                    <div class="px-2">
-                        @if(app()->getLocale() == 'ar')
-                            <a href="/lang/en" class="text-xs font-bold text-gray-400 hover:text-secondary transition-colors">EN</a>
-                        @else
-                            <a href="/lang/ar" class="text-xs font-bold text-gray-400 hover:text-secondary transition-colors">عربي</a>
-                        @endif
-                    </div>
-
-                    <!-- Mobile Menu Button -->
-                    <button @click="mobileMenu = !mobileMenu" class="xl:hidden p-2 text-gray-500 hover:text-secondary transition-colors">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path x-show="!mobileMenu" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path><path x-show="mobileMenu" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                <!-- Logout Button (Desktop) -->
+                <form method="POST" action="{{ route('logout') }}" class="hidden md:inline">
+                    @csrf
+                    <button type="submit" class="text-xs font-black uppercase text-red-500 hover:text-red-600 transition-colors">
+                        {{ __('messages.logout') }}
                     </button>
+                </form>
+
+                <!-- Lang Switcher -->
+                <div class="ps-6 border-s border-gray-100 flex items-center">
+                    @if(app()->getLocale() == 'ar')
+                        <a href="/lang/en" class="text-xs font-bold text-gray-400 hover:text-secondary transition-colors">EN</a>
+                    @else
+                        <a href="/lang/ar" class="text-xs font-bold text-gray-400 hover:text-secondary transition-colors">عربي</a>
+                    @endif
                 </div>
+
+                <!-- Mobile Menu Button -->
+                <button @click="mobileMenu = !mobileMenu" class="xl:hidden p-2 text-gray-500 hover:text-secondary transition-colors">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path x-show="!mobileMenu" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path><path x-show="mobileMenu" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
             </div>
         </div>
 

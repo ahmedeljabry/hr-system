@@ -81,8 +81,8 @@ class LeaveService
         $this->notificationService->createNotification([
             'client_id' => $employee->client_id,
             'type' => 'leave_request_submitted',
-            'title' => __('messages.leave_request_submitted'),
-            'message' => __(':name has submitted a new leave request.', ['name' => $employee->name]),
+            'title' => 'messages.leave_request_submitted',
+            'message' => json_encode(['key' => 'messages.leave_request_submitted_msg', 'params' => ['name' => $employee->name]]),
             'related_type' => LeaveRequest::class,
             'related_id' => $leaveRequest->id,
         ]);
@@ -119,10 +119,13 @@ class LeaveService
             $this->notificationService->createNotification([
                 'employee_id' => $leaveRequest->employee_id,
                 'type' => 'leave_request_approved',
-                'title' => __('messages.leave_request_approved'),
-                'message' => __('Your leave request from :start to :end has been approved.', [
-                    'start' => $leaveRequest->start_date->format('d M'),
-                    'end' => $leaveRequest->end_date->format('d M'),
+                'title' => 'messages.leave_request_approved',
+                'message' => json_encode([
+                    'key' => 'messages.leave_request_approved_msg',
+                    'params' => [
+                        'start' => $leaveRequest->start_date->format('d M'),
+                        'end' => $leaveRequest->end_date->format('d M'),
+                    ]
                 ]),
                 'related_type' => LeaveRequest::class,
                 'related_id' => $leaveRequest->id,
@@ -153,10 +156,13 @@ class LeaveService
         $this->notificationService->createNotification([
             'employee_id' => $leaveRequest->employee_id,
             'type' => 'leave_request_rejected',
-            'title' => __('messages.leave_request_rejected'),
-            'message' => __('Your leave request from :start to :end has been rejected.', [
-                'start' => $leaveRequest->start_date->format('d M'),
-                'end' => $leaveRequest->end_date->format('d M'),
+            'title' => 'messages.leave_request_rejected',
+            'message' => json_encode([
+                'key' => 'messages.leave_request_rejected_msg',
+                'params' => [
+                    'start' => $leaveRequest->start_date->format('d M'),
+                    'end' => $leaveRequest->end_date->format('d M'),
+                ]
             ]),
             'related_type' => LeaveRequest::class,
             'related_id' => $leaveRequest->id,

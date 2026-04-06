@@ -21,8 +21,8 @@ class TaskService
         $this->notificationService->createNotification([
             'employee_id' => $task->employee_id,
             'type' => 'task_assigned',
-            'title' => __('messages.task_assigned'),
-            'message' => __('You have been assigned a new task: :title', ['title' => $task->title]),
+            'title' => 'messages.task_assigned',
+            'message' => json_encode(['key' => 'messages.task_assigned_msg', 'params' => ['title' => $task->title]]),
             'related_type' => Task::class,
             'related_id' => $task->id,
         ]);
@@ -50,11 +50,14 @@ class TaskService
             $this->notificationService->createNotification([
                 'client_id' => $task->employee->client_id,
                 'type' => 'task_status_updated',
-                'title' => __('messages.task_status_updated'),
-                'message' => __(':name has updated the status of task ":title" to :status.', [
-                    'name' => $task->employee->name,
-                    'title' => $task->title,
-                    'status' => __('messages.status_' . $status),
+                'title' => 'messages.task_status_updated',
+                'message' => json_encode([
+                    'key' => 'messages.task_status_updated_msg',
+                    'params' => [
+                        'name' => $task->employee->name,
+                        'title' => $task->title,
+                        'status' => 'messages.status_' . $status,
+                    ]
                 ]),
                 'related_type' => Task::class,
                 'related_id' => $task->id,

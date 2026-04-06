@@ -4,7 +4,7 @@
     'backLink' => null,
 ])
 
-<div class="relative mb-8">
+<div {{ $attributes->merge(['class' => 'relative mb-8']) }}>
     <div class="bg-secondary rounded-[2rem] p-7 md:p-9 text-white relative overflow-hidden shadow-2xl border border-primary/10">
         <!-- Brand Signature Glows -->
         <div class="absolute -bottom-12 -left-12 w-48 h-48 bg-primary/10 rounded-full blur-[60px]"></div>

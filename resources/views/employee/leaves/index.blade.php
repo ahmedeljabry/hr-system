@@ -1,30 +1,23 @@
 @extends('layouts.employee')
 
 @section('content')
-        <div class="mb-10">
-            <div class="bg-secondary rounded-3xl shadow-xl p-8 text-white relative overflow-hidden group">
-                <div class="relative z-10 flex flex-col md:flex-row md:items-center md:justify-between gap-6">
-                    <div class="relative z-10">
-                        <h1 class="text-3xl font-black mb-2 tracking-tight">{{ __('My Leaves') }}</h1>
-                        <p class="text-primary opacity-90 text-sm md:text-base">{{ __('View your leave balance and request history.') }}</p>
-                    </div>
-                    
-                    <a href="{{ route('employee.leaves.create') }}" 
-                       class="inline-flex items-center px-10 py-5 bg-primary text-secondary hover:bg-[#8affaa] text-lg font-black rounded-[2.5rem] shadow-[0_20px_50px_rgba(var(--color-primary-rgb),0.3)] hover:shadow-[0_25px_60px_rgba(var(--color-primary-rgb),0.5)] transition-all duration-500 hover:-translate-y-1 active:scale-[0.98] group/btn">
-                        <span class="tracking-tight">{{ __('messages.request_leave') }}</span>
-                        <div class="bg-black/5 p-3 rounded-2xl ms-5 group-hover/btn:bg-black/10 transition-colors shadow-inner">
-                            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="4">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
-                            </svg>
-                        </div>
-                    </a>
-                </div>
-                <!-- Decorative background elements -->
-                <div class="absolute top-0 right-0 -mt-16 -mr-16 text-white opacity-10 group-hover:scale-110 transition-transform duration-700">
-                    <svg class="w-64 h-64" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/></svg>
-                </div>
-            </div>
-        </div>
+<div class="pt-8 pb-12">
+    <!-- Standard Header -->
+    <x-dashboard-sub-header 
+        :title="__('messages.my_leaves')" 
+        :subtitle="__('messages.view_leave_balance_desc')"
+    >
+        <x-slot name="actions">
+            <a href="{{ route('employee.leaves.create') }}" 
+               class="inline-flex items-center px-6 py-3 bg-primary hover:bg-primary/90 text-secondary text-xs font-black rounded-xl shadow-lg transition-all duration-300 hover:-translate-y-1 active:translate-y-0 group/add">
+                <svg class="w-4 h-4 me-2 group-hover/add:rotate-90 transition-transform duration-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M12 4v16m8-8H4" />
+                </svg>
+                {{ __('messages.request_leave') }}
+            </a>
+        </x-slot>
+    </x-dashboard-sub-header>
+
 
         @if(session('success'))
             <div class="mb-8 animate-in fade-in slide-in-from-top-4 duration-500">
@@ -73,8 +66,8 @@
                             </svg>
                         </div>
                         <div class="text-right">
-                            <p class="text-[10px] font-black uppercase tracking-[0.15em] text-gray-400 mb-1">{{ __('Remaining') }}</p>
-                            <p class="text-2xl font-black text-gray-900 leading-none">{{ $balance['remaining'] }} <span class="text-xs font-bold text-gray-400">{{ __('days') }}</span></p>
+                            <p class="text-[10px] font-black uppercase tracking-[0.15em] text-gray-400 mb-1">{{ __('messages.remaining') }}</p>
+                            <p class="text-2xl font-black text-gray-900 leading-none">{{ $balance['remaining'] }} <span class="text-xs font-bold text-gray-400">{{ __('messages.days') }}</span></p>
                         </div>
                     </div>
                     
@@ -92,7 +85,7 @@
                             <div class="h-full rounded-full bg-gradient-to-r from-{{ $color }}-400 to-{{ $color }}-600 transition-all duration-1000 shadow-sm" style="width: {{ $pct }}%"></div>
                         </div>
                         
-                        <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest">{{ __('Used') }} {{ $balance['used_days'] }}</p>
+                        <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest">{{ __('messages.used') }} {{ $balance['used_days'] }}</p>
                     </div>
                 </div>
             @endforeach
@@ -102,8 +95,8 @@
             <div class="w-20 h-20 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-6">
                 <svg class="w-10 h-10 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
             </div>
-            <h3 class="text-xl font-black text-secondary mb-2">{{ __('No leave types') }}</h3>
-            <p class="text-sm text-gray-400 max-w-xs mx-auto">{{ __('No leave types available.') }}</p>
+            <h3 class="text-xl font-black text-secondary mb-2">{{ __('messages.no_leave_types') }}</h3>
+            <p class="text-sm text-gray-400 max-w-xs mx-auto">{{ __('messages.no_leave_types_desc') }}</p>
         </div>
         @endif
 
@@ -111,13 +104,13 @@
         <div class="bg-white rounded-[2.5rem] shadow-[0_20px_50px_rgba(0,0,0,0.04)] border border-gray-100/50 overflow-hidden">
             <div class="px-10 py-8 border-b border-gray-50 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
                 <div>
-                    <h3 class="text-xl font-black text-secondary leading-none mb-2">{{ __('Request History') }}</h3>
-                    <p class="text-xs text-gray-400 font-bold uppercase tracking-[0.2em]">{{ __('Track your submissions') }}</p>
+                    <h3 class="text-xl font-black text-secondary leading-none mb-2">{{ __('messages.request_history') }}</h3>
+                    <p class="text-xs text-gray-400 font-bold uppercase tracking-[0.2em]">{{ __('messages.track_your_submissions') }}</p>
                 </div>
                 
                 @if($requests->total() > 0)
                 <span class="bg-blue-50 text-blue-600 px-4 py-2 rounded-xl text-xs font-black uppercase tracking-widest border border-blue-100">
-                    {{ $requests->total() }} {{ __('Total Requests') }}
+                    {{ $requests->total() }} {{ __('messages.total_requests_count') }}
                 </span>
                 @endif
             </div>
@@ -126,11 +119,11 @@
                 <table class="min-w-full">
                     <thead>
                         <tr class="bg-gray-50/30 border-b border-gray-50">
-                        <th class="px-10 py-7 text-left text-[11px] font-black text-gray-400 uppercase tracking-[0.2em] {{ app()->getLocale() == 'ar' ? 'text-right' : '' }}">{{ __('Leave Type') }}</th>
-                        <th class="px-10 py-7 text-left text-[11px] font-black text-gray-400 uppercase tracking-[0.2em] {{ app()->getLocale() == 'ar' ? 'text-right' : '' }}">{{ __('Dates') }}</th>
-                        <th class="px-10 py-7 text-center text-[11px] font-black text-gray-400 uppercase tracking-[0.2em]">{{ __('Duration') }}</th>
-                        <th class="px-10 py-7 text-center text-[11px] font-black text-gray-400 uppercase tracking-[0.2em]">{{ __('Status') }}</th>
-                        <th class="px-10 py-6 text-right text-[11px] font-black text-gray-400 uppercase tracking-[0.2em] {{ app()->getLocale() == 'ar' ? 'text-left' : '' }}">{{ __('Comment') }}</th>
+                        <th class="px-10 py-7 text-left text-[11px] font-black text-gray-400 uppercase tracking-[0.2em] {{ app()->getLocale() == 'ar' ? 'text-right' : '' }}">{{ __('messages.leave_type') }}</th>
+                        <th class="px-10 py-7 text-left text-[11px] font-black text-gray-400 uppercase tracking-[0.2em] {{ app()->getLocale() == 'ar' ? 'text-right' : '' }}">{{ __('messages.dates') }}</th>
+                        <th class="px-10 py-7 text-center text-[11px] font-black text-gray-400 uppercase tracking-[0.2em]">{{ __('messages.duration') }}</th>
+                        <th class="px-10 py-7 text-center text-[11px] font-black text-gray-400 uppercase tracking-[0.2em]">{{ __('messages.status') }}</th>
+                        <th class="px-10 py-6 text-right text-[11px] font-black text-gray-400 uppercase tracking-[0.2em] {{ app()->getLocale() == 'ar' ? 'text-left' : '' }}">{{ __('messages.reviewer_comment') }}</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-50">
@@ -156,7 +149,7 @@
                                 </td>
                                 <td class="px-10 py-7 whitespace-nowrap text-center">
                                     <span class="inline-flex items-center px-4 py-1.5 rounded-full bg-gray-100 text-secondary text-xs font-black tracking-tight">
-                                        {{ $req->days_count }} {{ __('days') }}
+                                        {{ $req->days_count }} {{ __('messages.days') }}
                                     </span>
                                 </td>
                                 <td class="px-10 py-7 whitespace-nowrap text-center">
@@ -186,8 +179,8 @@
                                         <div class="w-20 h-20 bg-blue-50 rounded-full flex items-center justify-center mb-6">
                                             <svg class="w-10 h-10 text-blue-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path></svg>
                                         </div>
-                                        <h3 class="text-2xl font-black text-secondary tracking-tight mb-2">{{ __('No leave requests found.') }}</h3>
-                                        <p class="text-sm text-gray-400 max-w-xs mx-auto">{{ __('No requests have been submitted yet.') }}</p>
+                                        <h3 class="text-2xl font-black text-secondary tracking-tight mb-2">{{ __('messages.no_requests_found') }}</h3>
+                                        <p class="text-sm text-gray-400 max-w-xs mx-auto">{{ __('messages.no_requests_found_desc') }}</p>
                                     </div>
                                 </td>
                             </tr>
@@ -202,5 +195,5 @@
                 </div>
             @endif
         </div>
-
+    </div>
 @endsection

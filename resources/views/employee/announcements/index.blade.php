@@ -1,28 +1,13 @@
 @extends('layouts.employee')
 
 @section('content')
-<div class="mb-12 bg-secondary rounded-[2.5rem] p-10 relative overflow-hidden shadow-2xl shadow-secondary/20 group">
-    <!-- Decorative Elements -->
-    <div class="absolute top-[-2rem] right-[-2rem] w-40 h-40 bg-white/5 rounded-full blur-3xl group-hover:scale-110 transition-transform duration-1000"></div>
-    <div class="absolute bottom-[-2rem] left-[-2rem] w-40 h-40 bg-primary/10 rounded-full blur-2xl group-hover:scale-110 transition-transform duration-1000"></div>
+<div class="pt-8 pb-12">
+    <!-- Standard Header -->
+    <x-dashboard-sub-header 
+        :title="__('messages.announcements')" 
+        :subtitle="__('messages.announcements_desc')"
+    />
 
-    <div class="relative z-10 flex flex-col md:flex-row justify-between items-center gap-8 {{ app()->getLocale() == 'ar' ? 'flex-row-reverse' : '' }}">
-        <div class="text-left rtl:text-right">
-            <h1 class="text-3xl md:text-4xl font-black text-white tracking-tight leading-tight mb-2">
-                {{ __('messages.announcements') }}
-            </h1>
-            <p class="text-primary font-bold text-sm opacity-90">
-                {{ __('Stay updated with the latest news and announcements from your company.') }}
-            </p>
-        </div>
-        
-        <div class="hidden md:block">
-            <div class="w-20 h-20 bg-white/10 backdrop-blur-xl rounded-3xl flex items-center justify-center border border-white/10 group-hover:rotate-12 transition-all duration-500 shadow-2xl">
-                <svg class="w-10 h-10 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path></svg>
-            </div>
-        </div>
-    </div>
-</div>
 
 <div class="space-y-10">
     @forelse($announcements as $announcement)
@@ -61,7 +46,7 @@
                 <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10l4 4v10a2 2 0 01-2 2z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 4v4h4"></path></svg>
             </div>
             <h3 class="text-2xl font-black text-secondary tracking-tight mb-3">{{ __('messages.no_announcements_yet') }}</h3>
-            <p class="text-gray-400 font-bold max-w-xs mx-auto text-sm">{{ __('Check back later for news and updates from your company.') }}</p>
+            <p class="text-gray-400 font-bold max-w-xs mx-auto text-sm">{{ __('messages.no_announcements_desc') }}</p>
         </div>
     @endforelse
 
@@ -70,5 +55,6 @@
             {{ $announcements->links() }}
         </div>
     @endif
+    </div>
 </div>
 @endsection

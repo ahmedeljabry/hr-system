@@ -2,17 +2,13 @@
 
 @section('content')
 <div class="space-y-10">
-    <!-- Premium Hero Section -->
-    <div class="relative bg-secondary overflow-hidden shadow-2xl rounded-[2.5rem] p-12 text-white mb-10 transition-all duration-700 group hover:shadow-secondary/20">
-        <div class="relative z-10 text-center md:text-left {{ app()->getLocale() == 'ar' ? 'md:text-right' : '' }}">
-            <h1 class="text-4xl font-black mb-2 tracking-tight">{{ __('My Tasks') }}</h1>
-            <p class="text-primary text-lg opacity-90 font-medium">{{ __('View and track tasks assigned to you by your organization.') }}</p>
-        </div>
-        <!-- Decorative background elements -->
-        <div class="absolute top-0 right-0 -mt-20 -mr-20 text-white opacity-10 group-hover:scale-110 transition-transform duration-1000">
-            <svg class="w-80 h-80" fill="currentColor" viewBox="0 0 24 24"><path d="M19 3h-4.18C14.4 1.84 13.3 1 12 1c-1.3 0-2.4.84-2.82 2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 0c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm2 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
-        </div>
-    </div>
+<div class="pt-8 pb-12">
+    <!-- Standard Header -->
+    <x-dashboard-sub-header 
+        :title="__('messages.my_tasks')" 
+        :subtitle="__('messages.my_tasks_desc')"
+    />
+
 
     <!-- Tasks Table Container -->
     <div class="bg-white rounded-[3rem] shadow-[0_20px_60px_rgba(0,0,0,0.03)] border border-gray-100 overflow-hidden transition-all duration-500">
@@ -21,16 +17,16 @@
                 <thead>
                     <tr class="bg-gray-50/50 border-b border-gray-100">
                         <th class="px-10 py-7 text-left text-[11px] font-black text-gray-400 uppercase tracking-[0.2em] {{ app()->getLocale() == 'ar' ? 'text-right' : '' }}">
-                            {{ __('Task') }}
+                            {{ __('messages.task') }}
                         </th>
                         <th class="px-10 py-7 text-left text-[11px] font-black text-gray-400 uppercase tracking-[0.2em] {{ app()->getLocale() == 'ar' ? 'text-right' : '' }}">
-                            {{ __('Due Date') }}
+                            {{ __('messages.due_date') }}
                         </th>
                         <th class="px-10 py-7 text-center text-[11px] font-black text-gray-400 uppercase tracking-[0.2em]">
-                            {{ __('Status') }}
+                            {{ __('messages.status') }}
                         </th>
                         <th class="px-10 py-7 text-right text-[11px] font-black text-gray-400 uppercase tracking-[0.2em] {{ app()->getLocale() == 'ar' ? 'text-left' : '' }}">
-                            {{ __('Actions') }}
+                            {{ __('messages.actions') }}
                         </th>
                     </tr>
                 </thead>
@@ -47,7 +43,7 @@
                                             <div class="text-base font-black text-secondary tracking-tight group-hover/row:text-blue-600 transition-colors uppercase">{{ $task->title }}</div>
                                             @if($task->attachments && count($task->attachments) > 0)
                                                 <div class="relative group/att">
-                                                    <div class="w-5 h-5 rounded-lg bg-blue-100 flex items-center justify-center" title="{{ count($task->attachments) }} {{ __('Attachments') }}">
+                                                    <div class="w-5 h-5 rounded-lg bg-blue-100 flex items-center justify-center" title="{{ count($task->attachments) }} {{ __('messages.attachments') }}">
                                                         <svg class="w-3 h-3 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" />
                                                         </svg>
@@ -64,7 +60,7 @@
                             </td>
                             <td class="px-10 py-7 whitespace-nowrap">
                                 <div class="flex flex-col">
-                                    <span class="text-[10px] font-black uppercase text-gray-400 tracking-widest mb-1">{{ __('Deadline') }}</span>
+                                    <span class="text-[10px] font-black uppercase text-gray-400 tracking-widest mb-1">{{ __('messages.deadline') }}</span>
                                     <div class="text-sm {{ $task->due_date?->isPast() && $task->status != 'done' ? 'text-rose-500 font-black' : 'text-secondary font-black' }}">
                                         {{ $task->due_date?->translatedFormat('d M, Y') ?: '—' }}
                                     </div>
@@ -100,7 +96,7 @@
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                                         </svg>
-                                        {{ count($task->attachments) > 1 ? __('View All') : __('Download') }}
+                                        {{ count($task->attachments) > 1 ? __('messages.view_all') : __('messages.download') }}
                                     </a>
                                 @endif
                             </td>
@@ -112,8 +108,8 @@
                                     <div class="w-24 h-24 bg-blue-50 rounded-full flex items-center justify-center mb-6">
                                         <svg class="w-12 h-12 text-blue-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2m-2-12a2 2 0 002 2h2a2 2 0 002-2" /></svg>
                                     </div>
-                                    <h3 class="text-2xl font-black text-secondary tracking-tight mb-2">{{ __('No tasks assigned.') }}</h3>
-                                    <p class="text-sm text-gray-400 max-w-xs mx-auto">{{ __('You have completed all your tasks or haven\'t been assigned any yet.') }}</p>
+                                    <h3 class="text-2xl font-black text-secondary tracking-tight mb-2">{{ __('messages.no_tasks_found') }}</h3>
+                                    <p class="text-sm text-gray-400 max-w-xs mx-auto">{{ __('messages.no_tasks_desc') }}</p>
                                 </div>
                             </td>
                         </tr>

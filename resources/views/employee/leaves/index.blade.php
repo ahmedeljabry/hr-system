@@ -1,122 +1,198 @@
 @extends('layouts.employee')
 
 @section('content')
-<div class="mb-8 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-    <div>
-        <h1 class="text-3xl font-extrabold text-gray-900 tracking-tight">{{ __('My Leaves') }}</h1>
-        <p class="mt-2 text-sm text-gray-500">{{ __('View your leave balance and request history.') }}</p>
-    </div>
-    
-    <a href="{{ route('employee.leaves.create') }}" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-bold rounded-lg shadow-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-500/50 transition-all hover:-translate-y-0.5">
-        <svg class="-ml-1 mr-2 h-5 w-5 {{ app()->getLocale() == 'ar' ? 'ml-2 -mr-1' : '' }}" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4" />
-        </svg>
-        {{ __('Request Leave') }}
-    </a>
-</div>
-
-@if(session('success'))
-    <div class="mb-4 bg-green-50 border-l-4 border-green-400 p-4 rounded-md shadow-sm">
-        <div class="flex">
-            <div class="flex-shrink-0">
-                <svg class="h-5 w-5 text-green-400" viewBox="0 0 20 20" fill="currentColor">
-                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
-                </svg>
-            </div>
-            <div class="ml-3 {{ app()->getLocale() == 'ar' ? 'mr-3 ml-0' : '' }}">
-                <p class="text-sm text-green-700">{{ session('success') }}</p>
-            </div>
-        </div>
-    </div>
-@endif
-
-@if(session('error'))
-    <div class="mb-4 bg-red-50 border-l-4 border-red-400 p-4 rounded-md shadow-sm">
-        <div class="flex">
-            <div class="flex-shrink-0">
-                <svg class="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
-                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
-                </svg>
-            </div>
-            <div class="ml-3 {{ app()->getLocale() == 'ar' ? 'mr-3 ml-0' : '' }}">
-                <p class="text-sm text-red-700">{{ session('error') }}</p>
-            </div>
-        </div>
-    </div>
-@endif
-
-<!-- Leave Balance Cards -->
-@if(count($balanceSummary) > 0)
-<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-    @foreach($balanceSummary as $balance)
-        <div class="bg-white rounded-2xl shadow-sm p-5 border border-gray-100 hover:shadow-md transition-shadow">
-            <h3 class="text-sm font-medium text-gray-500 mb-2">{{ $balance['type']->name }}</h3>
-            <div class="flex items-end justify-between">
-                <div>
-                    <span class="text-2xl font-bold text-gray-900">{{ $balance['remaining'] }}</span>
-                    <span class="text-sm text-gray-400">/ {{ $balance['max_days'] > 0 ? $balance['max_days'] : '∞' }}</span>
-                </div>
-                @if($balance['max_days'] > 0)
-                    <div class="w-16 h-2 bg-gray-100 rounded-full overflow-hidden">
-                        @php $pct = $balance['max_days'] > 0 ? min(100, ($balance['used_days'] / $balance['max_days']) * 100) : 0; @endphp
-                        <div class="h-full rounded-full {{ $pct > 80 ? 'bg-red-500' : ($pct > 50 ? 'bg-amber-500' : 'bg-green-500') }}" style="width: {{ $pct }}%"></div>
+        <div class="mb-10">
+            <div class="bg-secondary rounded-3xl shadow-xl p-8 text-white relative overflow-hidden group">
+                <div class="relative z-10 flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+                    <div class="relative z-10">
+                        <h1 class="text-3xl font-black mb-2 tracking-tight">{{ __('My Leaves') }}</h1>
+                        <p class="text-primary opacity-90 text-sm md:text-base">{{ __('View your leave balance and request history.') }}</p>
                     </div>
+                    
+                    <a href="{{ route('employee.leaves.create') }}" 
+                       class="inline-flex items-center px-8 py-4 bg-primary text-secondary hover:bg-primary/90 text-sm font-black rounded-2xl shadow-xl transition-all duration-300 hover:-translate-y-1 active:scale-95 group/btn">
+                        <div class="bg-white/20 p-1.5 rounded-lg mr-3 group-hover/btn:bg-white group-hover/btn:text-secondary transition-colors">
+                            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+                            </svg>
+                        </div>
+                        {{ __('Request Leave') }}
+                    </a>
+                </div>
+                <!-- Decorative background elements -->
+                <div class="absolute top-0 right-0 -mt-16 -mr-16 text-white opacity-10 group-hover:scale-110 transition-transform duration-700">
+                    <svg class="w-64 h-64" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/></svg>
+                </div>
+            </div>
+        </div>
+
+        @if(session('success'))
+            <div class="mb-8 animate-in fade-in slide-in-from-top-4 duration-500">
+                <div class="bg-emerald-50 border border-emerald-100 p-5 rounded-2xl flex items-center gap-4 shadow-sm">
+                    <div class="w-10 h-10 rounded-full bg-emerald-500/10 flex items-center justify-center shrink-0">
+                        <svg class="w-6 h-6 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path></svg>
+                    </div>
+                    <p class="text-emerald-800 font-bold tracking-tight">{{ session('success') }}</p>
+                </div>
+            </div>
+        @endif
+
+        @if(session('error'))
+            <div class="mb-8 animate-in fade-in slide-in-from-top-4 duration-500">
+                <div class="bg-red-50 border border-red-100 p-5 rounded-2xl flex items-center gap-4 shadow-sm">
+                    <div class="w-10 h-10 rounded-full bg-red-500/10 flex items-center justify-center shrink-0">
+                        <svg class="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    </div>
+                    <p class="text-red-800 font-bold tracking-tight">{{ session('error') }}</p>
+                </div>
+            </div>
+        @endif
+
+        <!-- Leave Balance Cards -->
+        @if(count($balanceSummary) > 0)
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
+            @php
+                $colors = ['blue', 'purple', 'emerald', 'amber', 'rose', 'indigo'];
+            @endphp
+            @foreach($balanceSummary as $index => $balance)
+                @php
+                    $color = $colors[$index % count($colors)];
+                    $pct = $balance['max_days'] > 0 ? min(100, ($balance['used_days'] / $balance['max_days']) * 100) : 0;
+                @endphp
+                <div class="group bg-white rounded-[2rem] shadow-[0_10px_40px_rgba(0,0,0,0.03)] border border-gray-100 p-6 hover:shadow-[0_20px_50px_rgba(0,0,0,0.06)] hover:translate-y-[-4px] transition-all duration-500">
+                    <div class="flex items-start justify-between mb-6">
+                        <div class="w-12 h-12 rounded-2xl bg-{{ $color }}-50 flex items-center justify-center text-{{ $color }}-500 group-hover:scale-110 transition-transform duration-500">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                @if(str_contains(strtolower($balance['type']->name), 'sick') || str_contains(strtolower($balance['type']->name), 'مرض'))
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
+                                @elseif(str_contains(strtolower($balance['type']->name), 'annual') || str_contains(strtolower($balance['type']->name), 'سنوي'))
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                @else
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                @endif
+                            </svg>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-[10px] font-black uppercase tracking-[0.15em] text-gray-400 mb-1">{{ __('Remaining') }}</p>
+                            <p class="text-2xl font-black text-gray-900 leading-none">{{ $balance['remaining'] }} <span class="text-xs font-bold text-gray-400">{{ __('days') }}</span></p>
+                        </div>
+                    </div>
+                    
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-between text-xs font-bold">
+                            <span class="text-secondary tracking-tight">{{ $balance['type']->name }}</span>
+                            <span class="text-{{ $color }}-600 bg-{{ $color }}-50 px-3 py-1 rounded-full outline outline-1 outline-{{ $color }}-100">{{ $balance['used_days'] }} / {{ $balance['max_days'] > 0 ? $balance['max_days'] : '∞' }}</span>
+                        </div>
+                        
+                        <div class="relative w-full h-2.5 bg-gray-50 rounded-full overflow-hidden border border-gray-100">
+                            <div class="h-full rounded-full bg-gradient-to-r from-{{ $color }}-400 to-{{ $color }}-600 transition-all duration-1000 shadow-sm" style="width: {{ $pct }}%"></div>
+                        </div>
+                        
+                        <p class="text-[10px] text-gray-400 font-bold uppercase tracking-widest">{{ __('Used') }} {{ $balance['used_days'] }}</p>
+                    </div>
+                </div>
+            @endforeach
+        </div>
+        @else
+        <div class="mb-10 bg-white rounded-3xl p-12 text-center border border-dashed border-gray-200">
+            <div class="w-20 h-20 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-6">
+                <svg class="w-10 h-10 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+            </div>
+            <h3 class="text-xl font-black text-secondary mb-2">{{ __('No leave types') }}</h3>
+            <p class="text-sm text-gray-400 max-w-xs mx-auto">{{ __('No leave types available.') }}</p>
+        </div>
+        @endif
+
+        <!-- Leave Request History Table -->
+        <div class="bg-white rounded-[2.5rem] shadow-[0_20px_50px_rgba(0,0,0,0.04)] border border-gray-100/50 overflow-hidden">
+            <div class="px-10 py-8 border-b border-gray-50 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                <div>
+                    <h3 class="text-xl font-black text-secondary leading-none mb-2">{{ __('Request History') }}</h3>
+                    <p class="text-xs text-gray-400 font-bold uppercase tracking-[0.2em]">{{ __('Track your submissions') }}</p>
+                </div>
+                
+                @if($requests->total() > 0)
+                <span class="bg-blue-50 text-blue-600 px-4 py-2 rounded-xl text-xs font-black uppercase tracking-widest border border-blue-100">
+                    {{ $requests->total() }} {{ __('Total Requests') }}
+                </span>
                 @endif
             </div>
-            <p class="text-xs text-gray-400 mt-1">{{ __(':used used', ['used' => $balance['used_days']]) }}</p>
-        </div>
-    @endforeach
-</div>
-@else
-<div class="mb-8 bg-gray-50 rounded-2xl p-8 text-center text-gray-500">
-    <p class="font-bold">{{ __('No leave types configured by your organization yet.') }}</p>
-</div>
-@endif
 
-<!-- Leave Request History -->
-<div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-    <div class="px-6 py-5 border-b border-gray-50 bg-gray-50/50">
-        <h3 class="font-bold text-gray-900">{{ __('Request History') }}</h3>
-    </div>
-    <div class="overflow-x-auto">
-        <table class="min-w-full divide-y divide-gray-200">
-            <thead class="bg-gray-50">
-                <tr>
-                    <th class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase {{ app()->getLocale() == 'ar' ? 'text-right' : '' }}">{{ __('Leave Type') }}</th>
-                    <th class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase {{ app()->getLocale() == 'ar' ? 'text-right' : '' }}">{{ __('Dates') }}</th>
-                    <th class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase {{ app()->getLocale() == 'ar' ? 'text-right' : '' }}">{{ __('Days') }}</th>
-                    <th class="px-6 py-4 text-center text-xs font-bold text-gray-500 uppercase">{{ __('Status') }}</th>
-                    <th class="px-6 py-4 text-left text-xs font-bold text-gray-500 uppercase {{ app()->getLocale() == 'ar' ? 'text-right' : '' }}">{{ __('Comment') }}</th>
-                </tr>
-            </thead>
-            <tbody class="bg-white divide-y divide-gray-100">
-                @forelse($requests as $req)
-                    <tr class="hover:bg-gray-50/50 transition-colors">
-                        <td class="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-900">{{ $req->leaveType->name }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{{ $req->start_date->format('d/m/Y') }} — {{ $req->end_date->format('d/m/Y') }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-900">{{ $req->days_count }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-center">
-                            @php
-                                $sc = [
-                                    'pending' => 'bg-amber-100 text-amber-800',
-                                    'approved' => 'bg-green-100 text-green-800',
-                                    'rejected' => 'bg-red-100 text-red-800',
-                                ][$req->status] ?? 'bg-gray-100 text-gray-700';
-                            @endphp
-                            <span class="px-3 py-1 rounded-full text-xs font-extrabold uppercase {{ $sc }}">{{ __($req->status) }}</span>
-                        </td>
-                        <td class="px-6 py-4 text-sm text-gray-500">{{ $req->reviewer_comment ?? '—' }}</td>
-                    </tr>
-                @empty
-                    <tr>
-                        <td colspan="5" class="px-6 py-12 text-center text-gray-500 font-bold">{{ __('No leave requests found.') }}</td>
-                    </tr>
-                @endforelse
-            </tbody>
-        </table>
-    </div>
-    @if($requests->hasPages())
-        <div class="px-6 py-4 bg-gray-50 border-t border-gray-100">{{ $requests->links() }}</div>
-    @endif
-</div>
+            <div class="overflow-x-auto">
+                <table class="min-w-full">
+                    <thead>
+                        <tr class="bg-gray-50/30 border-b border-gray-50">
+                        <th class="px-10 py-7 text-left text-[11px] font-black text-gray-400 uppercase tracking-[0.2em] {{ app()->getLocale() == 'ar' ? 'text-right' : '' }}">{{ __('Leave Type') }}</th>
+                        <th class="px-10 py-7 text-left text-[11px] font-black text-gray-400 uppercase tracking-[0.2em] {{ app()->getLocale() == 'ar' ? 'text-right' : '' }}">{{ __('Dates') }}</th>
+                        <th class="px-10 py-7 text-center text-[11px] font-black text-gray-400 uppercase tracking-[0.2em]">{{ __('Duration') }}</th>
+                        <th class="px-10 py-7 text-center text-[11px] font-black text-gray-400 uppercase tracking-[0.2em]">{{ __('Status') }}</th>
+                        <th class="px-10 py-6 text-right text-[11px] font-black text-gray-400 uppercase tracking-[0.2em] {{ app()->getLocale() == 'ar' ? 'text-left' : '' }}">{{ __('Comment') }}</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-50">
+                        @forelse($requests as $req)
+                            <tr class="hover:bg-gray-50/50 transition-all duration-300">
+                                <td class="px-10 py-7 whitespace-nowrap">
+                                    <div class="flex items-center gap-3">
+                                        <div class="w-1.5 h-6 bg-blue-500 rounded-full opacity-40"></div>
+                                        <span class="text-base font-black text-secondary tracking-tight capitalize">{{ $req->leaveType->name }}</span>
+                                    </div>
+                                </td>
+                                <td class="px-10 py-7 whitespace-nowrap">
+                                    <div class="flex flex-col">
+                                        <span class="text-sm font-black text-secondary/80 leading-none mb-1">
+                                            {{ $req->start_date->format('d M Y') }} — {{ $req->end_date->format('d M Y') }}
+                                        </span>
+                                        <span class="text-[10px] text-gray-400 font-bold uppercase tracking-widest">{{ $req->created_at->diffForHumans() }}</span>
+                                    </div>
+                                </td>
+                                <td class="px-10 py-7 whitespace-nowrap text-center">
+                                    <span class="inline-flex items-center px-4 py-1.5 rounded-full bg-gray-100 text-secondary text-xs font-black tracking-tight">
+                                        {{ $req->days_count }} {{ __('days') }}
+                                    </span>
+                                </td>
+                                <td class="px-10 py-7 whitespace-nowrap text-center">
+                                    @php
+                                        $sc = [
+                                            'pending' => 'bg-amber-100 text-amber-700 border-amber-200',
+                                            'approved' => 'bg-emerald-100 text-emerald-700 border-emerald-200',
+                                            'rejected' => 'bg-red-100 text-red-700 border-red-200',
+                                        ][$req->status] ?? 'bg-gray-100 text-gray-600 border-gray-200';
+                                    @endphp
+                                    <span class="px-5 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest border {{ $sc }}">
+                                        {{ __($req->status) }}
+                                    </span>
+                                </td>
+                                <td class="px-10 py-7 text-right {{ app()->getLocale() == 'ar' ? 'text-left' : '' }}">
+                                    @if($req->reviewer_comment)
+                                        <span class="text-sm text-gray-500 font-medium italic">"{{ Str::limit($req->reviewer_comment, 40) }}"</span>
+                                    @else
+                                        <span class="text-xs text-gray-300">—</span>
+                                    @endif
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="5" class="px-10 py-24 text-center">
+                                    <div class="flex flex-col items-center">
+                                        <div class="w-20 h-20 bg-blue-50 rounded-full flex items-center justify-center mb-6">
+                                            <svg class="w-10 h-10 text-blue-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path></svg>
+                                        </div>
+                                        <h3 class="text-2xl font-black text-secondary tracking-tight mb-2">{{ __('No leave requests found.') }}</h3>
+                                        <p class="text-sm text-gray-400 max-w-xs mx-auto">{{ __('No requests have been submitted yet.') }}</p>
+                                    </div>
+                                </td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
+            
+            @if($requests->hasPages())
+                <div class="px-10 py-8 bg-gray-50/50 border-t border-gray-100">
+                    {{ $requests->links() }}
+                </div>
+            @endif
+        </div>
+
 @endsection

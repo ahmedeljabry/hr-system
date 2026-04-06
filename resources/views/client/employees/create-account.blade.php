@@ -3,7 +3,7 @@
 @section('content')
 <div class="max-w-2xl mx-auto space-y-6">
     <div class="flex justify-between items-center bg-gray-900 border border-gray-800 p-6 rounded-2xl shadow-xl">
-        <h1 class="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-indigo-400">
+        <h1 class="text-3xl font-bold bg-clip-text text-transparent bg-primary">
             Create Login for {{ $employee->name }}
         </h1>
         <a href="{{ route('client.employees.show', $employee->id) }}" class="text-gray-400 hover:text-white transition-colors duration-200">
@@ -28,7 +28,7 @@
                 </div>
 
                 <div class="pt-4 text-right">
-                    <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-8 rounded-xl transition-all duration-200 shadow-lg shadow-blue-500/30">
+                    <button type="submit" class="bg-secondary hover:bg-secondary/90 text-white font-medium py-3 px-8 rounded-xl transition-all duration-200 shadow-lg shadow-secondary/30">
                         {{ __('messages.create_account') }}
                     </button>
                 </div>

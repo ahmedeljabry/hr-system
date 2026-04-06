@@ -2,14 +2,14 @@
 
 @section('content')
 <div class="mb-8">
-    <div class="bg-gradient-to-r from-blue-600 to-indigo-700 rounded-3xl shadow-lg p-8 text-white relative overflow-hidden">
+    <div class="bg-secondary rounded-3xl shadow-lg p-8 text-white relative overflow-hidden">
         <div class="relative z-10 flex items-center gap-6">
             <div class="w-20 h-20 bg-white/20 rounded-full flex items-center justify-center text-4xl text-white shadow-inner">
                 {{ substr($employee->name, 0, 1) }}
             </div>
             <div>
                 <h1 class="text-3xl font-bold">{{ $employee->name }}</h1>
-                <p class="text-blue-100 font-medium text-lg">{{ $employee->position ?? __('Employee Profile') }}</p>
+                <p class="text-primary font-medium text-lg">{{ $employee->position ?? __('Employee Profile') }}</p>
             </div>
         </div>
         <div class="absolute top-0 right-0 -mt-16 -mr-16 text-white opacity-10">

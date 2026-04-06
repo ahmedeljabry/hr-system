@@ -7,7 +7,7 @@
             <h1 class="text-3xl font-bold text-gray-900">{{ $client->name }}</h1>
             <p class="text-gray-600 mt-1">{{ __('Client Details & Employees') }}</p>
         </div>
-        <a href="{{ route('admin.clients.index') }}" class="text-blue-600 hover:text-blue-800 font-medium">
+        <a href="{{ route('admin.clients.index') }}" class="text-secondary hover:text-secondary/80 font-medium font-bold">
             ← {{ __('Back to Clients') }}
         </a>
     </div>
@@ -90,7 +90,7 @@
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-end text-sm font-medium">
                                 @if($employee->user)
-                                    <a href="{{ route('admin.users.edit', $employee->user->id) }}" class="text-blue-600 hover:text-blue-800 font-medium">
+                                    <a href="{{ route('admin.users.edit', $employee->user->id) }}" class="text-secondary hover:text-secondary/80 font-bold">
                                         {{ __('Edit User') }}
                                     </a>
                                 @endif

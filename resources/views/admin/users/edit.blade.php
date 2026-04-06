@@ -7,7 +7,7 @@
             <h1 class="text-3xl font-bold text-gray-900">{{ __('Edit User') }}</h1>
             <p class="text-gray-600 mt-1">{{ $user->name }} ({{ $user->email }})</p>
         </div>
-        <a href="{{ route('admin.clients.index') }}" class="text-blue-600 hover:text-blue-800 font-medium">
+        <a href="{{ route('admin.clients.index') }}" class="text-secondary hover:text-secondary/80 font-bold">
             ← {{ __('Back to Clients') }}
         </a>
     </div>
@@ -29,7 +29,7 @@
             <div class="mb-6">
                 <label for="name" class="block text-sm font-bold text-gray-700 mb-2">{{ __('Name') }}</label>
                 <input type="text" id="name" name="name" value="{{ old('name', $user->name) }}" required
-                    class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all @error('name') border-red-300 @enderror">
+                    class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all @error('name') border-red-300 @enderror">
                 @error('name')
                     <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
                 @enderror
@@ -38,14 +38,14 @@
             <div class="mb-6">
                 <label for="email" class="block text-sm font-bold text-gray-700 mb-2">{{ __('Email') }}</label>
                 <input type="email" id="email" name="email" value="{{ old('email', $user->email) }}" required
-                    class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all @error('email') border-red-300 @enderror">
+                    class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all @error('email') border-red-300 @enderror">
                 @error('email')
                     <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
                 @enderror
             </div>
 
             <div class="flex gap-4">
-                <button type="submit" class="flex-1 bg-blue-600 text-white font-bold py-3 px-6 rounded-xl hover:bg-blue-700 transition-colors focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                <button type="submit" class="flex-1 bg-secondary text-white font-bold py-3 px-6 rounded-xl hover:bg-secondary/90 transition-all focus:ring-2 focus:ring-primary focus:ring-offset-2 shadow-lg">
                     {{ __('Update User') }}
                 </button>
                 <a href="{{ route('admin.clients.index') }}" class="flex-1 bg-gray-100 text-gray-700 font-bold py-3 px-6 rounded-xl hover:bg-gray-200 transition-colors text-center">

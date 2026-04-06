@@ -6,7 +6,7 @@
         <h1 class="text-2xl font-bold text-gray-900">{{ __('Announcements') }}</h1>
         <p class="text-gray-600 text-sm mt-1">{{ __('Manage company-wide announcements for your employees.') }}</p>
     </div>
-    <a href="{{ route('client.announcements.create') }}" class="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors">
+    <a href="{{ route('client.announcements.create') }}" class="bg-secondary text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-secondary/90 transition-colors">
         + {{ __('Create Announcement') }}
     </a>
 </div>
@@ -34,7 +34,7 @@
                     <td class="px-6 py-4 text-sm text-gray-500">{{ $announcement->published_at->format('Y-m-d H:i') }}</td>
                     <td class="px-6 py-4 text-sm font-medium whitespace-nowrap">
                         <div class="flex items-center space-x-3 {{ app()->getLocale() == 'ar' ? 'space-x-reverse' : '' }}">
-                            <a href="{{ route('client.announcements.edit', $announcement) }}" class="text-blue-600 hover:text-blue-900 transition-colors">
+                            <a href="{{ route('client.announcements.edit', $announcement) }}" class="text-secondary hover:text-secondary/80 transition-colors">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
                             </a>
                             <form action="{{ route('client.announcements.destroy', $announcement) }}" method="POST" class="inline" onsubmit="return confirm('{{ __('Are you sure you want to delete this announcement?') }}');">

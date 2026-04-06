@@ -21,7 +21,7 @@
 </head>
 <body class="bg-surface text-text-main antialiased min-h-screen flex flex-row" x-data="{ mobileOpen: false }">
     <div class="md:hidden p-4 bg-white border-b border-gray-100 flex items-center justify-between w-full fixed top-0 z-20">
-        <a href="{{ route('admin.dashboard') }}" class="text-xl font-outfit font-bold text-primary tracking-tight">{{ config('app.name', 'HR System') }}</a>
+        <a href="{{ route('admin.dashboard') }}" class="text-xl font-outfit font-bold text-secondary tracking-tight">{{ config('app.name', 'HR System') }}</a>
         <button @click="mobileOpen = !mobileOpen" class="p-2 text-gray-500 hover:text-gray-700 focus:outline-none">
             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
         </button>
@@ -34,7 +34,7 @@
          x-data="{ collapsed: false }"
          class="fixed top-0 inset-y-0 z-50 w-64 bg-white md:hidden flex flex-col {{ app()->getLocale() == 'ar' ? 'right-0' : 'left-0' }}" x-cloak>
         <div class="h-16 flex items-center justify-start px-4 border-b border-gray-50">
-            <span class="text-xl font-outfit font-bold text-primary">{{ config('app.name') }}</span>
+            <span class="text-xl font-outfit font-bold text-secondary">{{ config('app.name') }}</span>
             <button @click="mobileOpen = false" class="ms-auto p-2 text-gray-500">
                 <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
             </button>

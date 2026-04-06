@@ -8,8 +8,8 @@
                 <h1 class="text-3xl font-bold text-gray-900 mb-2">{{ __('Super Admin Dashboard') }}</h1>
                 <p class="text-gray-600">{{ __('System overview and management tools') }}</p>
             </div>
-            <div class="bg-blue-50 px-4 py-2 rounded-xl">
-                <span class="text-sm font-medium text-blue-700">{{ __('Super Admin') }}</span>
+            <div class="bg-primary/20 px-4 py-2 rounded-xl">
+                <span class="text-sm font-medium text-secondary">{{ __('Super Admin') }}</span>
             </div>
         </div>
     </div>
@@ -21,7 +21,7 @@
             title="{{ __('Total Clients') }}" 
             value="{{ number_format($stats['total_clients']) }}"
             data="{{ json_encode($trends['clients']) }}"
-            color="#3B82F6"
+            color="#142533"
         />
 
         <x-sparkline-card 
@@ -71,17 +71,17 @@
 
     <!-- Quick Actions -->
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <a href="{{ route('admin.clients.index') }}" class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 hover:border-blue-300 hover:shadow-md transition-all group">
+        <a href="{{ route('admin.clients.index') }}" class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 hover:border-primary hover:shadow-md transition-all group">
             <div class="flex items-center justify-between mb-4">
                 <div>
                     <h3 class="text-lg font-bold text-gray-900">{{ __('Clients') }}</h3>
                     <p class="text-sm text-gray-600">{{ __('Manage client subscriptions and view details') }}</p>
                 </div>
-                <div class="bg-blue-50 p-3 rounded-xl group-hover:bg-blue-100 transition-colors">
+                <div class="bg-primary/20 p-3 rounded-xl group-hover:bg-primary/30 transition-colors">
                     <span class="text-xl">👥</span>
                 </div>
             </div>
-            <div class="flex items-center text-blue-600 font-medium text-sm">
+            <div class="flex items-center text-secondary font-medium text-sm">
                 <span>{{ __('View All Clients') }}</span>
                 <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>

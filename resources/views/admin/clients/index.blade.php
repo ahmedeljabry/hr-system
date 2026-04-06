@@ -4,7 +4,7 @@
 <div class="mb-8">
     <div class="flex justify-between items-center mb-8">
         <h1 class="text-3xl font-bold text-gray-900">{{ __('Clients') }}</h1>
-        <a href="{{ route('admin.dashboard') }}" class="text-primary hover:text-blue-800 font-medium">
+        <a href="{{ route('admin.dashboard') }}" class="text-secondary hover:text-secondary/80 font-medium">
             ← {{ __('Back to Dashboard') }}
         </a>
     </div>
@@ -28,7 +28,7 @@
         <x-slot name="body">
             <td class="px-6 py-6 whitespace-nowrap">
                 <div class="flex items-center">
-                    <div class="bg-blue-50 text-blue-600 w-10 h-10 rounded-xl flex items-center justify-center font-bold me-3 text-lg lowercase" x-text="item.name.substring(0, 1)"></div>
+                    <div class="bg-primary/20 text-secondary w-10 h-10 rounded-xl flex items-center justify-center font-bold me-3 text-lg lowercase" x-text="item.name.substring(0, 1)"></div>
                     <div>
                         <div class="text-sm font-bold text-gray-900" x-text="item.name"></div>
                         <div class="text-xs text-gray-400">ID: #<span x-text="item.id"></span></div>
@@ -46,7 +46,7 @@
             </td>
             <td class="px-6 py-6 whitespace-nowrap text-sm text-gray-900 font-bold" x-text="item.employees_count"></td>
             <td class="px-6 py-6 whitespace-nowrap text-end text-sm font-medium">
-                <a :href="`/admin/clients/${item.id}`" class="text-primary hover:text-blue-800 font-medium">
+                <a :href="`/admin/clients/${item.id}`" class="text-secondary hover:text-secondary/80 font-medium">
                     {{ __('View Details') }}
                 </a>
             </td>

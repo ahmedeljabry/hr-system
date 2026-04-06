@@ -122,7 +122,14 @@
                                 <span class="px-3 py-1 bg-primary/10 text-[9px] font-black text-primary uppercase tracking-widest rounded-full">{{ __('messages.notice') }}</span>
                                 <span class="text-[10px] font-bold text-gray-400">{{ $announcement->published_at->translatedFormat('d M, Y') }}</span>
                             </div>
-                            <h4 class="text-lg font-black text-secondary mb-2 group-hover/announcement:text-primary transition-colors leading-tight">{{ $announcement->title }}</h4>
+                                <div class="flex items-center gap-2 mb-2">
+                                    <h4 class="text-lg font-black text-secondary leading-tight group-hover/announcement:text-primary transition-colors">{{ $announcement->title }}</h4>
+                                    @if($announcement->attachment)
+                                        <div class="w-5 h-5 rounded-lg bg-emerald-500/10 flex items-center justify-center text-emerald-500" title="{{ __('messages.attachments') }}">
+                                            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                                        </div>
+                                    @endif
+                                </div>
                         </div>
                         <a href="{{ route('employee.announcements.index') }}" class="w-10 h-10 rounded-2xl bg-gray-50 flex items-center justify-center text-gray-400 hover:bg-primary hover:text-secondary transition-all duration-300">
                             <svg class="w-5 h-5 transition-transform group-hover/announcement:translate-x-1 rtl:group-hover/announcement:-translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 7l5 5m0 0l-5 5m5-5H6"></path></svg>

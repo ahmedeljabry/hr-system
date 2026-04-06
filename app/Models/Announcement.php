@@ -15,6 +15,7 @@ class Announcement extends Model
         'client_id',
         'title',
         'body',
+        'attachment',
         'published_at',
     ];
 

@@ -45,8 +45,16 @@
                     <tr class="hover:bg-primary/5 transition-all duration-300 group">
                         <td class="px-10 py-6">
                             <div class="flex flex-col">
-                                <span class="text-sm font-black text-secondary mb-1 group-hover:text-primary transition-colors">{{ $announcement->title }}</span>
-                                <span class="text-[11px] text-gray-400 font-medium line-clamp-1">{{ Str::limit(strip_tags($announcement->body), 100) }}</span>
+                                <span class="text-sm font-black text-secondary mb-1 group-hover:text-primary transition-colors italic">{{ $announcement->title }}</span>
+                                <div class="flex items-center gap-3">
+                                    <span class="text-[11px] text-gray-400 font-medium line-clamp-1">{{ Str::limit(strip_tags($announcement->body), 100) }}</span>
+                                    @if($announcement->attachment)
+                                        <a href="{{ asset('storage/' . $announcement->attachment) }}" target="_blank" class="flex items-center gap-1.5 px-2 py-0.5 rounded-md bg-primary/10 text-primary text-[9px] font-black uppercase tracking-widest hover:bg-primary hover:text-secondary transition-all">
+                                            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                                            {{ __('messages.download') }}
+                                        </a>
+                                    @endif
+                                </div>
                             </div>
                         </td>
                         <td class="px-10 py-6">
@@ -54,7 +62,7 @@
                                 <div class="w-8 h-8 rounded-lg bg-gray-100 flex items-center justify-center text-gray-400 group-hover:bg-primary/20 group-hover:text-primary transition-colors">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
                                 </div>
-                                <span class="text-xs font-bold text-gray-500">{{ $announcement->published_at->format('M d, Y') }}</span>
+                                <span class="text-xs font-bold text-gray-500 italic">{{ $announcement->published_at->format('M d, Y') }}</span>
                             </div>
                         </td>
                         <td class="px-10 py-6 text-right rtl:text-left">

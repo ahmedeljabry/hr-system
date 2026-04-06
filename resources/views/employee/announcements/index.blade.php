@@ -31,8 +31,15 @@
                 </div>
                 
                 <div class="mt-12 flex items-center justify-between border-t border-gray-50 pt-8">
-                    <div class="flex -space-x-2">
+                    <div class="flex items-center gap-4">
                         <div class="w-10 h-10 rounded-full bg-secondary border-2 border-white flex items-center justify-center text-[10px] font-black text-white antialiased">HR</div>
+                        @if($announcement->attachment)
+                            <a href="{{ asset('storage/' . $announcement->attachment) }}" target="_blank" 
+                               class="flex items-center gap-3 px-6 py-3 bg-primary hover:bg-primary/90 text-secondary text-[10px] font-black uppercase tracking-[0.2em] rounded-xl shadow-lg transition-all duration-300 hover:-translate-y-1 active:translate-y-0 group/dl">
+                                <svg class="w-4 h-4 transition-transform group-hover/dl:scale-110" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                                {{ __('messages.download') }}
+                            </a>
+                        @endif
                     </div>
                     <div class="w-10 h-10 rounded-2xl bg-primary/10 flex items-center justify-center text-primary group-hover/card:rotate-12 transition-all duration-500">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"></path></svg>

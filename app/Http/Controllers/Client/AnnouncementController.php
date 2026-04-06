@@ -38,11 +38,16 @@ class AnnouncementController extends Controller
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'body' => 'required|string|max:5000',
+            'attachment' => 'nullable|file|max:10240', // 10MB max
         ]);
+
+        if ($request->hasFile('attachment')) {
+            $validated['attachment'] = $request->file('attachment')->store('announcements', 'public');
+        }
 
         $this->announcementService->create($this->getClient(), $validated);
 
-        return redirect()->route('client.announcements.index')->with('success', __('Announcement created successfully.'));
+        return redirect()->route('client.announcements.index')->with('success', __('messages.employee_created'));
     }
 
     public function edit(Announcement $announcement)
@@ -61,11 +66,16 @@ class AnnouncementController extends Controller
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'body' => 'required|string|max:5000',
+            'attachment' => 'nullable|file|max:10240',
         ]);
+
+        if ($request->hasFile('attachment')) {
+            $validated['attachment'] = $request->file('attachment')->store('announcements', 'public');
+        }
 
         $this->announcementService->update($announcement, $validated);
 
-        return redirect()->route('client.announcements.index')->with('success', __('Announcement updated successfully.'));
+        return redirect()->route('client.announcements.index')->with('success', __('messages.employee_updated'));
     }
 
     public function destroy(Announcement $announcement)

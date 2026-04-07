@@ -90,4 +90,81 @@ class ClientController extends Controller
 
         return back()->with('success', __('messages.subscription_date_updated'));
     }
+
+    /**
+     * Remove the specified client from storage.
+     */
+    public function destroy(Request $request, Client $client)
+    {
+        try {
+            \Illuminate\Support\Facades\DB::transaction(function() use ($client) {
+                // 1. Delete all users belonging to this client
+                \App\Models\User::where('client_id', $client->id)->delete();
+
+                // 2. Delete the client itself
+                // Database cascading handles: employees, announcements, notifications, payroll_runs
+                $client->delete();
+            });
+
+            Log::channel('daily')->info('ADMIN_ACTION', [
+                'admin_id' => Auth::id(),
+                'action' => 'client_deleted',
+                'target' => 'clients',
+                'record_id' => $client->id,
+                'client_name' => $client->name,
+            ]);
+
+            if ($request->wantsJson()) {
+                return response()->json(['success' => true, 'message' => __('messages.client_deleted_successfully')]);
+            }
+            return redirect()->route('admin.clients.index')->with('success', __('messages.client_deleted_successfully'));
+        } catch (\Exception $e) {
+            Log::error('Client deletion failed: ' . $e->getMessage());
+            if ($request->wantsJson()) {
+                return response()->json(['success' => false, 'message' => __('messages.delete_failed')], 500);
+            }
+            return back()->with('error', __('messages.delete_failed'));
+        }
+    }
+
+    /**
+     * Remove multiple clients from storage.
+     */
+    public function bulkDestroy(Request $request)
+    {
+        $ids = $request->input('ids', []);
+        
+        if (empty($ids)) {
+            return back()->with('error', __('messages.no_clients_selected'));
+        }
+
+        try {
+            \Illuminate\Support\Facades\DB::transaction(function() use ($ids) {
+                // Delete all users belonging to these clients
+                \App\Models\User::whereIn('client_id', $ids)->delete();
+
+                // Delete the clients
+                Client::whereIn('id', $ids)->delete();
+            });
+
+            Log::channel('daily')->info('ADMIN_ACTION', [
+                'admin_id' => Auth::id(),
+                'action' => 'bulk_client_deleted',
+                'target' => 'clients',
+                'count' => count($ids),
+                'ids' => $ids,
+            ]);
+
+            if ($request->wantsJson()) {
+                return response()->json(['success' => true, 'message' => __('messages.clients_deleted_successfully')]);
+            }
+            return back()->with('success', __('messages.clients_deleted_successfully'));
+        } catch (\Exception $e) {
+            Log::error('Bulk client deletion failed: ' . $e->getMessage());
+            if ($request->wantsJson()) {
+                return response()->json(['success' => false, 'message' => __('messages.delete_failed')], 500);
+            }
+            return back()->with('error', __('messages.delete_failed'));
+        }
+    }
 }

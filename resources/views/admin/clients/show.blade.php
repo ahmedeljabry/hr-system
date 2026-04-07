@@ -15,6 +15,38 @@
                     </svg>
                     <span class="text-xs uppercase tracking-widest">{{ __('messages.back_to_clients') ?? 'Back' }}</span>
                 </a>
+                
+                <form action="{{ route('admin.clients.destroy', $client->id) }}" method="POST">
+                    @csrf
+                    @method('DELETE')
+                    <button type="button" 
+                            onclick="const form = this.closest('form'); Swal.fire({
+                                title: '{{ __('messages.are_you_sure') }}',
+                                text: '{{ __('messages.confirm_delete_client') }}',
+                                icon: 'warning',
+                                showCancelButton: true,
+                                confirmButtonColor: '#EF4444',
+                                cancelButtonColor: '#6B7280',
+                                confirmButtonText: '{{ __('messages.yes_delete') }}',
+                                cancelButtonText: '{{ __('messages.cancel') }}',
+                                reverseButtons: true,
+                                customClass: {
+                                    popup: 'rounded-[2rem]',
+                                    confirmButton: 'rounded-xl font-bold px-6 py-3',
+                                    cancelButton: 'rounded-xl font-bold px-6 py-3'
+                                }
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    form.submit();
+                                }
+                            })"
+                            class="group relative inline-flex items-center gap-3 px-8 py-4 bg-red-500 text-white font-black rounded-2xl shadow-[0_10px_30px_rgba(239,68,68,0.2)] border border-red-600 hover:translate-y-[-2px] transition-all duration-300">
+                        <svg class="w-5 h-5 group-hover:scale-110 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                        </svg>
+                        <span class="text-xs uppercase tracking-widest">{{ __('messages.delete_client') ?? 'Delete Client' }}</span>
+                    </button>
+                </form>
             </x-slot>
         </x-dashboard-sub-header>
 

@@ -238,5 +238,11 @@
     "Request History": "سجل الطلبات",
     "Track your submissions": "تتبع طلباتك",
     "No leave types available.": "لا تتوفر أنواع إجازات حالياً.",
-    "No requests have been submitted yet.": "لم يتم تقديم أي طلبات بعد."
+    "No requests have been submitted yet.": "لم يتم تقديم أي طلبات بعد.",
+    "Client deleted successfully.": "تم حذف العميل بنجاح.",
+    "Selected clients deleted successfully.": "تم حذف العملاء المحددين بنجاح.",
+    "Are you sure you want to delete the selected records?": "هل أنت متأكد من حذف السجلات المختارة؟",
+    "Delete failed": "فشل الحذف",
+    "Are you sure you want to delete this client and all its data? This cannot be undone.": "هل أنت متأكد من حذف هذا العميل وجميع بياناته؟ لا يمكن التراجع عن هذه الخطوة.",
+    "Delete Client": "حذف العميل"
 }

@@ -1,8 +1,9 @@
-@props(['endpoint'])
+@props(['endpoint', 'deleteEndpoint' => null])
 
 <div 
     x-data="{
         endpoint: '{{ $endpoint }}',
+        deleteEndpoint: '{{ $deleteEndpoint }}',
         data: [],
         links: [],
         search: '',
@@ -34,6 +35,80 @@
                 this.loading = false;
             })
             .catch(() => this.loading = false);
+        },
+
+        bulkDelete() {
+            if (!this.deleteEndpoint || this.selected.length === 0) return;
+            
+            Swal.fire({
+                title: '{{ __('messages.are_you_sure') }}',
+                text: '{{ __('messages.confirm_bulk_delete') }}',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#EF4444',
+                cancelButtonColor: '#6B7280',
+                confirmButtonText: '{{ __('messages.yes_delete') }}',
+                cancelButtonText: '{{ __('messages.cancel') }}',
+                reverseButtons: true,
+                customClass: {
+                    popup: 'rounded-[2rem]',
+                    confirmButton: 'rounded-xl font-bold px-6 py-3',
+                    cancelButton: 'rounded-xl font-bold px-6 py-3'
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    this.loading = true;
+                    
+                    fetch(this.deleteEndpoint, {
+                        method: 'DELETE',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Accept': 'application/json',
+                            'X-CSRF-TOKEN': document.querySelector('[name=csrf-token]')?.content
+                        },
+                        body: JSON.stringify({ ids: this.selected })
+                    })
+                    .then(res => {
+                        if (res.ok) {
+                            this.selected = [];
+                            Swal.fire({
+                                title: '{{ __('messages.deleted') }}',
+                                text: '{{ __('messages.clients_deleted_successfully') }}',
+                                icon: 'success',
+                                timer: 2000,
+                                showConfirmButton: false,
+                                customClass: {
+                                    popup: 'rounded-[2rem]'
+                                }
+                            }).then(() => {
+                                window.location.reload();
+                            });
+                        } else {
+                            Swal.fire({
+                                title: '{{ __('messages.error') }}',
+                                text: '{{ __('messages.delete_failed') }}',
+                                icon: 'error',
+                                customClass: {
+                                    popup: 'rounded-[1.5rem]'
+                                }
+                            });
+                            this.loading = false;
+                        }
+                    })
+                    .catch((err) => {
+                        console.error('Delete Error:', err);
+                        Swal.fire({
+                            title: '{{ __('messages.error') }}',
+                            text: '{{ __('messages.something_went_wrong') }}',
+                            icon: 'error',
+                            customClass: {
+                                popup: 'rounded-[1.5rem]'
+                            }
+                        });
+                        this.loading = false;
+                    });
+                }
+            });
         },
 
         toggleAll(e) {

@@ -194,5 +194,11 @@
     "Request History": "Request History",
     "Track your submissions": "Track your submissions",
     "No leave types available.": "No leave types available.",
-    "No requests have been submitted yet.": "No requests have been submitted yet."
+    "No requests have been submitted yet.": "No requests have been submitted yet.",
+    "Client deleted successfully.": "Client deleted successfully.",
+    "Selected clients deleted successfully.": "Selected clients deleted successfully.",
+    "Are you sure you want to delete the selected records?": "Are you sure you want to delete the selected records?",
+    "Delete failed": "Delete failed",
+    "Are you sure you want to delete this client and all its data? This cannot be undone.": "Are you sure you want to delete this client and all its data? This cannot be undone.",
+    "Delete Client": "Delete Client"
 }

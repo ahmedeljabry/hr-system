@@ -13,6 +13,8 @@ Route::middleware(['auth', 'role:super_admin'])->prefix('admin')->name('admin.')
     Route::get('/clients/{client}', [ClientController::class, 'show'])->name('clients.show');
     Route::patch('/clients/{client}/status', [ClientController::class, 'updateStatus'])->name('clients.status');
     Route::patch('/clients/{client}/subscription', [ClientController::class, 'updateSubscription'])->name('clients.subscription');
+    Route::delete('/clients', [ClientController::class, 'bulkDestroy'])->name('clients.bulk-destroy');
+    Route::delete('/clients/{client}', [ClientController::class, 'destroy'])->name('clients.destroy');
 
     Route::get('/users/{user}/edit', [UserController::class, 'edit'])->name('users.edit');
     Route::patch('/users/{user}', [UserController::class, 'update'])->name('users.update');

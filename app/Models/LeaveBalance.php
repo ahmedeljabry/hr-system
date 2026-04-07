@@ -13,11 +13,13 @@ class LeaveBalance extends Model
         'employee_id',
         'leave_type_id',
         'year',
+        'total_days',
         'used_days',
     ];
 
     protected $casts = [
         'used_days' => 'decimal:1',
+        'total_days' => 'decimal:1',
     ];
 
     public function employee()
@@ -35,6 +37,7 @@ class LeaveBalance extends Model
      */
     public function getRemainingAttribute(): float
     {
-        return max(0, $this->leaveType->max_days_per_year - $this->used_days);
+        $limit = $this->total_days ?? $this->leaveType->max_days_per_year;
+        return max(0, $limit - $this->used_days);
     }
 }

@@ -17,12 +17,17 @@ return Application::configure(basePath: dirname(__DIR__))
                 $user = auth()->user();
                 if (!$user) return '/login';
 
-                return match ($user->role) {
-                    'super_admin' => '/admin/dashboard',
-                    'client' => '/client/dashboard',
-                    'employee' => '/employee/dashboard',
-                    default => '/login',
-                };
+                if ($user->role === 'super_admin') return '/admin/dashboard';
+                if ($user->role === 'client') {
+                    $slug = $user->client->slug ?? 'client';
+                    return "/$slug/dashboard";
+                }
+                if ($user->role === 'employee' && $user->client && $user->employee) {
+                    $cSlug = $user->client->slug;
+                    $eSlug = $user->employee->slug;
+                    return "/$cSlug/$eSlug/dashboard";
+                }
+                return '/login';
             }
         );
 
@@ -35,6 +40,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'role' => \App\Http\Middleware\RoleMiddleware::class,
             'check_subscription' => \App\Http\Middleware\CheckSubscriptionStatus::class,
+            'client_tenant' => \App\Http\Middleware\HandleClientTenant::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

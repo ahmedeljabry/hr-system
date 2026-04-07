@@ -1,4 +1,7 @@
-@props(['apiUrl' => '/employee/notifications/api', 'readUrl' => '/employee/notifications'])
+@props([
+    'apiUrl' => auth()->user()->isEmployee() ? route('employee.notifications.api') : '#',
+    'readUrl' => auth()->user()->isEmployee() ? explode('/api', route('employee.notifications.api'))[0] : '#'
+])
 
 <div x-data="{ 
         open: false,

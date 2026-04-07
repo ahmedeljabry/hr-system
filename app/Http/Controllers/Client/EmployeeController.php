@@ -17,7 +17,16 @@ class EmployeeController extends Controller
 
     private function getClientId(): int
     {
-        return auth()->user()->client->id;
+        // Priority 1: Use the tenant slug from the URL (vetted by middleware)
+        $slug = request()->route('client_slug');
+        if ($slug) {
+            $client = \App\Models\Client::where('slug', $slug)->first();
+            if ($client) return $client->id;
+        }
+
+        // Priority 2: Use the authenticated user's assigned client
+        $user = auth()->user();
+        return (int) ($user->client_id ?? $user->client?->id ?? 0);
     }
 
     public function index(Request $request)
@@ -73,28 +82,16 @@ class EmployeeController extends Controller
         return redirect()->route('client.employees.index')->with('success', __('messages.employee_updated'));
     }
 
-    /**
-     * Remove the specified employee from storage.
-     */
     public function destroy(int $id)
     {
         try {
-            \Illuminate\Support\Facades\Log::info("Destroy command received for employee ID: $id");
-            
             $success = $this->employeeService->delete($this->getClientId(), $id);
-            
             if ($success) {
-                \Illuminate\Support\Facades\Log::info("Employee $id deleted successfully.");
-                return redirect()->route('client.employees.index')->with('success', __('messages.employee_deleted') ?? 'Employee deleted successfully.');
+                return redirect()->route('client.employees.index')->with('success', __('messages.employee_deleted'));
             }
-            
-            \Illuminate\Support\Facades\Log::warning("Employee $id could not be deleted (not found or service failed).");
-            return redirect()->route('client.employees.index')->with('error', 'Employee could not be found or has already been deleted.');
-            
+            return redirect()->route('client.employees.index')->with('error', 'Employee not found.');
         } catch (\Exception $e) {
-            \Illuminate\Support\Facades\Log::error("CRITICAL ERROR during employee $id deletion: " . $e->getMessage());
-            \Illuminate\Support\Facades\Log::error($e->getTraceAsString());
-            return redirect()->route('client.employees.index')->with('error', 'An error occurred while deleting: ' . $e->getMessage());
+            return redirect()->route('client.employees.index')->with('error', 'Error: ' . $e->getMessage());
         }
     }
 
@@ -109,23 +106,42 @@ class EmployeeController extends Controller
             'file' => ['required', 'file', 'mimes:xlsx,xls', 'max:10240'],
         ]);
 
-        $countBefore = Employee::where('client_id', $this->getClientId())->count();
+        $clientId = $this->getClientId();
 
-        $import = new EmployeesImport($this->getClientId());
-        $import->import($request->file('file'));
-
-        $failures = $import->failures();
-        $countAfter = Employee::where('client_id', $this->getClientId())->count();
-        $successCount = $countAfter - $countBefore;
-
-        if ($failures->isNotEmpty()) {
-            return redirect()->route('client.employees.import.form')
-                ->with('warning', __('messages.import_errors'))
-                ->with('import_failures', $failures)
-                ->with('import_success_count', $successCount);
+        if (!$clientId || $clientId === 0) {
+            \Illuminate\Support\Facades\Log::error("Import: Could not resolve client ID. User: " . auth()->id());
+            return back()->with('error', __('messages.client_not_found') ?: 'Could not determine your company. Please log in again.');
         }
 
-        return redirect()->route('client.employees.index')
-            ->with('success', __('messages.import_success', ['count' => $successCount]));
+        try {
+            $import = new EmployeesImport($clientId);
+            \Maatwebsite\Excel\Facades\Excel::import($import, $request->file('file'));
+
+            $successCount = $import->getSuccessCount();
+            $errors = $import->getErrors();
+
+            if ($successCount === 0 && empty($errors)) {
+                return back()->with('error', __('messages.import_no_data') ?: 'No valid employee data found in the file. Please check the column order matches the instructions.');
+            }
+
+            if ($successCount === 0 && !empty($errors)) {
+                return back()->with('error', 'Import failed for all rows.')
+                             ->with('import_errors', $errors);
+            }
+
+            // Some or all rows succeeded
+            $redirect = redirect()->route('client.employees.index')
+                ->with('success', __('messages.import_success', ['count' => $successCount]));
+
+            if (!empty($errors)) {
+                $redirect->with('import_errors', $errors);
+            }
+
+            return $redirect;
+
+        } catch (\Exception $e) {
+            \Illuminate\Support\Facades\Log::error("Import Exception: " . $e->getMessage() . "\n" . $e->getTraceAsString());
+            return back()->with('error', __('messages.import_crash') ?: 'Import failed: ' . $e->getMessage());
+        }
     }
 }

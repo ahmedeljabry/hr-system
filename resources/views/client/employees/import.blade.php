@@ -12,6 +12,46 @@
         />
 
 
+        @if (session('success'))
+            <div class="mb-8 animate-in fade-in slide-in-from-top-4 duration-500">
+                <div class="bg-emerald-50 border border-emerald-100 p-5 rounded-[1.5rem] flex items-center gap-4 shadow-sm">
+                    <div class="w-10 h-10 rounded-full bg-emerald-500/10 flex items-center justify-center shrink-0">
+                        <svg class="w-6 h-6 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path></svg>
+                    </div>
+                    <p class="text-emerald-800 font-bold tracking-tight">{{ session('success') }}</p>
+                </div>
+            </div>
+        @endif
+
+        @if (session('error'))
+            <div class="mb-8 animate-in fade-in slide-in-from-top-4 duration-500">
+                <div class="bg-red-50 border border-red-100 p-5 rounded-[1.5rem] flex items-center gap-4 shadow-sm">
+                    <div class="w-10 h-10 rounded-full bg-red-500/10 flex items-center justify-center shrink-0">
+                        <svg class="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                    </div>
+                    <p class="text-red-800 font-bold tracking-tight">{{ session('error') }}</p>
+                </div>
+            </div>
+        @endif
+
+        @if (session('import_errors'))
+            <div class="mb-8 animate-in fade-in slide-in-from-top-4 duration-500">
+                <div class="bg-amber-50 border border-amber-100 p-6 rounded-[1.5rem] shadow-sm">
+                    <h3 class="text-sm font-black text-amber-800 mb-4 tracking-tight flex items-center gap-2">
+                        <svg class="h-5 w-5 text-amber-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                        {{ __('messages.import_errors') ?? 'Import Errors' }}
+                    </h3>
+                    <div class="max-h-60 overflow-y-auto space-y-2 bg-white p-4 rounded-xl border border-amber-100/50">
+                        @foreach(session('import_errors') as $err)
+                            <div class="text-xs flex items-start gap-2 bg-amber-50/50 p-2 rounded-lg">
+                                <span class="text-amber-700 font-bold">{{ $err }}</span>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+            </div>
+        @endif
+
         @if ($errors->any())
             <div class="mb-8 animate-in fade-in slide-in-from-top-4 duration-500">
                 <div class="bg-red-50 border border-red-100 p-5 rounded-[1.5rem] flex items-center gap-4 shadow-sm">

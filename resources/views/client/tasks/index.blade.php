@@ -107,7 +107,13 @@
                                 <td class="px-8 py-6 whitespace-nowrap">
                                     <div class="flex items-center justify-end gap-3">
                                         @if($task->attachments && count($task->attachments) > 0)
-                                            <a href="{{ Storage::url($task->attachments[0]) }}" target="_blank"
+                                            @php
+                                                $attachment = $task->attachments[0];
+                                                $path = is_array($attachment) ? ($attachment['path'] ?? $attachment) : $attachment;
+                                                $fileName = is_array($attachment) ? ($attachment['name'] ?? null) : null;
+                                            @endphp
+                                            <a href="{{ Storage::url($path) }}" 
+                                               @if($fileName) download="{{ $fileName }}" @else target="_blank" @endif
                                                class="w-10 h-10 rounded-2xl bg-primary/10 text-primary-dark hover:bg-primary transition-all duration-300 flex items-center justify-center hover:scale-110 active:scale-95 group/file shadow-sm"
                                                title="{{ count($task->attachments) > 1 ? __('messages.view_all_attachments') ?? __('View all attachments') : __('messages.view_attachment') }}">
                                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

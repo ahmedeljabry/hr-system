@@ -4,13 +4,74 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
+
 class Employee extends Model
 {
     use HasFactory;
 
+    protected static function booted()
+    {
+        static::saving(function ($employee) {
+            if ($employee->name_en && !$employee->slug) {
+                $baseSlug = Str::slug($employee->name_en);
+                $slug = $baseSlug;
+                $counter = 2;
+
+                // Keep incrementing until we find a unique slug
+                while (static::where('slug', $slug)->where('id', '!=', $employee->id ?? 0)->exists()) {
+                    $slug = $baseSlug . '-' . $counter;
+                    $counter++;
+                }
+
+                $employee->slug = $slug;
+            }
+        });
+
+        static::saved(function ($employee) {
+            if ($employee->annual_leave_days !== null) {
+                $employee->syncAnnualLeaveBalance();
+            }
+        });
+    }
+
+    /**
+     * Syncs the employee's annual leave balance for the current year.
+     */
+    public function syncAnnualLeaveBalance(): void
+    {
+        $annualLeaveType = \App\Models\LeaveType::where('client_id', $this->client_id)
+            ->where(function($q) {
+                $q->where('name', 'Annual Leave')
+                  ->orWhere('name', 'إجازة سنوية')
+                  ->orWhere('name', 'like', '%سنوية%');
+            })->first();
+
+        if (!$annualLeaveType) {
+            $annualLeaveType = \App\Models\LeaveType::create([
+                'client_id' => $this->client_id,
+                'name' => app()->getLocale() == 'ar' ? 'إجازة سنوية' : 'Annual Leave',
+                'max_days_per_year' => 21,
+                'gender' => 'all'
+            ]);
+        }
+
+        \App\Models\LeaveBalance::updateOrCreate(
+            [
+                'employee_id' => $this->id,
+                'leave_type_id' => $annualLeaveType->id,
+                'year' => date('Y'),
+            ],
+            [
+                'total_days' => $this->annual_leave_days,
+            ]
+        );
+    }
+
     protected $fillable = [
         'client_id',
         'user_id',
+        'slug',
         'name_ar',
         'name_en',
         'position',

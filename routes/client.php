@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Client\EmployeeController;
 use App\Http\Controllers\Client\EmployeeFileController;
 
-Route::middleware(['auth', 'role:client', 'check_subscription'])->prefix('client')->name('client.')->group(function () {
+Route::middleware(['auth', 'role:client', 'check_subscription', 'client_tenant'])->prefix('{client_slug}')->name('client.')->group(function () {
     Route::get('/dashboard', [\App\Http\Controllers\Client\DashboardController::class, 'index'])->name('dashboard');
 
     // Employee CRUD

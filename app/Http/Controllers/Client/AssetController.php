@@ -34,7 +34,7 @@ class AssetController extends Controller
 
     public function create()
     {
-        $employees = $this->getClient()->employees()->orderBy('name')->get();
+        $employees = $this->getClient()->employees()->orderBy('name_ar')->get();
         return view('client.assets.create', compact('employees'));
     }
 
@@ -68,7 +68,7 @@ class AssetController extends Controller
         $client = $this->getClient();
         abort_unless($asset->client_id === $client->id, 403, __('messages.unauthorized'));
 
-        $employees = $client->employees()->orderBy('name')->get();
+        $employees = $client->employees()->orderBy('name_ar')->get();
         return view('client.assets.edit', compact('asset', 'employees'));
     }
 

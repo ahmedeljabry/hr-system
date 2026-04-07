@@ -37,6 +37,24 @@ Route::get('/subscription/renewal', function () {
     return response('Your subscription is not active. Please contact admin.', 200);
 })->name('subscription.renewal');
 
+// Redirect Legacy Employee Dashboard to Slug-based Dashboard
+Route::get('/employee/dashboard', function () {
+    $user = auth()->user();
+    if ($user && $user->role === 'employee' && $user->client && $user->employee) {
+        return redirect()->to("/" . $user->client->slug . "/" . $user->employee->slug . "/dashboard");
+    }
+    return redirect('/login');
+})->middleware('auth');
+
+// Redirect Legacy Client Dashboard to Slug-based Dashboard
+Route::get('/client/dashboard', function () {
+    $user = auth()->user();
+    if ($user && $user->role === 'client' && $user->client) {
+        return redirect()->to("/" . $user->client->slug . "/dashboard");
+    }
+    return redirect('/login');
+})->middleware('auth');
+
 // Admin Routes (Separated)
 require __DIR__.'/admin.php';
 

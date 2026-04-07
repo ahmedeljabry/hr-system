@@ -3,69 +3,111 @@
 namespace App\Imports;
 
 use App\Models\Employee;
-use Maatwebsite\Excel\Concerns\ToModel;
-use Maatwebsite\Excel\Concerns\WithHeadingRow;
-use Maatwebsite\Excel\Concerns\WithValidation;
-use Maatwebsite\Excel\Concerns\SkipsOnFailure;
-use Maatwebsite\Excel\Concerns\SkipsOnError;
-use Maatwebsite\Excel\Concerns\SkipsFailures;
-use Maatwebsite\Excel\Concerns\SkipsErrors;
-use Maatwebsite\Excel\Concerns\Importable;
+use Maatwebsite\Excel\Concerns\ToCollection;
+use Maatwebsite\Excel\Concerns\SkipsEmptyRows;
+use Carbon\Carbon;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Log;
 
-class EmployeesImport implements ToModel, WithValidation, SkipsOnFailure, SkipsOnError, WithHeadingRow
+class EmployeesImport implements ToCollection, SkipsEmptyRows
 {
-    use SkipsFailures, SkipsErrors, Importable;
+    private int $successCount = 0;
+    private array $errors = [];
 
     public function __construct(private int $clientId)
     {
     }
 
-    public function model(array $row): ?Employee
+    public function getSuccessCount(): int
     {
-        // $row is now an associative array with keys like 'employee_name_arabic' 
-        // derived from the first row's cells.
+        return $this->successCount;
+    }
 
-        $email = $row['email_address'] ?? null;
-        if (!$email) return null;
+    public function getErrors(): array
+    {
+        return $this->errors;
+    }
 
-        $user = \App\Models\User::firstOrCreate(
-            ['email' => $email],
-            [
-                'name' => $row['employee_name_english'] ?? ($row['employee_name_arabic'] ?? 'Employee'),
-                'password' => $row['password'] ?? 'password123',
-                'role' => 'employee',
-                'client_id' => $this->clientId,
-            ]
-        );
+    public function collection(Collection $rows)
+    {
+        // Skip the first row if it looks like a header
+        $firstRow = $rows->first();
+        if ($firstRow && isset($firstRow[2]) && !filter_var(trim($firstRow[2]), FILTER_VALIDATE_EMAIL)) {
+            $rows = $rows->slice(1);
+        }
 
-        return new Employee([
-            'client_id' => $this->clientId,
-            'user_id' => $user->id,
-            'name_ar' => $row['employee_name_arabic'] ?? null,
-            'name_en' => $row['employee_name_english'] ?? null,
-            'email' => $email,
-            'gender' => strtolower($row['gender'] ?? 'male'),
-            'annual_leave_days' => $this->sanitizeNumber($row['annual_leave_days'] ?? 21),
-            'position' => $row['position'] ?? null,
-            'national_id_number' => $row['national_id_residency_number'] ?? null,
-            'phone' => $row['phone_number'] ?? null,
-            'emergency_phone' => $row['emergency_phone'] ?? null,
-            'bank_iban' => $row['bank_iban'] ?? null,
-            'basic_salary' => $this->sanitizeNumber($row['basic_salary'] ?? 0),
-            'housing_allowance' => $this->sanitizeNumber($row['housing_allowance'] ?? 0),
-            'transportation_allowance' => $this->sanitizeNumber($row['transportation_allowance'] ?? 0),
-            'other_allowances' => $this->sanitizeNumber($row['other_allowances'] ?? 0),
-            'date_of_birth' => $this->parseDate($row['date_of_birth'] ?? null),
-            'hire_date' => $this->parseDate($row['hire_date'] ?? null),
-        ]);
+        foreach ($rows as $index => $row) {
+            $rowNumber = $index + 1; // 1-based for user-friendly messages
+            $rowArray = $row->toArray();
+
+            try {
+                $email = isset($rowArray[2]) ? trim($rowArray[2]) : null;
+
+                // Skip rows without a valid email
+                if (!$email || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                    continue;
+                }
+
+                $nameAr = trim($rowArray[0] ?? '');
+                $nameEn = trim($rowArray[1] ?? ($nameAr ?: 'Employee'));
+
+                if (empty($nameAr) && empty($nameEn)) {
+                    $this->errors[] = "Row {$rowNumber}: Name is required (Arabic or English).";
+                    continue;
+                }
+
+                // Normalize gender
+                $genderRaw = mb_strtolower(trim($rowArray[15] ?? 'male'));
+                $gender = in_array($genderRaw, ['انثى', 'أنثى', 'female', 'f']) ? 'female' : 'male';
+
+                // 1. Sync User Account
+                $user = \App\Models\User::updateOrCreate(
+                    ['email' => $email],
+                    [
+                        'name' => $nameEn ?: $nameAr,
+                        'password' => $rowArray[3] ?? 'password123',
+                        'role' => 'employee',
+                        'client_id' => $this->clientId,
+                    ]
+                );
+
+                // 2. Sync Employee Data - handle NOT NULL columns with safe defaults
+                Employee::updateOrCreate(
+                    ['email' => $email, 'client_id' => $this->clientId],
+                    [
+                        'user_id'                  => $user->id,
+                        'name_ar'                  => $nameAr ?: $nameEn,
+                        'name_en'                  => $nameEn ?: $nameAr,
+                        'gender'                   => $gender,
+                        'annual_leave_days'        => $this->sanitizeNumber($rowArray[16] ?? 21),
+                        'position'                 => $rowArray[4] ?? 'N/A',
+                        'national_id_number'       => $rowArray[5] ?? 'N/A',
+                        'phone'                    => $rowArray[6] ?? null,
+                        'emergency_phone'          => $rowArray[7] ?? null,
+                        'bank_iban'                => $rowArray[8] ?? null,
+                        'basic_salary'             => $this->sanitizeNumber($rowArray[9] ?? 0),
+                        'housing_allowance'        => $this->sanitizeNumber($rowArray[10] ?? 0),
+                        'transportation_allowance' => $this->sanitizeNumber($rowArray[11] ?? 0),
+                        'other_allowances'         => $this->sanitizeNumber($rowArray[12] ?? 0),
+                        'date_of_birth'            => $this->parseDate($rowArray[13] ?? null),
+                        'hire_date'                => $this->parseDate($rowArray[14] ?? null) ?? now(),
+                    ]
+                );
+
+                $this->successCount++;
+                Log::info("Import OK: Row {$rowNumber} - {$email} imported for client {$this->clientId}");
+
+            } catch (\Exception $e) {
+                $this->errors[] = "Row {$rowNumber}: " . $e->getMessage();
+                Log::error("Import FAIL: Row {$rowNumber} - " . $e->getMessage());
+            }
+        }
     }
 
     private function sanitizeNumber($value)
     {
         if ($value === null || $value === '') return 0;
-        // Strip out anything that's not a digit or a decimal point
-        // Using strval and handling scientific notation safely
-        if (is_numeric($value)) return (float)$value;
+        if (is_numeric($value)) return (float) $value;
         $cleanValue = preg_replace('/[^0-9.]/', '', strval($value));
         return is_numeric($cleanValue) ? floatval($cleanValue) : 0;
     }
@@ -74,47 +116,15 @@ class EmployeesImport implements ToModel, WithValidation, SkipsOnFailure, SkipsO
     {
         if (!$value) return null;
         if (is_numeric($value)) {
-            return \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($value);
+            try {
+                return \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($value);
+            } catch (\Exception $e) {
+            }
         }
         try {
-            return \Carbon\Carbon::parse($value);
+            return Carbon::parse($value);
         } catch (\Exception $e) {
             return null;
         }
-    }
-
-    public function rules(): array
-    {
-        return [
-            'employee_name_arabic' => ['required', 'string', 'max:255'],
-            'employee_name_english' => ['required', 'string', 'max:255'],
-            'email_address' => ['required', 'email'],
-            'gender' => ['required', 'string', 'in:male,female,Male,Female,MALE,FEMALE'],
-            'annual_leave_days' => ['required'],
-            'password' => ['required', 'min:8'],
-            'position' => ['required', 'string', 'max:255'],
-            'national_id_residency_number' => ['required', 'max:100'],
-            'basic_salary' => ['required'],
-        ];
-    }
-
-    public function customValidationAttributes(): array
-    {
-        return [
-            'employee_name_arabic' => __('messages.name_ar'),
-            'employee_name_english' => __('messages.name_en'),
-            'email_address' => __('messages.email'),
-            'gender' => __('messages.gender'),
-            'annual_leave_days' => __('messages.annual_leave_days'),
-            'password' => __('messages.password'),
-            'position' => __('messages.position'),
-            'national_id_residency_number' => __('messages.national_id_number'),
-            'basic_salary' => __('messages.basic_salary'),
-        ];
-    }
-
-    public function customValidationMessages(): array
-    {
-        return [];
     }
 }

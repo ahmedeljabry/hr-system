@@ -8,12 +8,33 @@ use App\Models\User;
 use App\Models\Employee;
 use App\Models\Announcement;
 
+use Illuminate\Support\Str;
+
 class Client extends Model
 {
     use HasFactory;
 
+    protected static function booted()
+    {
+        static::creating(function ($client) {
+            if (!$client->slug) {
+                $client->slug = Str::slug($client->name);
+            }
+        });
+
+        static::created(function ($client) {
+            // Create default Annual Leave Type for every new company
+            $client->leaveTypes()->create([
+                'name' => 'إجازة سنوية',
+                'max_days_per_year' => 21,
+                'gender' => 'all'
+            ]);
+        });
+    }
+
     protected $fillable = [
         'name',
+        'slug',
         'subscription_start',
         'subscription_end',
         'status',
@@ -66,6 +87,11 @@ class Client extends Model
     public function announcements()
     {
         return $this->hasMany(Announcement::class);
+    }
+
+    public function leaveTypes()
+    {
+        return $this->hasMany(LeaveType::class);
     }
 }
 

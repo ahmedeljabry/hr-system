@@ -34,7 +34,7 @@ class TaskController extends Controller
 
     public function create()
     {
-        $employees = $this->getClient()->employees()->orderBy('name')->get();
+        $employees = $this->getClient()->employees()->orderBy('name_ar')->get();
         return view('client.tasks.create', compact('employees'));
     }
 
@@ -55,7 +55,10 @@ class TaskController extends Controller
         if ($request->hasFile('attachments')) {
             $paths = [];
             foreach ($request->file('attachments') as $file) {
-                $paths[] = $file->store('task_attachments', 'public');
+                $paths[] = [
+                    'path' => $file->store('task_attachments', 'public'),
+                    'name' => $file->getClientOriginalName()
+                ];
             }
             $data['attachments'] = $paths;
         }
@@ -76,7 +79,7 @@ class TaskController extends Controller
         $client = $this->getClient();
         abort_unless($task->client_id === $client->id, 403, __('messages.unauthorized'));
 
-        $employees = $client->employees()->orderBy('name')->get();
+        $employees = $client->employees()->orderBy('name_ar')->get();
         return view('client.tasks.edit', compact('task', 'employees'));
     }
 
@@ -97,7 +100,10 @@ class TaskController extends Controller
             $existingAttachments = $task->attachments ?? [];
             $newPaths = [];
             foreach ($request->file('attachments') as $file) {
-                $newPaths[] = $file->store('task_attachments', 'public');
+                $newPaths[] = [
+                    'path' => $file->store('task_attachments', 'public'),
+                    'name' => $file->getClientOriginalName()
+                ];
             }
             $data['attachments'] = array_merge($existingAttachments, $newPaths);
         }

@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 
-Route::middleware(['auth', 'role:employee', 'check_subscription'])->prefix('employee')->name('employee.')->group(function () {
+Route::middleware(['auth', 'role:employee', 'check_subscription', 'client_tenant'])->prefix('{client_slug}/{employee_slug}')->name('employee.')->group(function () {
     Route::get('/dashboard', [\App\Http\Controllers\Employee\DashboardController::class, 'index'])->name('dashboard');
 
     Route::get('/payslips', [\App\Http\Controllers\Employee\PayslipController::class, 'index'])->name('payslips.index');

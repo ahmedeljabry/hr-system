@@ -1,10 +1,10 @@
 # nixpacks.toml for Railway Laravel Hosting
 
 [phases.setup]
-nixPkgs = ["php83Modules.bcmath", "php83Modules.gd", "php83Modules.intl", "php83Modules.mbstring", "php83Modules.mysql", "php83Modules.opcache", "php83Modules.pdo_mysql", "php83Modules.xml", "php83Modules.zip"]
+nixPkgs = ["php84Modules.bcmath", "php84Modules.gd", "php84Modules.intl", "php84Modules.mbstring", "php84Modules.mysql", "php84Modules.opcache", "php84Modules.pdo_mysql", "php84Modules.xml", "php84Modules.zip"]
 
 [phases.install]
-cmds = ["composer install --optimize-autoloader --no-dev", "npm install"]
+cmds = ["composer install --optimize-autoloader --no-dev --ignore-platform-reqs", "npm install"]
 
 [phases.build]
 cmds = ["npm run build"]

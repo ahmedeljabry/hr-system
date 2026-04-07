@@ -18,11 +18,15 @@ class ClientManagementTest extends TestCase
         $clientA = Client::create(['name' => 'Company A', 'status' => 'active']);
         $clientB = Client::create(['name' => 'Company B', 'status' => 'suspended']);
 
+        // Check HTML page loads correctly
         $response = $this->actingAs($admin)->get('/admin/clients');
-
         $response->assertStatus(200);
-        $response->assertSee('Company A');
-        $response->assertSee('Company B');
+
+        // Check JSON data contains companies (since the table is dynamic)
+        $response = $this->actingAs($admin)->getJson('/admin/clients');
+        $response->assertStatus(200);
+        $response->assertJsonFragment(['name' => 'Company A']);
+        $response->assertJsonFragment(['name' => 'Company B']);
     }
 
     /** @test */

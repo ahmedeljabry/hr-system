@@ -29,9 +29,9 @@ class ClientDetailTest extends TestCase
         $clientB = Client::factory()->create(['name' => 'Client B']);
 
         // Create employees for each client
-        $employeeA1 = Employee::factory()->create(['client_id' => $clientA->id, 'name' => 'Employee A1']);
-        $employeeA2 = Employee::factory()->create(['client_id' => $clientA->id, 'name' => 'Employee A2']);
-        $employeeB1 = Employee::factory()->create(['client_id' => $clientB->id, 'name' => 'Employee B1']);
+        $employeeA1 = Employee::factory()->create(['client_id' => $clientA->id, 'name_ar' => 'Employee A1', 'name_en' => 'Employee A1']);
+        $employeeA2 = Employee::factory()->create(['client_id' => $clientA->id, 'name_ar' => 'Employee A2', 'name_en' => 'Employee A2']);
+        $employeeB1 = Employee::factory()->create(['client_id' => $clientB->id, 'name_ar' => 'Employee B1', 'name_en' => 'Employee B1']);
 
         // Act as admin and visit Client A detail page
         $response = $this->actingAs($this->admin)->get('/admin/clients/' . $clientA->id);

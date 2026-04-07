@@ -41,17 +41,23 @@ class EmployeeTest extends TestCase
         Storage::fake('private');
 
         $response = $this->actingAs($this->clientUser)->post('/client/employees', [
-            'name' => 'Ahmed Ali',
+            'name_ar' => 'أحمد علي',
+            'name_en' => 'Ahmed Ali',
             'position' => 'Developer',
             'national_id_number' => 'NID12345',
             'basic_salary' => 5000.00,
             'hire_date' => '2026-01-15',
+            'gender' => 'male',
+            'email' => 'ahmed@example.com',
+            'password' => 'password123',
+            'annual_leave_days' => 30,
             'national_id_image' => UploadedFile::fake()->image('id.jpg'),
         ]);
 
         $response->assertRedirect('/client/employees');
         $this->assertDatabaseHas('employees', [
-            'name' => 'Ahmed Ali',
+            'name_ar' => 'أحمد علي',
+            'name_en' => 'Ahmed Ali',
             'client_id' => $this->client->id,
             'national_id_number' => 'NID12345',
         ]);
@@ -62,15 +68,23 @@ class EmployeeTest extends TestCase
         $employee = Employee::factory()->create(['client_id' => $this->client->id]);
 
         $response = $this->actingAs($this->clientUser)->put("/client/employees/{$employee->id}", [
-            'name' => 'Updated Name',
+            'name_ar' => 'Updated Name Ar',
+            'name_en' => 'Updated Name En',
             'position' => $employee->position,
             'national_id_number' => $employee->national_id_number,
             'basic_salary' => 6000,
             'hire_date' => $employee->hire_date->format('Y-m-d'),
+            'gender' => $employee->gender,
+            'email' => $employee->email,
+            'annual_leave_days' => $employee->annual_leave_days,
         ]);
 
         $response->assertRedirect('/client/employees');
-        $this->assertDatabaseHas('employees', ['id' => $employee->id, 'name' => 'Updated Name']);
+        $this->assertDatabaseHas('employees', [
+            'id' => $employee->id,
+            'name_ar' => 'Updated Name Ar',
+            'name_en' => 'Updated Name En'
+        ]);
     }
 
     public function test_client_can_delete_employee(): void
@@ -80,7 +94,7 @@ class EmployeeTest extends TestCase
         $response = $this->actingAs($this->clientUser)->delete("/client/employees/{$employee->id}");
 
         $response->assertRedirect('/client/employees');
-        $this->assertSoftDeleted('employees', ['id' => $employee->id]);
+        $this->assertDatabaseMissing('employees', ['id' => $employee->id]);
     }
 
     public function test_client_cannot_access_other_tenants_employees(): void
@@ -100,11 +114,16 @@ class EmployeeTest extends TestCase
         ]);
 
         $response = $this->actingAs($this->clientUser)->post('/client/employees', [
-            'name' => 'Duplicate',
+            'name_ar' => 'Duplicate',
+            'name_en' => 'Duplicate',
             'position' => 'Tester',
             'national_id_number' => 'DUP123',
             'basic_salary' => 3000,
             'hire_date' => '2026-01-01',
+            'gender' => 'male',
+            'email' => 'dup@example.com',
+            'password' => 'password123',
+            'annual_leave_days' => 30,
         ]);
 
         $response->assertSessionHasErrors('national_id_number');
@@ -113,7 +132,7 @@ class EmployeeTest extends TestCase
     public function test_employee_requires_mandatory_fields(): void
     {
         $response = $this->actingAs($this->clientUser)->post('/client/employees', []);
-        $response->assertSessionHasErrors(['name', 'position', 'national_id_number', 'basic_salary', 'hire_date']);
+        $response->assertSessionHasErrors(['name_ar', 'name_en', 'position', 'national_id_number', 'basic_salary', 'hire_date', 'gender', 'email', 'password', 'annual_leave_days']);
     }
 
     public function test_client_can_view_employee_details(): void
@@ -123,7 +142,7 @@ class EmployeeTest extends TestCase
         $response = $this->actingAs($this->clientUser)->get("/client/employees/{$employee->id}");
         $response->assertStatus(200);
         $response->assertViewIs('client.employees.show');
-        $response->assertSee($employee->name);
+        $response->assertSee($employee->name); // Uses the name accessor
     }
 
     public function test_client_can_download_employee_file(): void
@@ -136,8 +155,6 @@ class EmployeeTest extends TestCase
             'contract_image' => $file->store('contracts', 'private')
         ]);
 
-
-        
         $response = $this->actingAs($this->clientUser)->get("/client/files/employees/{$employee->id}/contract");
         $response->assertStatus(200);
     }

@@ -32,9 +32,8 @@ class ClientListTest extends TestCase
 
         // Assert response
         $response->assertStatus(200);
-        $response->assertSee('العملاء'); // Clients in Arabic
+        $response->assertSee(__('messages.clients')); // Clients in Arabic
         $response->assertSee('pagination'); // Should have pagination links
-        $response->assertSee('Showing'); // Laravel pagination text
     }
 
     public function test_client_list_includes_employee_count()

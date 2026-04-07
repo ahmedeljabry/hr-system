@@ -32,7 +32,7 @@ class EmployeeImportTest extends TestCase
 
     public function test_client_can_view_import_form(): void
     {
-        $response = $this->actingAs($this->clientUser)->get('/client/employees/import/form');
+        $response = $this->actingAs($this->clientUser)->get('/client/employees/import');
         $response->assertStatus(200);
         $response->assertViewIs('client.employees.import');
     }
@@ -61,9 +61,14 @@ class EmployeeImportTest extends TestCase
             {
                 return [
                     [
-                        'name' => 'John Doe',
+                        'employee_name_arabic' => 'جون دو',
+                        'employee_name_english' => 'John Doe',
+                        'email_address' => 'john@example.com',
+                        'gender' => 'male',
+                        'annual_leave_days' => 30,
+                        'password' => 'password123',
                         'position' => 'Developer',
-                        'national_id_number' => 'ID1234567890',
+                        'national_id_residency_number' => 'ID1234567890',
                         'basic_salary' => 5000,
                         'hire_date' => '2023-01-01',
                     ],
@@ -71,7 +76,18 @@ class EmployeeImportTest extends TestCase
             }
             public function headings(): array
             {
-                return ['name', 'position', 'national_id_number', 'basic_salary', 'hire_date'];
+                return [
+                    'employee_name_arabic',
+                    'employee_name_english',
+                    'email_address',
+                    'gender',
+                    'annual_leave_days',
+                    'password',
+                    'position',
+                    'national_id_residency_number',
+                    'basic_salary',
+                    'hire_date'
+                ];
             }
         };
 
@@ -93,7 +109,8 @@ class EmployeeImportTest extends TestCase
         
         $this->assertDatabaseHas('employees', [
             'client_id' => $this->client->id,
-            'name' => 'John Doe',
+            'name_ar' => 'جون دو',
+            'name_en' => 'John Doe',
             'national_id_number' => 'ID1234567890',
             'basic_salary' => 5000,
         ]);

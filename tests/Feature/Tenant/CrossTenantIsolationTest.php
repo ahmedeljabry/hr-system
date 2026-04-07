@@ -163,10 +163,14 @@ class CrossTenantIsolationTest extends TestCase
         // Create super admin
         $admin = User::factory()->create(['role' => 'super_admin']);
 
-        // Super admin should be able to access admin routes that show data from all tenants
+        // Check HTML page loads
         $response = $this->actingAs($admin)->get('/admin/clients');
         $response->assertStatus(200);
-        $response->assertSee('Client A');
-        $response->assertSee('Client B');
+
+        // Check JSON data contains clients (since the table is dynamic)
+        $response = $this->actingAs($admin)->getJson('/admin/clients');
+        $response->assertStatus(200);
+        $response->assertJsonFragment(['name' => 'Client A']);
+        $response->assertJsonFragment(['name' => 'Client B']);
     }
 }

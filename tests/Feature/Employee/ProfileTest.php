@@ -57,6 +57,6 @@ class ProfileTest extends TestCase
         $response = $this->actingAs($this->user)->get('/employee/profile');
 
         $response->assertStatus(200);
-        $response->assertSee(__('Document not available'));
+        $response->assertSee(__('messages.document_not_available'));
     }
 }

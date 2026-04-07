@@ -20,17 +20,20 @@ class EmployeeFactory extends Factory
     {
         return [
             'client_id' => Client::factory(),
-            'name' => fake()->name(),
+            'name_ar' => fake('ar_SA')->name(),
+            'name_en' => fake('en_US')->name(),
+            'gender' => fake()->randomElement(['male', 'female']),
             'email' => fake()->unique()->safeEmail(),
             'position' => fake()->jobTitle(),
-            'national_id_number' => fake()->unique()->numerify('NID#########'),
-            'phone' => fake()->phoneNumber(),
-            'emergency_phone' => fake()->phoneNumber(),
+            'national_id_number' => fake()->unique()->numerify('##########'),
+            'phone' => fake()->unique()->numerify('05########'),
+            'emergency_phone' => fake()->numerify('05########'),
             'bank_iban' => fake()->iban('SA'),
             'basic_salary' => fake()->randomFloat(2, 3000, 15000),
-            'housing_allowance' => fake()->randomFloat(2, 500, 2500),
-            'transportation_allowance' => fake()->randomFloat(2, 300, 1000),
-            'other_allowances' => fake()->randomFloat(2, 0, 1000),
+            'housing_allowance' => 0.00,
+            'transportation_allowance' => 0.00,
+            'other_allowances' => 0.00,
+            'annual_leave_days' => 21,
             'hire_date' => fake()->dateTimeBetween('-5 years', 'now')->format('Y-m-d'),
         ];
     }

@@ -39,7 +39,7 @@ class DashboardStatsTest extends TestCase
 
         // Assert response
         $response->assertStatus(200);
-        $response->assertSee('Super Admin Dashboard');
+        $response->assertSee(__('messages.super_admin_dashboard'));
         $response->assertSee('3'); // Total clients
         $response->assertSee('3'); // Total employees
         $response->assertSee('1'); // Active subscriptions
@@ -54,6 +54,7 @@ class DashboardStatsTest extends TestCase
 
         // Assert zero values
         $response->assertStatus(200);
-        $response->assertSee('0'); // All counts should be zero
+        // Better to check for the presence of the 0 in the context of the stats
+        $response->assertSee('0'); 
     }
 }

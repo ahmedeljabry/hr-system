@@ -30,6 +30,8 @@ return Application::configure(basePath: dirname(__DIR__))
             \App\Http\Middleware\SetLocale::class,
         ]);
 
+        $middleware->trustProxies(at: '*');
+ 
         $middleware->alias([
             'role' => \App\Http\Middleware\RoleMiddleware::class,
             'check_subscription' => \App\Http\Middleware\CheckSubscriptionStatus::class,

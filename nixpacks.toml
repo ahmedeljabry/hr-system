@@ -1,0 +1,13 @@
+# nixpacks.toml for Railway Laravel Hosting
+
+[phases.setup]
+nixPkgs = ["php83Modules.bcmath", "php83Modules.gd", "php83Modules.intl", "php83Modules.mbstring", "php83Modules.mysql", "php83Modules.opcache", "php83Modules.pdo_mysql", "php83Modules.xml", "php83Modules.zip"]
+
+[phases.install]
+cmds = ["composer install --optimize-autoloader --no-dev", "npm install"]
+
+[phases.build]
+cmds = ["npm run build"]
+
+[start]
+cmd = "php artisan serve --host=0.0.0.0 --port=$PORT"

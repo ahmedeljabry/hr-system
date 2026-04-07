@@ -82,4 +82,28 @@ php speckit-init.php
 composer speckit:init
 ```
 
-If you'd like me to wire CI hooks or store provider keys securely (GitHub Secrets / environment variables), tell me which CI provider you use.
+---
+ 
+ ## Railway Hosting
+ 
+ This project is prepared for hosting on [Railway](https://railway.app/).
+ 
+ ### Preparation Steps
+ 1.  **Procfile & Nixpacks**: The project includes `Procfile` and `nixpacks.toml` for automatic detection and configuration on Railway.
+ 2.  **Database**: Railway provides MySQL/Postgres. Ensure you link a database service to your project.
+ 3.  **Environment Variables**: You MUST set the following in Railway's **Variables** tab:
+     *   `APP_KEY`: Generate one locally using `php artisan key:generate --show` or use the one from your `.env`.
+     *   `APP_ENV`: `production`
+     *   `APP_DEBUG`: `false`
+     *   `APP_URL`: Your Railway provided URL (e.g., `https://your-app.up.railway.app`)
+     *   `DB_CONNECTION`: `mysql` (or `pgsql`)
+     *   `DB_HOST`, `DB_PORT`, `DB_DATABASE`, `DB_USERNAME`, `DB_PASSWORD`: Provided by Railway's connected Database.
+ 
+ ### Automated Migrations
+ To run migrations automatically after every deploy, add this to your **Deploy** settings command in Railway or run it manually once in the Railway terminal:
+ ```bash
+ php artisan migrate --force
+ ```
+ 
+ ### Build Process
+ Railway will automatically build your assets because of the `nixpacks.toml` and `package.json` configurations (running `npm install && npm run build`).

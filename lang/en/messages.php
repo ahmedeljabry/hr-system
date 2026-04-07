@@ -109,6 +109,12 @@ return [
     'change_file' => 'Change File',
     'total_salary' => 'Total Salary',
     'files_selected' => 'files selected',
+    'gender' => 'Gender',
+    'male' => 'Male',
+    'female' => 'Female',
+    'all' => 'All',
+    'annual_leave_days' => 'Annual Leave Days',
+    'gender_not_eligible_for_leave' => 'This leave type is only eligible for :gender employees.',
 
     // Leave Types Expansion
     'config_leave_types_title' => 'Leave Type Settings',
@@ -142,6 +148,8 @@ return [
 
     // Tasks
     'tasks' => 'Tasks',
+    'my_tasks' => 'My Tasks',
+    'due' => 'Due',
     'tasks_desc' => 'Organize and track employee tasks and deadlines efficiently.',
     'add_task' => 'Add Task',
     'task_title' => 'Task Title',

@@ -52,6 +52,8 @@
                             ['col' => 'M', 'key' => 'Other Allowances', 'label' => __('messages.other_allowances')],
                             ['col' => 'N', 'key' => 'Date of Birth', 'label' => __('messages.date_of_birth')],
                             ['col' => 'O', 'key' => 'Hire Date', 'label' => __('messages.hire_date')],
+                            ['col' => 'P', 'key' => 'Gender', 'label' => __('messages.gender')],
+                            ['col' => 'Q', 'key' => 'Annual Leave Days', 'label' => __('messages.annual_leave_days')],
                         ];
                     @endphp
                     @foreach($cols as $col)

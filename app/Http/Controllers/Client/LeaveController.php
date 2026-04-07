@@ -50,6 +50,7 @@ class LeaveController extends Controller
         $data = $request->validate([
             'name' => 'required|string|max:255',
             'max_days_per_year' => 'required|integer|min:0|max:365',
+            'gender' => 'required|in:male,female,all',
         ]);
 
         $this->leaveService->createLeaveType($this->getClient(), $data);
@@ -68,6 +69,7 @@ class LeaveController extends Controller
         $data = $request->validate([
             'name' => 'required|string|max:255',
             'max_days_per_year' => 'required|integer|min:0|max:365',
+            'gender' => 'required|in:male,female,all',
         ]);
 
         $this->leaveService->updateLeaveType($leaveType, $data);

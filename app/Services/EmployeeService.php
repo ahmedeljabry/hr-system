@@ -126,9 +126,33 @@ class EmployeeService
                 $employee->user->update($userData);
             }
 
-            unset($data['password']);
-
+            $oldGender = $employee->gender;
+            
+            if (isset($data['password'])) {
+                unset($data['password']); // Already updated in user account
+            }
+            
             $employee->update($data);
+            $newGender = $employee->gender;
+
+            // If employee gender changed, cleanup ineligible balances
+            if ($oldGender !== $newGender) {
+                \App\Models\LeaveBalance::where('employee_id', $employee->id)
+                    ->whereHas('leaveType', function($q) use ($newGender) {
+                        $q->where('gender', '!=', 'all')
+                          ->where('gender', '!=', $newGender);
+                    })
+                    ->delete();
+                
+                \App\Models\LeaveRequest::where('employee_id', $employee->id)
+                    ->where('status', 'pending')
+                    ->whereHas('leaveType', function($q) use ($newGender) {
+                        $q->where('gender', '!=', 'all')
+                          ->where('gender', '!=', $newGender);
+                    })
+                    ->update(['status' => 'rejected', 'reviewer_comment' => 'Automatically rejected: Employee gender no longer matches leave type requirements.']);
+            }
+
             return $employee->fresh();
         });
     }

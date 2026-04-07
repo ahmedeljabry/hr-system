@@ -14,6 +14,7 @@ class LeaveType extends Model
         'client_id',
         'name',
         'max_days_per_year',
+        'gender',
     ];
 
     public function client()

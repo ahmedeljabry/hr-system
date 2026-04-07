@@ -41,6 +41,8 @@ class StoreEmployeeRequest extends FormRequest
                 'max:255', 
                 Rule::unique('users')->ignore($this->getLinkedUserId(), 'id')
             ],
+            'gender' => ['required', 'string', 'in:male,female'],
+            'annual_leave_days' => ['required', 'integer', 'min:0'],
             'password' => [$this->route('employee') ? 'nullable' : 'required', 'string', 'min:8'],
             'basic_salary' => ['required', 'numeric', 'min:0'],
             'housing_allowance' => ['nullable', 'numeric', 'min:0'],
@@ -65,6 +67,9 @@ class StoreEmployeeRequest extends FormRequest
         return [
             'name_ar.required' => __('validation.required', ['attribute' => __('messages.name_ar')]),
             'name_en.required' => __('validation.required', ['attribute' => __('messages.name_en')]),
+            'gender.required' => __('validation.required', ['attribute' => __('messages.gender')]),
+            'gender.in' => __('validation.in', ['attribute' => __('messages.gender')]),
+            'annual_leave_days.required' => __('validation.required', ['attribute' => __('messages.annual_leave_days')]),
             'national_id_number.unique' => __('messages.national_id_duplicate'),
         ];
     }

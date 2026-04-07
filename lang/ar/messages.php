@@ -106,6 +106,12 @@ return [
     'change_file' => 'تغيير الملف',
     'total_salary' => 'إجمالي الراتب',
     'files_selected' => 'ملفات مختارة',
+    'gender' => 'الجنس',
+    'male' => 'ذكر',
+    'female' => 'أنثى',
+    'all' => 'الكل',
+    'annual_leave_days' => 'أيام الإجازة السنوية',
+    'gender_not_eligible_for_leave' => 'هذا النوع من الإجازات مخصص للموظفين ال:gender فقط.',
 
     // Leave Types Expansion
     'config_leave_types_title' => 'إعدادات أنواع الإجازات',
@@ -139,6 +145,8 @@ return [
 
     // Tasks
     'tasks' => 'المهام',
+    'my_tasks' => 'مهامي',
+    'due' => 'الاستحقاق',
     'tasks_desc' => 'تنظيم وتتبع مهام الموظفين والمواعيد النهائية بكفاءة.',
     'add_task' => 'إضافة مهمة',
     'task_title' => 'عنوان المهمة',
@@ -327,7 +335,7 @@ return [
     'not_uploaded' => 'لم يتم الرفع',
     'my_payslips' => 'قسائم الراتب الخاصة بي',
     'my_payslips_desc' => 'عرض وتحميل سجلات راتبك الشهرية.',
-    
+
     // Employee Dashboard
     'welcome_back' => 'مرحباً بعودتك',
     'welcome_back_with_name' => 'مرحباً بعودتك، :name! 👋',
@@ -386,7 +394,7 @@ return [
     // Leave Create Extras
     'submit_leave_desc' => 'تقديم طلب إجازة جديد للموافقة عليه.',
     'left' => 'متبقي',
-    'select_leave_type_placeholder' => 'اختر نوع الإجازة...',
+    'select_leave_type_placeholder' => 'اختر النوع.....',
     'reason' => 'السبب',
     'reason_placeholder' => 'سبب اختياري لطلب الإجازة الخاص بك...',
     'submit_request' => 'تقديم الطلب',
@@ -444,7 +452,7 @@ return [
     'total_employees' => 'إجمالي الموظفين',
     'confirm_delete_employee' => 'هل أنت متأكد من حذف هذا الموظف؟ لا يمكن التراجع عن هذا الإجراء.',
     'status' => 'الحالة',
-    
+
     // Payslip Details
     'payslip_detail' => 'تفاصيل قسيمة الراتب',
     'generated_on' => 'تم الإصدار في',
@@ -458,7 +466,7 @@ return [
     'back_to_payslips' => 'العودة للقائمة',
     'month_label' => 'الشهر',
     'currency_sar' => 'ريال',
-    
+
     // UI Elements & Dashboard
     'welcome_back' => 'مرحباً بعودتك',
     'portal_summary' => 'إليك ملخص لبوابتك الإلكترونية',
@@ -478,7 +486,7 @@ return [
     'notice_label' => 'تنويه',
     'read_more_btn' => 'اقرأ المزيد',
     'leave_request_desc' => 'تقديم طلب إجازة جديد للموافقة عليه.',
-    'select_leave_type' => 'اختر نوع الإجازة...',
+    'select_leave_type' => 'اختر النوع.....',
     'start_date' => 'تاريخ البدء',
     'end_date' => 'تاريخ الانتهاء',
     'leave_reason_placeholder' => 'سبب اختياري لطلب الإجازة الخاص بك...',

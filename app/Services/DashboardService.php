@@ -14,24 +14,39 @@ class DashboardService
 {
     public function getWidgetData(Employee $employee): array
     {
-        // Calculate total remaining leave balance
-        $leaveTypes = LeaveType::where('client_id', $employee->client_id)->get();
+        // Calculate total remaining leave balance for all eligible types
+        $leaveTypes = LeaveType::where('client_id', $employee->client_id)
+            ->where(function($q) use ($employee) {
+                $q->where('gender', 'all')
+                  ->orWhere('gender', $employee->gender);
+            })
+            ->get();
+
         $year = now()->year;
         $totalLeaveRemaining = 0;
 
         foreach ($leaveTypes as $type) {
-            if ($type->max_days_per_year > 0) {
+            $maxDays = $type->max_days_per_year;
+            
+            // Override with employee-specific annual leave days if this is the annual leave type
+            $isAnnual = preg_match('/Annual|سنوي|Annual Leave|إجازة سنوية/i', $type->name);
+            if ($isAnnual && $employee->annual_leave_days > 0) {
+                $maxDays = $employee->annual_leave_days;
+            }
+
+            if ($maxDays > 0) {
                 $balance = LeaveBalance::where('employee_id', $employee->id)
                     ->where('leave_type_id', $type->id)
                     ->where('year', $year)
                     ->first();
                 $used = $balance ? (float) $balance->used_days : 0;
-                $totalLeaveRemaining += max(0, $type->max_days_per_year - $used);
+                $totalLeaveRemaining += max(0, $maxDays - $used);
             }
         }
 
         return [
-            'pending_tasks' => Task::where('employee_id', $employee->id)->whereIn('status', ['todo', 'in_progress'])->count(),
+            'pending_tasks_count' => Task::where('employee_id', $employee->id)->whereIn('status', ['todo', 'in_progress'])->count(),
+            'recent_tasks' => Task::where('employee_id', $employee->id)->whereIn('status', ['todo', 'in_progress'])->latest()->take(5)->get(),
             'assigned_assets' => Asset::where('employee_id', $employee->id)->count(),
             'latest_payslip' => Payslip::where('employee_id', $employee->id)->latest()->first(),
             'recent_announcements' => Announcement::where('client_id', $employee->client_id)->latest('published_at')->take(3)->get(),

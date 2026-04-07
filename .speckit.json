@@ -2,8 +2,8 @@
   "specify": {
     "init_here": true,
     "ai": {
-      "provider": "agy",
-      "note": "Configured to use agy as the preferred AI assistant for spec-kit workflows"
+      "provider": "opencode",
+      "note": "Configured to use opencode as the preferred AI assistant for spec-kit workflows"
     }
   }
 }

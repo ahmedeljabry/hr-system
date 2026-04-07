@@ -103,47 +103,93 @@
         </div>
     </div>
 
-    <!-- Announcements Section -->
-    <div class="bg-white rounded-[2.5rem] shadow-[0_20px_50px_rgba(0,0,0,0.03)] border border-gray-100 overflow-hidden transition-all duration-500">
-        <div class="px-10 py-7 border-b border-gray-50 bg-gray-50/50 flex justify-between items-center">
-            <div class="flex items-center gap-3">
-                <div class="w-2 h-6 bg-primary rounded-full"></div>
-                <h3 class="text-xl font-black text-secondary tracking-tight">{{ __('messages.latest_announcements') }}</h3>
+    <!-- Bottom Content Grid -->
+    <div class="grid grid-cols-1 xl:grid-cols-2 gap-10">
+        <!-- Tasks Section -->
+        <div class="bg-white rounded-[2.5rem] shadow-[0_20px_50px_rgba(0,0,0,0.03)] border border-gray-100 overflow-hidden transition-all duration-500">
+            <div class="px-10 py-7 border-b border-gray-50 bg-gray-50/50 flex justify-between items-center">
+                <div class="flex items-center gap-3">
+                    <div class="w-2 h-6 bg-primary rounded-full"></div>
+                    <h3 class="text-xl font-black text-secondary tracking-tight">{{ __('messages.my_tasks') ?? __('messages.tasks') }}</h3>
+                </div>
+                <a href="{{ route('employee.tasks.index') }}" class="text-xs font-black uppercase tracking-widest text-primary hover:text-primary/70 transition-colors">{{ __('messages.view_all') }}</a>
             </div>
-            <a href="{{ route('employee.announcements.index') }}" class="text-xs font-black uppercase tracking-widest text-primary hover:text-primary/70 transition-colors">{{ __('messages.view_all') }}</a>
-        </div>
-        
-        <div class="divide-y divide-gray-50">
-            @forelse($widgets['recent_announcements'] as $announcement)
-                <div class="p-10 hover:bg-gray-50 transition-all duration-300 group/announcement">
-                    <div class="flex items-center justify-between gap-6">
-                        <div class="flex-grow">
-                            <div class="flex items-center gap-3 mb-2">
-                                <span class="px-3 py-1 bg-primary/10 text-[9px] font-black text-primary uppercase tracking-widest rounded-full">{{ __('messages.notice') }}</span>
-                                <span class="text-[10px] font-bold text-gray-400">{{ $announcement->published_at->translatedFormat('d M, Y') }}</span>
+            
+            <div class="divide-y divide-gray-50">
+                @forelse($widgets['recent_tasks'] as $task)
+                    <div class="p-8 hover:bg-gray-50 transition-all duration-300 group/task">
+                        <div class="flex items-center justify-between gap-6">
+                            <div class="flex-grow">
+                                <div class="flex items-center gap-3 mb-2">
+                                    <span class="px-3 py-1 bg-secondary/5 text-[9px] font-black text-secondary uppercase tracking-widest rounded-full border border-secondary/10">
+                                        {{ __('messages.' . $task->status) }}
+                                    </span>
+                                    @if($task->due_date)
+                                        <span class="text-[10px] font-bold {{ $task->due_date->isPast() ? 'text-red-400' : 'text-gray-400' }}">
+                                            {{ __('messages.due') }}: {{ $task->due_date->translatedFormat('d M') }}
+                                        </span>
+                                    @endif
+                                </div>
+                                <h4 class="text-base font-black text-secondary leading-tight group-hover/task:text-primary transition-colors line-clamp-1">{{ $task->title }}</h4>
                             </div>
-                                <div class="flex items-center gap-2 mb-2">
-                                    <h4 class="text-lg font-black text-secondary leading-tight group-hover/announcement:text-primary transition-colors">{{ $announcement->title }}</h4>
+                            <a href="{{ route('employee.tasks.index') }}" class="w-10 h-10 rounded-2xl bg-gray-50 flex items-center justify-center text-gray-400 hover:bg-primary hover:text-secondary transition-all duration-300">
+                                <svg class="w-5 h-5 transition-transform group-hover/task:translate-x-1 rtl:group-hover/task:-translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 7l5 5m0 0l-5 5m5-5H6"></path></svg>
+                            </a>
+                        </div>
+                    </div>
+                @empty
+                    <div class="p-16 text-center">
+                        <div class="w-16 h-16 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <svg class="w-8 h-8 text-gray-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path></svg>
+                        </div>
+                        <p class="text-xs font-bold text-gray-400 uppercase tracking-widest">{{ __('messages.no_tasks') }}</p>
+                    </div>
+                @endforelse
+            </div>
+        </div>
+
+        <!-- Announcements Section -->
+        <div class="bg-white rounded-[2.5rem] shadow-[0_20px_50px_rgba(0,0,0,0.03)] border border-gray-100 overflow-hidden transition-all duration-500">
+            <div class="px-10 py-7 border-b border-gray-50 bg-gray-50/50 flex justify-between items-center">
+                <div class="flex items-center gap-3">
+                    <div class="w-2 h-6 bg-primary rounded-full"></div>
+                    <h3 class="text-xl font-black text-secondary tracking-tight">{{ __('messages.latest_announcements') }}</h3>
+                </div>
+                <a href="{{ route('employee.announcements.index') }}" class="text-xs font-black uppercase tracking-widest text-primary hover:text-primary/70 transition-colors">{{ __('messages.view_all') }}</a>
+            </div>
+            
+            <div class="divide-y divide-gray-50">
+                @forelse($widgets['recent_announcements'] as $announcement)
+                    <div class="p-8 hover:bg-gray-50 transition-all duration-300 group/announcement">
+                        <div class="flex items-center justify-between gap-6">
+                            <div class="flex-grow">
+                                <div class="flex items-center gap-3 mb-2">
+                                    <span class="px-3 py-1 bg-primary/10 text-[9px] font-black text-primary uppercase tracking-widest rounded-full">{{ __('messages.notice') }}</span>
+                                    <span class="text-[10px] font-bold text-gray-400">{{ $announcement->published_at->translatedFormat('d M, Y') }}</span>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <h4 class="text-base font-black text-secondary leading-tight group-hover/announcement:text-primary transition-colors line-clamp-1">{{ $announcement->title }}</h4>
                                     @if($announcement->attachment)
-                                        <div class="w-5 h-5 rounded-lg bg-emerald-500/10 flex items-center justify-center text-emerald-500" title="{{ __('messages.attachments') }}">
+                                        <div class="w-4 h-4 rounded-lg bg-emerald-500/10 flex items-center justify-center text-emerald-500" title="{{ __('messages.attachments') }}">
                                             <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
                                         </div>
                                     @endif
                                 </div>
+                            </div>
+                            <a href="{{ route('employee.announcements.index') }}" class="w-10 h-10 rounded-2xl bg-gray-50 flex items-center justify-center text-gray-400 hover:bg-primary hover:text-secondary transition-all duration-300">
+                                <svg class="w-5 h-5 transition-transform group-hover/announcement:translate-x-1 rtl:group-hover/announcement:-translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 7l5 5m0 0l-5 5m5-5H6"></path></svg>
+                            </a>
                         </div>
-                        <a href="{{ route('employee.announcements.index') }}" class="w-10 h-10 rounded-2xl bg-gray-50 flex items-center justify-center text-gray-400 hover:bg-primary hover:text-secondary transition-all duration-300">
-                            <svg class="w-5 h-5 transition-transform group-hover/announcement:translate-x-1 rtl:group-hover/announcement:-translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 7l5 5m0 0l-5 5m5-5H6"></path></svg>
-                        </a>
                     </div>
-                </div>
-            @empty
-                <div class="p-20 text-center">
-                    <div class="w-20 h-20 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-6">
-                        <svg class="w-10 h-10 text-gray-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10l4 4v10a2 2 0 01-2 2z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 4v4h4"></path></svg>
+                @empty
+                    <div class="p-16 text-center">
+                        <div class="w-16 h-16 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <svg class="w-8 h-8 text-gray-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10l4 4v10a2 2 0 01-2 2z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 4v4h4"></path></svg>
+                        </div>
+                        <p class="text-xs font-bold text-gray-400 uppercase tracking-widest">{{ __('messages.no_announcements_yet') }}</p>
                     </div>
-                    <h3 class="text-xl font-black text-secondary tracking-tight mb-2">{{ __('messages.no_announcements_yet') }}</h3>
-                </div>
-            @endforelse
+                @endforelse
+            </div>
         </div>
     </div>
 </div>

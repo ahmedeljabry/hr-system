@@ -36,7 +36,7 @@ class LeaveController extends Controller
     public function create()
     {
         $employee = $this->getEmployee();
-        $leaveTypes = $this->leaveService->getLeaveTypes($employee->client);
+        $leaveTypes = $this->leaveService->getEligibleLeaveTypes($employee);
         $balanceSummary = $this->leaveService->getBalanceSummary($employee);
 
         return view('employee.leaves.create', compact('leaveTypes', 'balanceSummary'));

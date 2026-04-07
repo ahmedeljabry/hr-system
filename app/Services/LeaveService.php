@@ -22,6 +22,20 @@ class LeaveService
     }
 
     /**
+     * Get eligible leave types for an employee (filtered by gender).
+     */
+    public function getEligibleLeaveTypes(Employee $employee)
+    {
+        return LeaveType::where('client_id', $employee->client_id)
+            ->where(function($q) use ($employee) {
+                $q->where('gender', 'all')
+                  ->orWhere('gender', $employee->gender);
+            })
+            ->orderBy('name')
+            ->get();
+    }
+
+    /**
      * Create a leave type for a client.
      */
     public function createLeaveType(Client $client, array $data): LeaveType
@@ -35,7 +49,27 @@ class LeaveService
      */
     public function updateLeaveType(LeaveType $leaveType, array $data): LeaveType
     {
+        $oldGender = $leaveType->gender;
         $leaveType->update($data);
+        $newGender = $leaveType->gender;
+
+        // If gender restriction changed, cleanup ineligible balances
+        if ($oldGender !== $newGender && $newGender !== 'all') {
+            LeaveBalance::where('leave_type_id', $leaveType->id)
+                ->whereHas('employee', function($q) use ($newGender) {
+                    $q->where('gender', '!=', $newGender);
+                })
+                ->delete();
+            
+            // Also cancel pending requests for ineligible employees
+            LeaveRequest::where('leave_type_id', $leaveType->id)
+                ->where('status', 'pending')
+                ->whereHas('employee', function($q) use ($newGender) {
+                    $q->where('gender', '!=', $newGender);
+                })
+                ->update(['status' => 'rejected', 'reviewer_comment' => 'Automatically rejected: Leave type restricted to another gender.']);
+        }
+
         return $leaveType->fresh();
     }
 
@@ -59,11 +93,23 @@ class LeaveService
         $endDate = Carbon::parse($data['end_date']);
         $daysRequested = $startDate->diffInDays($endDate) + 1;
 
+        // Check gender eligibility
+        if ($leaveType->gender !== 'all' && $leaveType->gender !== $employee->gender) {
+            throw new \InvalidArgumentException(__('messages.gender_not_eligible_for_leave', ['gender' => __('messages.' . $leaveType->gender)]));
+        }
+
         // Check balance
         $balance = $this->getOrCreateBalance($employee, $leaveType);
-        $remaining = $leaveType->max_days_per_year - $balance->used_days;
+        
+        $maxDays = $leaveType->max_days_per_year;
+        $isAnnual = preg_match('/Annual|سنوي|Annual Leave|إجازة سنوية/i', $leaveType->name);
+        if ($isAnnual && $employee->annual_leave_days > 0) {
+            $maxDays = $employee->annual_leave_days;
+        }
 
-        if ($daysRequested > $remaining && $leaveType->max_days_per_year > 0) {
+        $remaining = $maxDays - $balance->used_days;
+
+        if ($daysRequested > $remaining && $maxDays > 0) {
             throw new \InvalidArgumentException(__('Insufficient leave balance. You have :remaining days remaining.', ['remaining' => $remaining]));
         }
 
@@ -176,11 +222,24 @@ class LeaveService
      */
     public function getBalanceSummary(Employee $employee): array
     {
-        $leaveTypes = LeaveType::where('client_id', $employee->client_id)->get();
+        $leaveTypes = LeaveType::where('client_id', $employee->client_id)
+            ->where(function($q) use ($employee) {
+                $q->where('gender', 'all')
+                  ->orWhere('gender', $employee->gender);
+            })
+            ->get();
         $year = now()->year;
 
         $summary = [];
         foreach ($leaveTypes as $type) {
+            $maxDays = $type->max_days_per_year;
+            
+            // Override with employee-specific annual leave days if this is the annual leave type
+            $isAnnual = preg_match('/Annual|سنوي|Annual Leave|إجازة سنوية/i', $type->name);
+            if ($isAnnual && $employee->annual_leave_days > 0) {
+                $maxDays = $employee->annual_leave_days;
+            }
+
             $balance = LeaveBalance::firstOrNew([
                 'employee_id' => $employee->id,
                 'leave_type_id' => $type->id,
@@ -189,9 +248,9 @@ class LeaveService
 
             $summary[] = [
                 'type' => $type,
-                'max_days' => $type->max_days_per_year,
+                'max_days' => $maxDays,
                 'used_days' => (float) $balance->used_days,
-                'remaining' => max(0, $type->max_days_per_year - $balance->used_days),
+                'remaining' => max(0, $maxDays - $balance->used_days),
             ];
         }
 

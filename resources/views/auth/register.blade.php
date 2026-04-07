@@ -10,7 +10,6 @@
         <form method="POST" action="{{ route('register') }}" class="space-y-6 w-full mt-4">
             @csrf
 
-            <x-step-indicator :current="1" :total="3" :labels="[__('messages.step_account'), __('messages.step_company'), __('messages.step_confirm')]" />
 
             <div>
                 <label for="name" class="block text-sm font-semibold text-gray-700 mb-2">{{ __('messages.name') }}</label>

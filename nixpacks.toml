@@ -1,10 +1,13 @@
 # nixpacks.toml for Railway Laravel Hosting
 
+[variables]
+NIXPACKS_PHP_VERSION = "8.4"
+
 [phases.setup]
-nixPkgs = ["php84Modules.bcmath", "php84Modules.gd", "php84Modules.intl", "php84Modules.mbstring", "php84Modules.mysql", "php84Modules.opcache", "php84Modules.pdo_mysql", "php84Modules.xml", "php84Modules.zip"]
+nixPkgs = ["php", "php84Modules.gd", "php84Modules.bcmath", "php84Modules.mbstring", "php84Modules.mysql", "nodejs", "git"]
 
 [phases.install]
-cmds = ["composer install --optimize-autoloader --no-dev --ignore-platform-reqs", "npm install"]
+cmds = ["composer install --optimize-autoloader --no-dev --ignore-platform-reqs --no-interaction --no-scripts", "npm install"]
 
 [phases.build]
 cmds = ["npm run build"]

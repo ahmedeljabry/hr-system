@@ -11,9 +11,17 @@ use App\Http\Controllers\LanguageController;
 |--------------------------------------------------------------------------
 */
 
-// Root Redirect
+// Home Redirect to Login
 Route::get('/', function () {
-    return view('welcome');
+    return redirect()->route('login.show');
+});
+
+// Manual Cache Clear (Helper for Hostinger)
+Route::get('/clear-cache', function () {
+    \Illuminate\Support\Facades\Artisan::call('route:clear');
+    \Illuminate\Support\Facades\Artisan::call('view:clear');
+    \Illuminate\Support\Facades\Artisan::call('cache:clear');
+    return "Cache is cleared! <a href='/'>Go to Login</a>";
 });
 
 // Localization Switcher

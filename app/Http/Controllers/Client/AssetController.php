@@ -58,7 +58,21 @@ class AssetController extends Controller
         }
 
         $data['client_id'] = $client->id;
-        Asset::create($data);
+        $asset = Asset::create($data);
+
+        if ($asset->employee_id) {
+            \App\Models\Notification::create([
+                'employee_id' => $asset->employee_id,
+                'type' => 'asset_assigned',
+                'title' => json_encode(['key' => 'messages.asset_assigned']),
+                'message' => json_encode([
+                    'key' => 'messages.asset_assigned_msg',
+                    'params' => ['type' => $asset->type, 'serial' => $asset->serial_number ?? '-']
+                ]),
+                'related_type' => Asset::class,
+                'related_id' => $asset->id,
+            ]);
+        }
 
         return redirect()->route('client.assets.index')->with('success', __('messages.asset_created'));
     }
@@ -92,7 +106,22 @@ class AssetController extends Controller
             abort_unless($employeeBelongsToClient, 403, __('messages.unauthorized'));
         }
 
+        $oldEmployeeId = $asset->employee_id;
         $asset->update($data);
+
+        if ($asset->employee_id && $asset->employee_id != $oldEmployeeId) {
+            \App\Models\Notification::create([
+                'employee_id' => $asset->employee_id,
+                'type' => 'asset_assigned',
+                'title' => json_encode(['key' => 'messages.asset_assigned']),
+                'message' => json_encode([
+                    'key' => 'messages.asset_assigned_msg',
+                    'params' => ['type' => $asset->type, 'serial' => $asset->serial_number ?? '-']
+                ]),
+                'related_type' => Asset::class,
+                'related_id' => $asset->id,
+            ]);
+        }
 
         return redirect()->route('client.assets.index')->with('success', __('messages.asset_updated'));
     }

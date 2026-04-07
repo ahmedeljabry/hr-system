@@ -155,7 +155,11 @@
                                 
                                 @if($task->attachments && count($task->attachments) > 0)
                                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
-                                        @foreach($task->attachments as $index => $path)
+                                        @foreach($task->attachments as $index => $attachment)
+                                            @php
+                                                $path = is_array($attachment) ? ($attachment['path'] ?? $attachment) : $attachment;
+                                                $fileName = is_array($attachment) ? ($attachment['name'] ?? basename($path)) : basename($path);
+                                            @endphp
                                             <div class="flex items-center gap-4 p-4 bg-primary/5 border border-primary/20 rounded-2xl group/file">
                                                 <div class="w-10 h-10 rounded-xl bg-white shadow-sm flex items-center justify-center">
                                                     <svg class="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -163,7 +167,7 @@
                                                     </svg>
                                                 </div>
                                                 <div class="flex-1 min-w-0">
-                                                    <p class="text-xs font-black text-secondary truncate">{{ basename($path) }}</p>
+                                                    <p class="text-xs font-black text-secondary truncate">{{ $fileName }}</p>
                                                     <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">{{ __('File') }} #{{ $index + 1 }}</p>
                                                 </div>
                                                 <a href="{{ Storage::url($path) }}" target="_blank"

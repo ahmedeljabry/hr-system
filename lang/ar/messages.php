@@ -555,6 +555,8 @@ return [
     'leave_request_approved_msg' => 'تمت الموافقة على طلب الإجازة الخاص بك من :start إلى :end.',
     'leave_request_rejected' => 'تم رفض طلب الإجازة',
     'leave_request_rejected_msg' => 'تم رفض طلب الإجازة الخاص بك من :start إلى :end.',
+    'asset_assigned' => 'تم تعيين أصل جديد لك',
+    'asset_assigned_msg' => 'تم إسناد أصل جديد لك: :type (:serial)',
     'new_announcement' => 'إعلان جديد',
     'announcement_new_msg' => 'تم نشر إعلان جديد: :title',
 

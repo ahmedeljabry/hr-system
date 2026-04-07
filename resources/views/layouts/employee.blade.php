@@ -126,7 +126,10 @@
         </div>
     </footer>
 
-    <x-notification-panel />
+    <x-notification-panel 
+        :apiUrl="route('employee.notifications.api', ['client_slug' => auth()->user()->client->slug, 'employee_slug' => auth()->user()->employee->slug])" 
+        :readUrl="url('/' . auth()->user()->client->slug . '/' . auth()->user()->employee->slug . '/notifications')" 
+    />
     @stack('scripts')
 </body>
 </html>

@@ -561,6 +561,8 @@ return [
     'leave_request_approved_msg' => 'Your leave request from :start to :end has been approved.',
     'leave_request_rejected' => 'Leave Request Rejected',
     'leave_request_rejected_msg' => 'Your leave request from :start to :end has been rejected.',
+    'asset_assigned' => 'New asset assigned to you',
+    'asset_assigned_msg' => 'A new asset has been assigned to you: :type (:serial)',
     'new_announcement' => 'New Announcement',
     'announcement_new_msg' => 'A new announcement has been published: :title',
     

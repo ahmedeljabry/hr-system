@@ -106,7 +106,10 @@
     </footer>
 
     @if(auth()->check() && auth()->user()->isClient())
-        <x-notification-panel apiUrl="/client/notifications/api" readUrl="/client/notifications" />
+        <x-notification-panel 
+            :apiUrl="route('client.notifications.api', ['client_slug' => auth()->user()->client->slug])" 
+            :readUrl="url('/' . auth()->user()->client->slug . '/notifications')" 
+        />
     @endif
 
     @stack('scripts')

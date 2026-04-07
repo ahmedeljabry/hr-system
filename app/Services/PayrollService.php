@@ -6,6 +6,7 @@ use App\Models\PayrollRun;
 use App\Models\Payslip;
 use App\Models\PayslipLineItem;
 use App\Models\Employee;
+use App\Models\SalaryDeduction;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 
@@ -67,7 +68,13 @@ class PayrollService
                 $totalExtraAllowances = $allowances->sum('amount');
                 $totalAllowances = $totalExtraAllowances + $housingAllowance + $transportationAllowance + $otherAllowancesOnModel;
                 
-                $totalDeductions = $deductions->sum('amount');
+                // Get dynamic deductions for the current month
+                $dynamicDeductions = SalaryDeduction::where('employee_id', $employee->id)
+                    ->whereYear('deduction_date', $monthDate->year)
+                    ->whereMonth('deduction_date', $monthDate->month)
+                    ->get();
+                
+                $totalDeductions = $deductions->sum('amount') + $dynamicDeductions->sum('amount');
                 $basicSalary = (float) $employee->basic_salary;
                 $netSalary = max(0, $basicSalary + $totalAllowances - $totalDeductions);
 
@@ -92,6 +99,16 @@ class PayrollService
                         'amount' => $component->amount,
                     ]);
                 }
+
+                // Snapshot dynamic deductions
+                foreach ($dynamicDeductions as $deduction) {
+                    PayslipLineItem::create([
+                        'payslip_id' => $payslip->id,
+                        'component_name' => $deduction->reason ?: __('messages.salary_deduction'),
+                        'type' => 'deduction',
+                        'amount' => $deduction->amount,
+                    ]);
+                }
             }
 
             return $run;
@@ -110,6 +127,13 @@ class PayrollService
             'status' => 'confirmed',
             'confirmed_at' => now(),
         ]);
+
+        // Mark dynamic deductions as applied for this month
+        $monthDate = Carbon::parse($run->month);
+        SalaryDeduction::where('client_id', $clientId)
+            ->whereYear('deduction_date', $monthDate->year)
+            ->whereMonth('deduction_date', $monthDate->month)
+            ->update(['is_applied' => true]);
 
         return $run->fresh();
     }

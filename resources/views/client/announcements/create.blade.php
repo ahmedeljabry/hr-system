@@ -38,29 +38,42 @@
                         @error('body') <p class="mt-3 text-red-500 text-xs font-bold">{{ $message }}</p> @enderror
                     </div>
 
-                    <!-- Attachment -->
-                    <div class="group" x-data="{ fileName: '' }">
+                    <!-- Attachments -->
+                    <div class="group" x-data="{ files: [] }">
                         <label class="block text-[10px] font-black uppercase tracking-[0.2em] text-gray-300 mb-4 group-focus-within:text-primary transition-colors text-start">{{ __('messages.attachments') }}</label>
                         <label class="relative block bg-gray-50/50 border-2 border-dashed border-gray-100 rounded-[2rem] p-10 cursor-pointer hover:border-primary/30 hover:bg-white transition-all group/upload shadow-sm overflow-hidden">
-                            <input type="file" name="attachment" class="absolute inset-0 w-full h-full opacity-0 z-10 cursor-pointer" 
-                                @change="fileName = $event.target.files[0].name">
+                            <input type="file" name="attachments[]" multiple class="absolute inset-0 w-full h-full opacity-0 z-10 cursor-pointer" 
+                                @change="files = Array.from($event.target.files).map(f => f.name)">
                             
                             <div class="flex flex-col items-center justify-center gap-4">
                                 <div class="w-16 h-16 rounded-2xl bg-white shadow-sm flex items-center justify-center group-hover/upload:scale-110 transition-transform duration-500">
-                                    <svg x-show="!fileName" class="w-8 h-8 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <svg x-show="files.length === 0" class="w-8 h-8 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
                                     </svg>
-                                    <svg x-show="fileName" class="w-8 h-8 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <svg x-show="files.length > 0" class="w-8 h-8 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04M12 21.48V22" />
                                     </svg>
                                 </div>
                                 <div class="text-center">
-                                    <p class="text-sm font-black text-secondary uppercase tracking-widest antialiased" x-text="fileName ? fileName : '{{ __('messages.upload_file') }}'"></p>
-                                    <p x-show="!fileName" class="text-[10px] font-bold text-gray-400 mt-1 uppercase tracking-[0.1em]">{{ __('messages.excel_size_hint') }}</p>
+                                    <p class="text-sm font-black text-secondary uppercase tracking-widest antialiased" x-text="files.length > 0 ? `${files.length} {{ __('messages.files_selected') }}` : '{{ __('messages.upload_file') }}'"></p>
+                                    <p x-show="files.length === 0" class="text-[10px] font-bold text-gray-400 mt-1 uppercase tracking-[0.1em]">{{ __('messages.any_file_hint') }}</p>
                                 </div>
                             </div>
                         </label>
-                        @error('attachment') <p class="mt-3 text-red-500 text-xs font-bold">{{ $message }}</p> @enderror
+
+                        <!-- Selected Files List -->
+                        <template x-if="files.length > 0">
+                            <div class="mt-6 space-y-3">
+                                <template x-for="fileName in files" :key="fileName">
+                                    <div class="flex items-center gap-3 bg-gray-50/50 rounded-xl px-5 py-3 border border-gray-100/50">
+                                        <svg class="w-4 h-4 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                        <span class="text-xs font-bold text-secondary truncate" x-text="fileName"></span>
+                                    </div>
+                                </template>
+                            </div>
+                        </template>
+
+                        @error('attachments.*') <p class="mt-3 text-red-500 text-xs font-bold">{{ $message }}</p> @enderror
                     </div>
                 </div>
 

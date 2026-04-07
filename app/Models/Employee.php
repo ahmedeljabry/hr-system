@@ -64,6 +64,11 @@ class Employee extends Model
         return $this->hasMany(Payslip::class);
     }
 
+    public function salaryDeductions()
+    {
+        return $this->hasMany(SalaryDeduction::class);
+    }
+
     public function getTotalSalaryAttribute(): float
     {
         return (float) ($this->basic_salary + $this->housing_allowance + $this->transportation_allowance + $this->other_allowances);

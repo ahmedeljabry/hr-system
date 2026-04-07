@@ -12,10 +12,26 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@500;600;700&display=swap" rel="stylesheet">
 
+    @if(app()->getLocale() == 'ar')
+        <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@200..1000&display=swap" rel="stylesheet">
+        <style>
+            body { font-family: 'Cairo', sans-serif !important; }
+        </style>
+    @endif
+
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body class="font-sans antialiased bg-surface text-text-main h-screen overflow-hidden">
+<body class="font-sans antialiased bg-gray-50 text-gray-900 h-screen overflow-hidden flex flex-col">
+    <!-- Language Switcher Overlay -->
+    <div class="fixed top-6 {{ app()->getLocale() == 'ar' ? 'left-6' : 'right-6' }} z-[60]">
+        @if(app()->getLocale() == 'ar')
+            <a href="/lang/en" class="px-4 py-2 bg-white/80 backdrop-blur-md border border-gray-100 rounded-xl text-xs font-black text-gray-400 hover:text-secondary shadow-sm transition-all">EN</a>
+        @else
+            <a href="/lang/ar" class="px-4 py-2 bg-white/80 backdrop-blur-md border border-gray-100 rounded-xl text-xs font-bold text-gray-400 hover:text-secondary shadow-sm transition-all font-sans">عربي</a>
+        @endif
+    </div>
+
     {{ $slot }}
 </body>
 </html>

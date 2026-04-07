@@ -275,6 +275,7 @@ return [
     'upload_excel' => 'Upload Excel File',
     'choose_file' => 'Choose File',
     'excel_size_hint' => 'Excel file only, maximum size 10MB',
+    'any_file_hint' => 'Any file type, maximum 10MB',
     'import' => 'Import',
     'import_errors' => 'Import Errors',
     'import_partial_success' => 'Successfully imported :count employee(s).',

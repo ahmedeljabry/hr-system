@@ -38,12 +38,16 @@ class AnnouncementController extends Controller
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'body' => 'required|string|max:5000',
-            'attachment' => 'nullable|file|max:10240', // 10MB max
+            'attachments.*' => 'nullable|file|max:10240', // 10MB max per file
         ]);
 
-        if ($request->hasFile('attachment')) {
-            $validated['attachment'] = $request->file('attachment')->store('announcements', 'public');
+        $attachments = [];
+        if ($request->hasFile('attachments')) {
+            foreach ($request->file('attachments') as $file) {
+                $attachments[] = $file->store('announcements', 'public');
+            }
         }
+        $validated['attachments'] = $attachments;
 
         $this->announcementService->create($this->getClient(), $validated);
 
@@ -66,12 +70,16 @@ class AnnouncementController extends Controller
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'body' => 'required|string|max:5000',
-            'attachment' => 'nullable|file|max:10240',
+            'attachments.*' => 'nullable|file|max:10240',
         ]);
 
-        if ($request->hasFile('attachment')) {
-            $validated['attachment'] = $request->file('attachment')->store('announcements', 'public');
+        $attachments = $announcement->attachments ?? [];
+        if ($request->hasFile('attachments')) {
+            foreach ($request->file('attachments') as $file) {
+                $attachments[] = $file->store('announcements', 'public');
+            }
         }
+        $validated['attachments'] = $attachments;
 
         $this->announcementService->update($announcement, $validated);
 

@@ -311,6 +311,7 @@ return [
     'upload_excel' => 'رفع ملف التميز (Excel)',
     'choose_file' => 'اختر ملف',
     'excel_size_hint' => 'ملف Excel فقط، بحجم أقصى 10MB',
+    'any_file_hint' => 'أي نوع ملف، بحجم أقصى 10MB',
     'import' => 'استيراد',
     'import_errors' => 'أخطاء الاستيراد',
     'import_partial_success' => 'تم استيراد :count موظف(ين) بنجاح.',

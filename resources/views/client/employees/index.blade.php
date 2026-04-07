@@ -61,6 +61,7 @@
                 <!-- Search & Layout Controls -->
                 <div class="p-8 border-b border-gray-50 flex flex-col md:flex-row items-center justify-between gap-6 bg-gray-50/30">
                     <form method="GET" action="{{ route('client.employees.index') }}" class="relative w-full max-w-xl group">
+                        <input type="hidden" name="view" value="{{ request('view', 'grid') }}">
                         <div class="absolute inset-y-0 {{ app()->getLocale() == 'ar' ? 'right-0 pr-6' : 'left-0 pl-6' }} flex items-center pointer-events-none">
                             <svg class="h-5 w-5 text-gray-400 group-focus-within:text-primary transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -71,21 +72,21 @@
                                placeholder="{{ __('messages.search_employees') }}">
                         
                         @if(request('search'))
-                            <a href="{{ route('client.employees.index') }}" class="absolute inset-y-0 {{ app()->getLocale() == 'ar' ? 'left-4' : 'right-4' }} flex items-center text-gray-300 hover:text-gray-500">
+                            <a href="{{ route('client.employees.index', ['view' => request('view', 'grid')]) }}" class="absolute inset-y-0 {{ app()->getLocale() == 'ar' ? 'left-4' : 'right-4' }} flex items-center text-gray-300 hover:text-gray-500">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
                             </a>
                         @endif
                     </form>
 
                     <div class="flex items-center gap-2 p-1.5 bg-gray-100/80 rounded-2xl border border-gray-200/50">
-                        <button onclick="localStorage.setItem('view_mode', 'grid'); location.reload();" 
-                                class="px-4 py-2 rounded-xl text-xs font-bold transition-all {{ (request('view') ?? 'grid') == 'grid' ? 'bg-white text-secondary shadow-sm' : 'text-gray-400 hover:text-secondary' }}">
+                        <a href="{{ request()->fullUrlWithQuery(['view' => 'grid']) }}" 
+                           class="px-4 py-2 rounded-xl text-xs font-bold transition-all {{ (request('view', 'grid')) == 'grid' ? 'bg-white text-secondary shadow-sm' : 'text-gray-400 hover:text-secondary' }}">
                             {{ __('messages.grid') }}
-                        </button>
-                        <button onclick="localStorage.setItem('view_mode', 'list'); location.reload();" 
-                                class="px-4 py-2 rounded-xl text-xs font-bold transition-all {{ request('view') == 'list' ? 'bg-white text-secondary shadow-sm' : 'text-gray-400 hover:text-secondary' }}">
+                        </a>
+                        <a href="{{ request()->fullUrlWithQuery(['view' => 'list']) }}" 
+                           class="px-4 py-2 rounded-xl text-xs font-bold transition-all {{ request('view') == 'list' ? 'bg-white text-secondary shadow-sm' : 'text-gray-400 hover:text-secondary' }}">
                             {{ __('messages.list') }}
-                        </button>
+                        </a>
                     </div>
                 </div>
 

@@ -15,12 +15,13 @@ class Announcement extends Model
         'client_id',
         'title',
         'body',
-        'attachment',
+        'attachments',
         'published_at',
     ];
 
     protected $casts = [
         'published_at' => 'datetime',
+        'attachments' => 'array',
     ];
 
     public function client()

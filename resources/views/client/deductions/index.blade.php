@@ -85,7 +85,7 @@
                                     <div class="text-sm font-bold text-gray-500">{{ $deduction->deduction_date->format('M Y') }}</div>
                                 </td>
                                 <td class="px-8 py-6 whitespace-nowrap">
-                                    <div class="text-sm font-black text-rose-600 tracking-tight">{{ number_format($deduction->amount, 2) }} <span class="text-[10px] text-gray-300 uppercase ms-0.5">SAR</span></div>
+                                    <div class="text-sm font-black text-rose-600 tracking-tight">{{ number_format($deduction->amount, 2) }} <span class="text-[10px] text-gray-300 uppercase ms-0.5">{{ __('messages.currency_sar') }}</span></div>
                                 </td>
                                 <td class="px-8 py-6">
                                     <div class="text-sm font-bold text-gray-500 truncate max-w-xs">{{ $deduction->reason ?? '-' }}</div>

@@ -15,7 +15,7 @@
         <div class="text-sm font-bold text-gray-500 font-mono">{{ $employee->national_id_number }}</div>
     </td>
     <td class="px-8 py-6 whitespace-nowrap">
-        <div class="text-sm font-black text-secondary">{{ number_format($employee->basic_salary, 2) }} <span class="text-[10px] text-gray-400 ms-0.5 uppercase">SAR</span></div>
+        <div class="text-sm font-black text-secondary">{{ number_format($employee->basic_salary, 2) }} <span class="text-[10px] text-gray-400 ms-0.5 uppercase">{{ __('messages.currency_sar') }}</span></div>
     </td>
     <td class="px-8 py-6 whitespace-nowrap">
         <div class="text-sm font-bold text-gray-500">{{ $employee->hire_date->format('d/m/Y') }}</div>

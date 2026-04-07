@@ -37,7 +37,7 @@
             <div class="flex items-center justify-between p-4 rounded-2xl bg-gray-50/50 border border-gray-100/50 group-hover:bg-white transition-colors duration-500">
                 <div class="flex flex-col">
                     <span class="text-[10px] font-black text-gray-300 uppercase tracking-widest mb-1">{{ __('messages.total_salary') }}</span>
-                    <span class="text-sm font-black text-secondary">{{ number_format($employee->total_salary, 2) }} <span class="text-[10px] text-gray-400 ms-1 uppercase">SAR</span></span>
+                    <span class="text-sm font-black text-secondary">{{ number_format($employee->total_salary, 2) }} <span class="text-[10px] text-gray-400 ms-1 uppercase">{{ __('messages.currency_sar') }}</span></span>
                 </div>
                 <div class="bg-white p-2 rounded-xl shadow-sm text-primary">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

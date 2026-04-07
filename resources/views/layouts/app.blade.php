@@ -82,9 +82,9 @@
                 <!-- Lang Switcher -->
                 <div class="ps-6 border-s border-gray-100 flex items-center">
                     @if(app()->getLocale() == 'ar')
-                        <a href="/lang/en" class="text-xs font-bold text-gray-400 hover:text-secondary transition-colors">EN</a>
+                        <a href="/lang/en" class="text-xs font-bold text-gray-400 hover:text-secondary transition-colors">{{ __('messages.english') }}</a>
                     @else
-                        <a href="/lang/ar" class="text-xs font-bold text-gray-400 hover:text-secondary transition-colors">عربي</a>
+                        <a href="/lang/ar" class="text-xs font-bold text-gray-400 hover:text-secondary transition-colors">{{ __('messages.arabic') }}</a>
                     @endif
                 </div>
             </div>

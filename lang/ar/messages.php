@@ -10,6 +10,8 @@ return [
     'settings' => 'الإعدادات',
     'logout' => 'تسجيل الخروج',
     'profile' => 'الملف الشخصي',
+    'english' => 'الإنجليزية',
+    'arabic' => 'العربية',
     'leaves' => 'الإجازات',
     'payslips' => 'مسيرات الرواتب',
     'welcome' => 'مرحباً بك',
@@ -331,6 +333,8 @@ return [
     'documents' => 'الوثائق والمستندات',
     'open_document' => 'فتح المستند',
     'create_account' => 'إنشاء حساب للموظف',
+    'create_login_for' => 'إنشاء حساب دخول لـ :name',
+    'email_address' => 'البريد الإلكتروني',
     'phone' => 'رقم الجوال',
     'other_documents' => 'مستندات أخرى',
     'not_uploaded' => 'لم يتم الرفع',
@@ -617,4 +621,5 @@ return [
     'deleted' => 'تم الحذف!',
     'error' => 'خطأ!',
     'something_went_wrong' => 'حدث خطأ ما، يرجى المحاولة مرة أخرى.',
+    'close_panel' => 'إغلاق اللوحة',
 ];

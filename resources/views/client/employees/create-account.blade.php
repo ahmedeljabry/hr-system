@@ -4,7 +4,7 @@
 <div class="max-w-2xl mx-auto space-y-6">
     <div class="flex justify-between items-center bg-gray-900 border border-gray-800 p-6 rounded-2xl shadow-xl">
         <h1 class="text-3xl font-bold bg-clip-text text-transparent bg-primary">
-            Create Login for {{ $employee->name }}
+            {{ __('messages.create_login_for', ['name' => $employee->name]) }}
         </h1>
         <a href="{{ route('client.employees.show', $employee->id) }}" class="text-gray-400 hover:text-white transition-colors duration-200">
             {{ __('messages.back') }}
@@ -22,7 +22,7 @@
                 @csrf
                 
                 <div>
-                    <label class="block text-sm font-medium text-gray-300 mb-2">Email Address</label>
+                    <label class="block text-sm font-medium text-gray-300 mb-2">{{ __('messages.email_address') }}</label>
                     <input type="email" name="email" value="{{ old('email', $employee->email) }}" required class="w-full bg-gray-800 border outline-none border-gray-700 text-white rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 p-3">
                     @error('email')<p class="text-red-400 text-xs mt-1">{{ $message }}</p>@enderror
                 </div>

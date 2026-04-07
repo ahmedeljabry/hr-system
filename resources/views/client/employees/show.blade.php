@@ -70,7 +70,7 @@
                             <h2 class="text-2xl font-black text-secondary tracking-tight">{{ __('messages.total_salary') }}</h2>
                             <div class="ms-auto">
                                 <span class="text-4xl font-black text-primary">{{ number_format($employee->total_salary, 2) }}</span>
-                                <span class="text-sm font-bold text-gray-400 ms-1 uppercase tracking-widest">SAR</span>
+                                <span class="text-sm font-bold text-gray-400 ms-1 uppercase tracking-widest">{{ __('messages.currency_sar') }}</span>
                             </div>
                         </div>
 

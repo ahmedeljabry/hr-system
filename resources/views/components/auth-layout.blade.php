@@ -26,9 +26,9 @@
     <!-- Language Switcher Overlay -->
     <div class="fixed top-6 {{ app()->getLocale() == 'ar' ? 'left-6' : 'right-6' }} z-[60]">
         @if(app()->getLocale() == 'ar')
-            <a href="/lang/en" class="px-4 py-2 bg-white/80 backdrop-blur-md border border-gray-100 rounded-xl text-xs font-black text-gray-400 hover:text-secondary shadow-sm transition-all">EN</a>
+            <a href="/lang/en" class="px-4 py-2 bg-white/80 backdrop-blur-md border border-gray-100 rounded-xl text-xs font-black text-gray-400 hover:text-secondary shadow-sm transition-all">{{ __('messages.english') }}</a>
         @else
-            <a href="/lang/ar" class="px-4 py-2 bg-white/80 backdrop-blur-md border border-gray-100 rounded-xl text-xs font-bold text-gray-400 hover:text-secondary shadow-sm transition-all font-sans">عربي</a>
+            <a href="/lang/ar" class="px-4 py-2 bg-white/80 backdrop-blur-md border border-gray-100 rounded-xl text-xs font-bold text-gray-400 hover:text-secondary shadow-sm transition-all font-sans">{{ __('messages.arabic') }}</a>
         @endif
     </div>
 

@@ -26,7 +26,7 @@
         <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
             <div class="bg-white rounded-3xl p-8 border border-gray-100 shadow-sm hover:shadow-md transition-shadow group">
                 <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2 group-hover:text-secondary transition-colors">{{ __('messages.basic_salary') }}</p>
-                <p class="text-3xl font-black text-secondary">{{ number_format($employee->basic_salary, 2) }} <span class="text-xs text-gray-300 uppercase ms-1">{{ __('SAR') }}</span></p>
+                <p class="text-3xl font-black text-secondary">{{ number_format($employee->basic_salary, 2) }} <span class="text-xs text-gray-300 uppercase ms-1">{{ __('messages.currency_sar') }}</span></p>
             </div>
             
             <div class="bg-white rounded-3xl p-8 border border-emerald-100 shadow-sm hover:shadow-md transition-shadow group">

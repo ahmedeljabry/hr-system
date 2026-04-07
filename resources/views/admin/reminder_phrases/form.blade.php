@@ -66,7 +66,7 @@
                 <div class="space-y-4">
                     <div class="flex justify-between items-center ml-1">
                         <label for="text_en" class="text-xs font-black text-gray-400 uppercase tracking-widest">{{ __('messages.english_template') ?? 'English Template' }}</label>
-                        <span class="px-2 py-1 bg-gray-100 text-[10px] font-black text-gray-500 rounded-md uppercase tracking-wider">English</span>
+                        <span class="px-2 py-1 bg-gray-100 text-[10px] font-black text-gray-500 rounded-md uppercase tracking-wider">{{ __('messages.english') }}</span>
                     </div>
                     <textarea name="text_en" id="text_en" rows="4" class="w-full px-6 py-5 bg-gray-50 border border-gray-100 rounded-3xl focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all outline-none font-medium text-gray-600 leading-relaxed" placeholder="Enter content in English..." required></textarea>
                     @error('text_en') <p class="text-xs font-bold text-red-500 ml-1">{{ $message }}</p> @enderror
@@ -76,7 +76,7 @@
                 <div class="space-y-4">
                     <div class="flex justify-between items-center ml-1">
                         <label for="text_ar" class="text-xs font-black text-gray-400 uppercase tracking-widest">{{ __('messages.arabic_template') ?? 'Arabic Template' }}</label>
-                        <span class="px-2 py-1 bg-amber-50 text-[10px] font-black text-amber-600 rounded-md uppercase tracking-wider">Arabic</span>
+                        <span class="px-2 py-1 bg-amber-50 text-[10px] font-black text-amber-600 rounded-md uppercase tracking-wider">{{ __('messages.arabic') }}</span>
                     </div>
                     <textarea name="text_ar" id="text_ar" rows="4" dir="rtl" class="w-full px-8 py-5 bg-gray-50 border border-gray-100 rounded-3xl focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all outline-none font-bold text-secondary text-right leading-loose font-arabic" placeholder="...ادخل المحتوى باللغة العربية" required></textarea>
                     @error('text_ar') <p class="text-xs font-bold text-red-500 ml-1">{{ $message }}</p> @enderror

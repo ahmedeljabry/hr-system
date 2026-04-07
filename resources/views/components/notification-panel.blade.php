@@ -78,7 +78,7 @@
                                         class="relative rounded-md text-gray-400 hover:text-gray-500 focus:outline-none"
                                         @click="open = false">
                                         <span class="absolute -inset-2.5"></span>
-                                        <span class="sr-only">Close panel</span>
+                                        <span class="sr-only">{{ __('messages.close_panel') }}</span>
                                         <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                                             stroke="currentColor" aria-hidden="true">
                                             <path stroke-linecap="round" stroke-linejoin="round"

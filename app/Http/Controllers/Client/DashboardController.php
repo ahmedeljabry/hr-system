@@ -49,6 +49,10 @@ class DashboardController extends Controller
 
         $recentAnnouncements = $client->announcements()->latest()->take(3)->get();
 
+        $actionRequiredCount = \App\Models\LeaveRequest::where('client_id', $client->id)->where('status', 'rejected')->count() +
+            \App\Models\Task::where('client_id', $client->id)->whereIn('status', ['todo', 'in_progress'])->where('due_date', '<', now()->startOfDay())->count() +
+            \App\Models\Asset::where('client_id', $client->id)->whereNotNull('returned_date')->count();
+
         return view('client.dashboard', compact(
             'client',
             'employeeCount',
@@ -57,6 +61,7 @@ class DashboardController extends Controller
             'daysUntilExpiry',
             'showExpiryWarning',
             'recentAnnouncements',
+            'actionRequiredCount',
         ));
     }
 }

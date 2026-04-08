@@ -65,6 +65,12 @@ Route::middleware(['auth', 'role:client', 'check_subscription', 'client_tenant']
     Route::post('/leaves/{leaveRequest}/approve', [\App\Http\Controllers\Client\LeaveController::class, 'approve'])->name('leaves.approve');
     Route::post('/leaves/{leaveRequest}/reject', [\App\Http\Controllers\Client\LeaveController::class, 'reject'])->name('leaves.reject');
 
+    // Action Required Management Center
+    Route::get('/management/action-required', [\App\Http\Controllers\Client\ActionRequiredController::class, 'index'])->name('action-required.index');
+    Route::delete('/management/action-required/leaves/{leaveRequest}', [\App\Http\Controllers\Client\ActionRequiredController::class, 'destroyLeave'])->name('action-required.leaves.destroy');
+    Route::delete('/management/action-required/tasks/{task}', [\App\Http\Controllers\Client\ActionRequiredController::class, 'destroyTask'])->name('action-required.tasks.destroy');
+    Route::delete('/management/action-required/assets/{asset}', [\App\Http\Controllers\Client\ActionRequiredController::class, 'destroyAsset'])->name('action-required.assets.destroy');
+
     // Notifications API
     Route::get('/notifications/api', [\App\Http\Controllers\Client\NotificationController::class, 'api'])->name('notifications.api');
     Route::post('/notifications/{notification}/read', [\App\Http\Controllers\Client\NotificationController::class, 'read'])->name('notifications.read');

@@ -21,6 +21,43 @@
             </div>
         @endif
 
+        <!-- Action Required Alert Banner -->
+        @if($actionRequiredCount > 0)
+            <div x-data="{ 
+                     count: {{ $actionRequiredCount }},
+                     dismissed: localStorage.getItem('action_required_dismissed') === 'true' && localStorage.getItem('action_required_last_count') == {{ $actionRequiredCount }}
+                 }" 
+                 x-show="!dismissed" 
+                 x-transition:leave="transition ease-in duration-300"
+                 x-transition:leave-start="opacity-100 scale-100"
+                 x-transition:leave-end="opacity-0 scale-95"
+                 class="mb-8 bg-rose-50 border-s-4 border-rose-500 p-6 rounded-3xl shadow-[0_10px_30px_rgba(244,63,94,0.1)] flex items-center justify-between group relative">
+                
+                <div class="flex items-center gap-5">
+                    <div class="w-12 h-12 bg-rose-500/10 rounded-2xl flex items-center justify-center shrink-0">
+                        <svg class="w-6 h-6 text-rose-600 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                    </div>
+                    <div>
+                        <h4 class="text-rose-900 font-black tracking-tight text-lg mb-0.5">{{ __('messages.action_required') }}</h4>
+                        <p class="text-rose-700 text-sm font-bold opacity-80">{{ __('messages.action_required_items', ['count' => $actionRequiredCount]) }}</p>
+                    </div>
+                </div>
+
+                <div class="flex items-center gap-4">
+                    <a href="{{ route('client.action-required.index') }}" 
+                       @click="localStorage.setItem('action_required_dismissed', 'true'); localStorage.setItem('action_required_last_count', count)"
+                       class="px-8 py-3 bg-rose-500 text-white rounded-xl text-xs font-black uppercase tracking-widest shadow-lg shadow-rose-200 hover:bg-rose-600 transition-all hover:-translate-y-1 active:scale-95">
+                        {{ __('messages.view_details') }}
+                    </a>
+                    <button @click="dismissed = true; localStorage.setItem('action_required_dismissed', 'true'); localStorage.setItem('action_required_last_count', count)" 
+                            class="p-2 text-rose-300 hover:text-rose-600 transition-colors"
+                            title="{{ __('messages.dismiss') }}">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"></path></svg>
+                    </button>
+                </div>
+            </div>
+        @endif
+
         <!-- Standard Header -->
         <x-dashboard-sub-header 
             :title="__('messages.dashboard')" 

@@ -42,7 +42,7 @@
                                         <div class="text-sm font-black text-secondary mb-1">{{ $reason->label() }}</div>
                                         <div class="flex items-center gap-4">
                                             <span class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">{{ __('messages.article') }}: {{ $reason->article() }}</span>
-                                            <span class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">{{ __('messages.notice_period') }}: {{ app()->getLocale() == 'ar' ? $reason->noticePeriodAr() : $reason->noticePeriod() }}</span>
+                                            <span class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">{{ __('messages.notice_period') }}: {{ $reason->noticePeriod() }}</span>
                                         </div>
                                     </div>
                                 </label>

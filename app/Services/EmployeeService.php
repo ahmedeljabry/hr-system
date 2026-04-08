@@ -9,7 +9,7 @@ use Illuminate\Pagination\LengthAwarePaginator;
 
 class EmployeeService
 {
-    public function list(int $clientId, ?string $search = null, string $status = 'active', int $perPage = 15): LengthAwarePaginator
+    public function list(int $clientId, ?string $search = null, string $status = 'active', int $perPage = 12): LengthAwarePaginator
     {
         $query = Employee::where('client_id', $clientId)->where('status', $status);
 

@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="pt-8 pb-12" x-data="{ viewMode: localStorage.getItem('view_mode') || 'grid' }" @view-changed.window="viewMode = $event.detail">
+<div class="pt-8 pb-12" x-data="{ viewMode: localStorage.getItem('employee_view_mode') || 'grid' }" @view-changed.window="viewMode = $event.detail">
     <div class="w-full">
         
         <!-- Standard Header -->
@@ -69,7 +69,6 @@
                 <!-- Search & Layout Controls -->
                 <div class="p-8 border-b border-gray-50 flex flex-col md:flex-row items-center justify-between gap-6 bg-gray-50/30">
                     <form method="GET" action="{{ route('client.employees.index') }}" class="relative w-full max-w-xl group">
-                        <input type="hidden" name="view" value="{{ request('view', 'grid') }}">
                         <div class="absolute inset-y-0 {{ app()->getLocale() == 'ar' ? 'right-0 pr-6' : 'left-0 pl-6' }} flex items-center pointer-events-none">
                             <svg class="h-5 w-5 text-gray-400 group-focus-within:text-primary transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -80,80 +79,78 @@
                                placeholder="{{ __('messages.search_employees') }}">
                         
                         @if(request('search'))
-                            <a href="{{ route('client.employees.index', ['view' => request('view', 'grid')]) }}" class="absolute inset-y-0 {{ app()->getLocale() == 'ar' ? 'left-4' : 'right-4' }} flex items-center text-gray-300 hover:text-gray-500">
+                            <button type="button" @click="window.location.href='{{ route('client.employees.index') }}'" class="absolute inset-y-0 {{ app()->getLocale() == 'ar' ? 'left-4' : 'right-4' }} flex items-center text-gray-300 hover:text-gray-500">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
-                            </a>
+                            </button>
                         @endif
                     </form>
 
                     <div class="flex items-center gap-2 p-1.5 bg-gray-100/80 rounded-2xl border border-gray-200/50">
-                        <a href="{{ request()->fullUrlWithQuery(['view' => 'grid']) }}" 
-                           class="px-4 py-2 rounded-xl text-xs font-bold transition-all {{ (request('view', 'grid')) == 'grid' ? 'bg-white text-secondary shadow-sm' : 'text-gray-400 hover:text-secondary' }}">
+                        <button type="button" @click="viewMode = 'grid'; localStorage.setItem('employee_view_mode', 'grid')" 
+                           :class="viewMode === 'grid' ? 'bg-white text-secondary shadow-sm' : 'text-gray-400 hover:text-secondary'"
+                           class="px-4 py-2 rounded-xl text-xs font-bold transition-all">
                             {{ __('messages.grid') }}
-                        </a>
-                        <a href="{{ request()->fullUrlWithQuery(['view' => 'list']) }}" 
-                           class="px-4 py-2 rounded-xl text-xs font-bold transition-all {{ request('view') == 'list' ? 'bg-white text-secondary shadow-sm' : 'text-gray-400 hover:text-secondary' }}">
+                        </button>
+                        <button type="button" @click="viewMode = 'list'; localStorage.setItem('employee_view_mode', 'list')" 
+                           :class="viewMode === 'list' ? 'bg-white text-secondary shadow-sm' : 'text-gray-400 hover:text-secondary'"
+                           class="px-4 py-2 rounded-xl text-xs font-bold transition-all">
                             {{ __('messages.list') }}
-                        </a>
+                        </button>
                     </div>
                 </div>
 
                 <!-- Views -->
                 <div class="flex-grow">
-                    @php 
-                        $viewMode = request('view', 'grid'); 
-                    @endphp
-                    
-                    @if($viewMode === 'grid')
-                        <div class="p-8">
-                            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-                                @forelse($employees as $employee)
-                                    @include('client.employees._grid-card', ['employee' => $employee])
-                                @empty
-                                    <div class="col-span-full py-20 flex flex-col items-center justify-center text-center opacity-60">
-                                        <div class="bg-gray-100 p-8 rounded-[2.5rem] mb-6">
-                                            <svg class="w-16 h-16 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
-                                            </svg>
-                                        </div>
-                                        <h3 class="text-xl font-bold text-secondary mb-2">{{ __('messages.no_employees') }}</h3>
-                                        <p class="text-sm text-gray-400 max-w-xs mx-auto">{{ __('messages.no_employees_desc') ?? 'Start by adding your first employee to the system.' }}</p>
+                    <!-- Grid View -->
+                    <div x-show="viewMode === 'grid'" x-cloak class="p-8 animate-in fade-in duration-500">
+                        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-8">
+                            @forelse($employees as $employee)
+                                @include('client.employees._grid-card', ['employee' => $employee])
+                            @empty
+                                <div class="col-span-full py-20 flex flex-col items-center justify-center text-center opacity-60">
+                                    <div class="bg-gray-100 p-8 rounded-[2.5rem] mb-6">
+                                        <svg class="w-16 h-16 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                                        </svg>
                                     </div>
-                                @endforelse
-                            </div>
+                                    <h3 class="text-xl font-bold text-secondary mb-2">{{ __('messages.no_employees') }}</h3>
+                                    <p class="text-sm text-gray-400 max-w-xs mx-auto">{{ __('messages.no_employees_desc') ?? 'Start by adding your first employee to the system.' }}</p>
+                                </div>
+                            @endforelse
                         </div>
-                    @else
-                        <div class="overflow-x-auto p-1">
-                            <table class="min-w-full">
-                                <thead>
-                                    <tr class="bg-gray-50/50 border-b border-gray-100">
-                                        <th class="px-8 py-5 text-start text-xs font-black text-gray-400 uppercase tracking-[0.2em]">{{ __('messages.employee_name') }}</th>
-                                        <th class="px-8 py-5 text-start text-xs font-black text-gray-400 uppercase tracking-[0.2em]">{{ __('messages.position') }}</th>
-                                        <th class="px-8 py-5 text-start text-xs font-black text-gray-400 uppercase tracking-[0.2em]">{{ __('messages.national_id_number') }}</th>
-                                        <th class="px-8 py-5 text-start text-xs font-black text-gray-400 uppercase tracking-[0.2em]">{{ __('messages.basic_salary') }}</th>
-                                        <th class="px-8 py-5 text-start text-xs font-black text-gray-400 uppercase tracking-[0.2em]">{{ __('messages.hire_date') }}</th>
-                                        <th class="px-8 py-5 text-end text-xs font-black text-gray-400 uppercase tracking-[0.2em]">{{ __('messages.actions') }}</th>
+                    </div>
+
+                    <!-- List View -->
+                    <div x-show="viewMode === 'list'" x-cloak class="overflow-x-auto p-1 animate-in fade-in duration-500">
+                        <table class="min-w-full">
+                            <thead>
+                                <tr class="bg-gray-50/50 border-b border-gray-100">
+                                    <th class="px-8 py-5 text-start text-xs font-black text-gray-400 uppercase tracking-[0.2em] {{ app()->getLocale() == 'ar' ? 'text-right' : '' }}">{{ __('messages.employee_name') }}</th>
+                                    <th class="px-8 py-5 text-start text-xs font-black text-gray-400 uppercase tracking-[0.2em] {{ app()->getLocale() == 'ar' ? 'text-right' : '' }}">{{ __('messages.position') }}</th>
+                                    <th class="px-8 py-5 text-start text-xs font-black text-gray-400 uppercase tracking-[0.2em] {{ app()->getLocale() == 'ar' ? 'text-right' : '' }}">{{ __('messages.national_id_number') }}</th>
+                                    <th class="px-8 py-5 text-start text-xs font-black text-gray-400 uppercase tracking-[0.2em] {{ app()->getLocale() == 'ar' ? 'text-right' : '' }}">{{ __('messages.basic_salary') }}</th>
+                                    <th class="px-8 py-5 text-start text-xs font-black text-gray-400 uppercase tracking-[0.2em] {{ app()->getLocale() == 'ar' ? 'text-right' : '' }}">{{ __('messages.hire_date') }}</th>
+                                    <th class="px-8 py-5 text-end text-xs font-black text-gray-400 uppercase tracking-[0.2em] {{ app()->getLocale() == 'ar' ? 'text-left' : '' }}">{{ __('messages.actions') }}</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-50">
+                                @forelse($employees as $employee)
+                                    @include('client.employees._list-row', ['employee' => $employee])
+                                @empty
+                                    <tr>
+                                        <td colspan="6" class="px-8 py-32 text-center">
+                                            <div class="flex flex-col items-center justify-center opacity-40">
+                                                <svg class="w-12 h-12 mb-4 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                                                </svg>
+                                                <span class="text-lg font-bold text-gray-500">{{ __('messages.no_employees') }}</span>
+                                            </div>
+                                        </td>
                                     </tr>
-                                </thead>
-                                <tbody class="divide-y divide-gray-50">
-                                    @forelse($employees as $employee)
-                                        @include('client.employees._list-row', ['employee' => $employee])
-                                    @empty
-                                        <tr>
-                                            <td colspan="6" class="px-8 py-32 text-center">
-                                                <div class="flex flex-col items-center justify-center opacity-40">
-                                                    <svg class="w-12 h-12 mb-4 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
-                                                    </svg>
-                                                    <span class="text-lg font-bold text-gray-500">{{ __('messages.no_employees') }}</span>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    @endforelse
-                                </tbody>
-                            </table>
-                        </div>
-                    @endif
+                                @endforelse
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
 
                 <!-- Footer / Pagination -->

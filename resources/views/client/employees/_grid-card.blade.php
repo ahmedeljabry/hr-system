@@ -1,4 +1,4 @@
-<div class="group bg-white rounded-[2.5rem] shadow-[0_15px_50px_rgba(0,0,0,0.03)] border border-gray-100 p-2 flex flex-col transition-all duration-700 hover:shadow-[0_30px_80px_rgba(0,0,0,0.08)] hover:-translate-y-2 relative overflow-hidden h-full">
+<div class="group bg-white rounded-[2.5rem] shadow-[0_15px_50px_rgba(0,0,0,0.03)] border border-gray-100 p-2 flex flex-col transition-all duration-700 hover:shadow-[0_30px_80px_rgba(0,0,0,0.08)] hover:-translate-y-2 relative overflow-hidden h-full min-h-[420px]">
     <!-- Decorative Corner Element -->
     <div class="absolute top-0 end-0 w-32 h-32 bg-primary/5 rounded-bl-[5rem] translate-x-10 -translate-y-10 group-hover:translate-x-0 group-hover:translate-y-0 transition-transform duration-700"></div>
     

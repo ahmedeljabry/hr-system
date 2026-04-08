@@ -123,7 +123,66 @@
                 </div>
             </div>
         </div>
-    <div class="mt-12 bg-white rounded-[2.5rem] shadow-[0_20px_50px_rgba(0,0,0,0.03)] border border-gray-100 overflow-hidden transition-all duration-500">
+
+        <!-- Employee Statistics Section -->
+        <div class="mt-12 grid grid-cols-1 lg:grid-cols-2 gap-10">
+            <!-- Gender Distribution Card -->
+            <div class="bg-white p-10 rounded-[2.5rem] shadow-[0_20px_50px_rgba(0,0,0,0.04)] border border-gray-100/50">
+                <div class="flex items-center gap-4 mb-8">
+                    <div class="w-1.5 h-6 bg-primary rounded-full"></div>
+                    <h3 class="text-xl font-black text-secondary tracking-tight">{{ __('messages.gender_distribution') }}</h3>
+                </div>
+                
+                <div class="grid grid-cols-2 gap-8">
+                    <!-- Male -->
+                    <div class="p-8 rounded-3xl bg-blue-50/50 border border-blue-100 flex flex-col items-center text-center group">
+                        <div class="w-14 h-14 bg-blue-100 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                            <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                            </svg>
+                        </div>
+                        <span class="text-3xl font-black text-blue-900 mb-1">{{ $genderStats['male'] }}</span>
+                        <span class="text-[10px] font-bold text-blue-400 uppercase tracking-widest">{{ __('messages.male') }}</span>
+                    </div>
+                    <!-- Female -->
+                    <div class="p-8 rounded-3xl bg-pink-50/50 border border-pink-100 flex flex-col items-center text-center group">
+                        <div class="w-14 h-14 bg-pink-100 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                            <svg class="w-8 h-8 text-pink-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                            </svg>
+                        </div>
+                        <span class="text-3xl font-black text-pink-900 mb-1">{{ $genderStats['female'] }}</span>
+                        <span class="text-[10px] font-bold text-pink-400 uppercase tracking-widest">{{ __('messages.female') }}</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Age Distribution Card -->
+            <div class="bg-white p-10 rounded-[2.5rem] shadow-[0_20px_50px_rgba(0,0,0,0.04)] border border-gray-100/50">
+                <div class="flex items-center gap-4 mb-8">
+                    <div class="w-1.5 h-6 bg-secondary rounded-full"></div>
+                    <h3 class="text-xl font-black text-secondary tracking-tight">{{ __('messages.age_distribution') }}</h3>
+                </div>
+                
+                <div class="space-y-4">
+                    @php
+                        $totalWithAge = array_sum($ageStats);
+                        $maxAge = max($ageStats) ?: 1;
+                    @endphp
+                    @foreach(['under_25' => 'bg-indigo-400', '25_35' => 'bg-emerald-400', '35_45' => 'bg-amber-400', 'over_45' => 'bg-rose-400'] as $key => $color)
+                        <div class="flex items-center gap-4">
+                            <div class="w-20 text-[10px] font-black text-gray-400 uppercase tracking-tighter">{{ __('messages.' . $key) }}</div>
+                            <div class="flex-grow h-3 bg-gray-50 rounded-full overflow-hidden border border-gray-100 shadow-inner">
+                                <div class="{{ $color }} h-full rounded-full transition-all duration-1000" style="width: {{ $totalWithAge > 0 ? ($ageStats[$key] / $totalWithAge * 100) : 0 }}%"></div>
+                            </div>
+                            <div class="w-10 text-right text-sm font-black text-secondary">{{ $ageStats[$key] }}</div>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-12 bg-white rounded-[2.5rem] shadow-[0_20px_50px_rgba(0,0,0,0.03)] border border-gray-100 overflow-hidden transition-all duration-500">
         <div class="px-10 py-7 border-b border-gray-50 bg-gray-50/50 flex justify-between items-center">
             <div class="flex items-center gap-3">
                 <div class="w-2 h-6 bg-primary rounded-full"></div>

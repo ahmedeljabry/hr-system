@@ -9,9 +9,9 @@ use Illuminate\Pagination\LengthAwarePaginator;
 
 class EmployeeService
 {
-    public function list(int $clientId, ?string $search = null, int $perPage = 15): LengthAwarePaginator
+    public function list(int $clientId, ?string $search = null, string $status = 'active', int $perPage = 15): LengthAwarePaginator
     {
-        $query = Employee::where('client_id', $clientId);
+        $query = Employee::where('client_id', $clientId)->where('status', $status);
 
         if ($search) {
             $query->where(function ($q) use ($search) {
@@ -23,6 +23,39 @@ class EmployeeService
         }
 
         return $query->orderBy('name_ar')->paginate($perPage);
+    }
+
+    public function terminate(int $clientId, int $employeeId, array $data, array $uploadedFiles = []): bool
+    {
+        $employee = $this->find($clientId, $employeeId);
+        $reason = \App\Enums\TerminationReason::from((int) $data['reason_case']);
+
+        return \Illuminate\Support\Facades\DB::transaction(function () use ($clientId, $employee, $data, $reason, $uploadedFiles) {
+            $filePaths = [];
+            foreach ($uploadedFiles as $file) {
+                $filePaths[] = $file->store("employees/{$clientId}/terminations/{$employee->id}", 'private');
+            }
+
+            \App\Models\EmployeeTermination::create([
+                'employee_id' => $employee->id,
+                'client_id' => $clientId,
+                'reason_case' => $reason->value,
+                'article_number' => $reason->article(),
+                'notice_period' => $reason->noticePeriod(),
+                'comments' => $data['comments'] ?? null,
+                'files' => $filePaths,
+                'terminated_at' => now(),
+            ]);
+
+            $employee->update(['status' => 'terminated']);
+
+            // Disable the user account
+            if ($employee->user) {
+                $employee->user->update(['email' => $employee->user->email . '_terminated_' . $employee->id]);
+            }
+
+            return true;
+        });
     }
 
     public function find(int $clientId, int $employeeId): Employee

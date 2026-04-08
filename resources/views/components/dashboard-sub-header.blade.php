@@ -32,9 +32,9 @@
                         {{ $title }}
                     </h1>
                 @if($subtitle)
-                    <p class="text-gray-400 text-xs md:text-sm font-bold opacity-80">
+                    <div class="text-gray-400 text-xs md:text-sm font-bold opacity-80">
                         {{ $subtitle }}
-                    </p>
+                    </div>
                 @endif
             </div>
         </div>

@@ -13,8 +13,14 @@ class Employee extends Model
     protected static function booted()
     {
         static::saving(function ($employee) {
-            if ($employee->name_en && !$employee->slug) {
-                $baseSlug = Str::slug($employee->name_en);
+            if (!$employee->slug) {
+                $baseName = $employee->name_en ?: $employee->name_ar;
+                $baseSlug = Str::slug($baseName);
+                
+                if (empty($baseSlug)) {
+                    $baseSlug = 'emp-' . strtolower(Str::random(5));
+                }
+                
                 $slug = $baseSlug;
                 $counter = 2;
 
@@ -91,6 +97,7 @@ class Employee extends Model
         'transportation_allowance',
         'other_allowances',
         'hire_date',
+        'status',
         'date_of_birth',
     ];
 
@@ -128,6 +135,21 @@ class Employee extends Model
     public function salaryDeductions()
     {
         return $this->hasMany(SalaryDeduction::class);
+    }
+
+    public function tasks()
+    {
+        return $this->hasMany(Task::class);
+    }
+
+    public function leaveRequests()
+    {
+        return $this->hasMany(LeaveRequest::class);
+    }
+
+    public function termination()
+    {
+        return $this->hasOne(EmployeeTermination::class);
     }
 
     public function getTotalSalaryAttribute(): float

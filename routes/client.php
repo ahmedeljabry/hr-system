@@ -20,6 +20,11 @@ Route::middleware(['auth', 'role:client', 'check_subscription', 'client_tenant']
     Route::put('/employees/{employee}', [EmployeeController::class, 'update'])->name('employees.update');
     Route::delete('/employees/{employee}', [EmployeeController::class, 'destroy'])->name('employees.destroy');
 
+    // New Termination Routes
+    Route::get('/terminated-employees', [EmployeeController::class, 'terminated'])->name('employees.terminated');
+    Route::get('/employees/{employee}/terminate', [EmployeeController::class, 'terminationForm'])->name('employees.terminate.form');
+    Route::post('/employees/{employee}/terminate', [EmployeeController::class, 'terminate'])->name('employees.terminate');
+
     // Salary Components
     Route::get('/employees/{employee}/salary-components', [\App\Http\Controllers\Client\SalaryComponentController::class, 'index'])->name('salary-components.index');
     Route::post('/employees/{employee}/salary-components', [\App\Http\Controllers\Client\SalaryComponentController::class, 'store'])->name('salary-components.store');

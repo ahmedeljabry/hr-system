@@ -41,8 +41,12 @@ class AuthService
     {
         return match ($user->role) {
             'super_admin' => '/admin/dashboard',
-            'client' => '/client/dashboard',
-            'employee' => '/employee/dashboard',
+            'client' => $user->client && $user->client->slug 
+                ? '/' . $user->client->slug . '/dashboard' 
+                : '/client/dashboard',
+            'employee' => $user->client && $user->client->slug && $user->employee && $user->employee->slug
+                ? '/' . $user->client->slug . '/' . $user->employee->slug . '/dashboard'
+                : '/employee/dashboard',
             default => '/login',
         };
     }

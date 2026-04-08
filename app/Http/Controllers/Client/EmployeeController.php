@@ -31,11 +31,13 @@ class EmployeeController extends Controller
 
     public function index(Request $request)
     {
+        $status = $request->input('status', 'active');
         $employees = $this->employeeService->list(
             $this->getClientId(),
             $request->input('search'),
+            $status,
         );
-        return view('client.employees.index', compact('employees'));
+        return view('client.employees.index', compact('employees', 'status'));
     }
 
     public function create()
@@ -54,6 +56,42 @@ class EmployeeController extends Controller
             $request->file('other_documents', []),
         );
         return redirect()->route('client.employees.index')->with('success', __('messages.employee_created'));
+    }
+
+    public function terminated(Request $request)
+    {
+        $employees = $this->employeeService->list(
+            $this->getClientId(),
+            $request->input('search'),
+            'terminated',
+        );
+        return view('client.employees.terminated', compact('employees'));
+    }
+
+    public function terminationForm(int $employee)
+    {
+        $employee = $this->employeeService->find($this->getClientId(), $employee);
+        $reasons = \App\Enums\TerminationReason::cases();
+        return view('client.employees.terminate', compact('employee', 'reasons'));
+    }
+
+    public function terminate(Request $request, int $employee)
+    {
+        $request->validate([
+            'reason_case' => ['required', 'integer', 'min:1', 'max:11'],
+            'comments' => ['nullable', 'string'],
+            'files' => ['nullable', 'array'],
+            'files.*' => ['file', 'mimes:jpeg,png,pdf,doc,docx', 'max:10240'],
+        ]);
+
+        $this->employeeService->terminate(
+            $this->getClientId(),
+            $employee,
+            $request->only(['reason_case', 'comments']),
+            $request->file('files', [])
+        );
+
+        return redirect()->route('client.employees.index')->with('success', __('messages.employee_terminated'));
     }
 
     public function show(int $employee)

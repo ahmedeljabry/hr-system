@@ -18,7 +18,12 @@ class Client extends Model
     {
         static::creating(function ($client) {
             if (!$client->slug) {
-                $client->slug = Str::slug($client->name);
+                $slug = Str::slug($client->name);
+                if (empty($slug)) {
+                    // Fallback for Arabic or non-Latin names
+                    $slug = strtolower(Str::random(8));
+                }
+                $client->slug = $slug;
             }
         });
 

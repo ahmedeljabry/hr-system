@@ -20,6 +20,14 @@
                 </a>
                 @endif
 
+                <a href="{{ route('client.employees.terminated') }}" 
+                   class="inline-flex items-center px-6 py-3 bg-red-500/10 hover:bg-red-500/20 border border-red-500/20 text-red-200 text-xs font-black rounded-xl transition-all duration-300 backdrop-blur-md">
+                    <svg class="w-4 h-4 me-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7a4 4 0 11-8 0 4 4 0 018 0zM9 14a6 6 0 00-6 6v1h12v-1a6 6 0 00-6-6zM21 12h-6" />
+                    </svg>
+                    {{ __('messages.terminated_employees') }}
+                </a>
+
                 <a href="{{ route('client.employees.create') }}" 
                    class="inline-flex items-center px-6 py-3 bg-primary hover:bg-primary/90 text-secondary text-xs font-black rounded-xl shadow-lg transition-all duration-300 hover:-translate-y-1 active:translate-y-0 group/add">
                     <svg class="w-4 h-4 me-2 group-hover/add:rotate-90 transition-transform duration-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">

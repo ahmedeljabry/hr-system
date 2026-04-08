@@ -25,9 +25,10 @@
         @if($actionRequiredCount > 0)
             <div x-data="{ 
                      count: {{ $actionRequiredCount }},
-                     dismissed: localStorage.getItem('action_required_dismissed') === 'true' && localStorage.getItem('action_required_last_count') == {{ $actionRequiredCount }}
+                     dismissed: localStorage.getItem('action_required_last_count') == {{ $actionRequiredCount }}
                  }" 
                  x-show="!dismissed" 
+                 x-cloak
                  x-transition:leave="transition ease-in duration-300"
                  x-transition:leave-start="opacity-100 scale-100"
                  x-transition:leave-end="opacity-0 scale-95"
@@ -45,11 +46,11 @@
 
                 <div class="flex items-center gap-4">
                     <a href="{{ route('client.action-required.index') }}" 
-                       @click="localStorage.setItem('action_required_dismissed', 'true'); localStorage.setItem('action_required_last_count', count)"
+                       @click="localStorage.setItem('action_required_last_count', count)"
                        class="px-8 py-3 bg-rose-500 text-white rounded-xl text-xs font-black uppercase tracking-widest shadow-lg shadow-rose-200 hover:bg-rose-600 transition-all hover:-translate-y-1 active:scale-95">
                         {{ __('messages.view_details') }}
                     </a>
-                    <button @click="dismissed = true; localStorage.setItem('action_required_dismissed', 'true'); localStorage.setItem('action_required_last_count', count)" 
+                    <button @click="dismissed = true; localStorage.setItem('action_required_last_count', count)" 
                             class="p-2 text-rose-300 hover:text-rose-600 transition-colors"
                             title="{{ __('messages.dismiss') }}">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"></path></svg>

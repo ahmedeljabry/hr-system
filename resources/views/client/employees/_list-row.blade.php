@@ -12,6 +12,9 @@
         <div class="text-sm font-bold text-gray-500 bg-gray-50 inline-block px-3 py-1 rounded-xl border border-gray-100">{{ $employee->position }}</div>
     </td>
     <td class="px-8 py-6 whitespace-nowrap">
+        <div class="text-sm font-black text-secondary uppercase">{{ $employee->nationality ?: 'Saudi' }}</div>
+    </td>
+    <td class="px-8 py-6 whitespace-nowrap">
         <div class="text-sm font-bold text-gray-500 font-mono">{{ $employee->national_id_number }}</div>
     </td>
     <td class="px-8 py-6 whitespace-nowrap">

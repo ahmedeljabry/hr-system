@@ -198,3 +198,11 @@
     </div>
 </div>
 @endsection
+
+@push('scripts')
+<script>
+    // When the user visits this page, they've 'seen' all currently required actions.
+    const currentCount = {{ $rejectedLeaves->count() + $overdueTasks->count() + $returnedAssets->count() }};
+    localStorage.setItem('action_required_last_count', currentCount);
+</script>
+@endpush

@@ -92,30 +92,90 @@
                                 </div>
                             </div>
 
-                            <!-- Gender -->
-                            <div class="space-y-3">
-                                <label for="gender"
-                                    class="block text-xs font-black text-gray-400 uppercase tracking-[0.2em]">{{ __('messages.gender') }}
-                                    <span class="text-primary">*</span></label>
-                                <div class="relative group">
-                                    <div
-                                        class="absolute inset-y-0 {{ app()->getLocale() == 'ar' ? 'right-3' : 'left-3' }} flex items-center pointer-events-none transition-all duration-300">
-                                        <div class="w-8 h-8 rounded-xl bg-primary/10 group-focus-within:bg-primary/20 flex items-center justify-center transition-all duration-300 group-focus-within:scale-110">
-                                            <svg class="w-4 h-4 text-primary/60 group-focus-within:text-primary transition-colors duration-300" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z"></path>
+                            <!-- Gender & Nationality -->
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-10 md:col-span-2" x-data="{ nationality: '{{ old('nationality', 'Saudi') }}' }">
+                                <!-- Gender -->
+                                <div class="space-y-3">
+                                    <label for="gender"
+                                        class="block text-xs font-black text-gray-400 uppercase tracking-[0.2em]">{{ __('messages.gender') }}
+                                        <span class="text-primary">*</span></label>
+                                    <div class="relative group">
+                                        <div
+                                            class="absolute inset-y-0 {{ app()->getLocale() == 'ar' ? 'right-3' : 'left-3' }} flex items-center pointer-events-none transition-all duration-300">
+                                            <div class="w-8 h-8 rounded-xl bg-primary/10 group-focus-within:bg-primary/20 flex items-center justify-center transition-all duration-300 group-focus-within:scale-110">
+                                                <svg class="w-4 h-4 text-primary/60 group-focus-within:text-primary transition-colors duration-300" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z"></path>
+                                                </svg>
+                                            </div>
+                                        </div>
+                                        <select name="gender" id="gender" required
+                                            class="block w-full bg-gray-50 border-2 border-transparent focus:border-primary focus:bg-white rounded-2xl py-4 {{ app()->getLocale() == 'ar' ? 'pr-14 pl-6' : 'pl-14 pr-6' }} text-secondary font-bold transition-all duration-300 outline-none appearance-none">
+                                            <option value="" disabled {{ old('gender') ? '' : 'selected' }}>{{ __('messages.select_leave_type_placeholder') }}</option>
+                                            <option value="male" {{ old('gender') == 'male' ? 'selected' : '' }}>{{ __('messages.male') }}</option>
+                                            <option value="female" {{ old('gender') == 'female' ? 'selected' : '' }}>{{ __('messages.female') }}</option>
+                                        </select>
+                                        <div class="absolute inset-y-0 {{ app()->getLocale() == 'ar' ? 'left-6' : 'right-6' }} flex items-center pointer-events-none">
+                                            <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path>
                                             </svg>
                                         </div>
                                     </div>
-                                    <select name="gender" id="gender" required
-                                        class="block w-full bg-gray-50 border-2 border-transparent focus:border-primary focus:bg-white rounded-2xl py-4 {{ app()->getLocale() == 'ar' ? 'pr-14 pl-6' : 'pl-14 pr-6' }} text-secondary font-bold transition-all duration-300 outline-none appearance-none">
-                                        <option value="" disabled {{ old('gender') ? '' : 'selected' }}>{{ __('messages.select_leave_type_placeholder') }}</option>
-                                        <option value="male" {{ old('gender') == 'male' ? 'selected' : '' }}>{{ __('messages.male') }}</option>
-                                        <option value="female" {{ old('gender') == 'female' ? 'selected' : '' }}>{{ __('messages.female') }}</option>
-                                    </select>
-                                    <div class="absolute inset-y-0 {{ app()->getLocale() == 'ar' ? 'left-6' : 'right-6' }} flex items-center pointer-events-none">
-                                        <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path>
-                                        </svg>
+                                </div>
+
+                                <!-- Nationality -->
+                                <div class="space-y-3">
+                                    <label for="nationality"
+                                        class="block text-xs font-black text-gray-400 uppercase tracking-[0.2em]">{{ __('messages.nationality') }}
+                                        <span class="text-primary">*</span></label>
+                                    <div class="relative group">
+                                        <div
+                                            class="absolute inset-y-0 {{ app()->getLocale() == 'ar' ? 'right-3' : 'left-3' }} flex items-center pointer-events-none transition-all duration-300">
+                                            <div class="w-8 h-8 rounded-xl bg-primary/10 group-focus-within:bg-primary/20 flex items-center justify-center transition-all duration-300 group-focus-within:scale-110">
+                                                <svg class="w-4 h-4 text-primary/60 group-focus-within:text-primary transition-colors duration-300" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 21a9.004 9.004 0 008.716-6.747M12 21a9.004 9.004 0 01-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 017.843 4.582M12 3a8.997 8.997 0 00-7.843 4.582m15.686 0A11.953 11.953 0 0112 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0121 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0112 16.5c-3.162 0-6.133-.815-8.716-2.247m0 0A9.015 9.015 0 013 12c0-1.605.42-3.113 1.157-4.418"></path>
+                                                </svg>
+                                            </div>
+                                        </div>
+                                        <select name="nationality" id="nationality" required x-model="nationality"
+                                            class="block w-full bg-gray-50 border-2 border-transparent focus:border-primary focus:bg-white rounded-2xl py-4 {{ app()->getLocale() == 'ar' ? 'pr-14 pl-6' : 'pl-14 pr-6' }} text-secondary font-bold transition-all duration-300 outline-none appearance-none">
+                                            <option value="Saudi">{{ __('messages.saudi') }}</option>
+                                            <option value="Afghan">Afghan</option>
+                                            <option value="Egyptian">Egyptian</option>
+                                            <option value="Indian">Indian</option>
+                                            <option value="Jordanian">Jordanian</option>
+                                            <option value="Pakistani">Pakistani</option>
+                                            <option value="Syrian">Syrian</option>
+                                            <option value="Yemeni">Yemeni</option>
+                                            <option value="Other">Other</option>
+                                        </select>
+                                        <div class="absolute inset-y-0 {{ app()->getLocale() == 'ar' ? 'left-6' : 'right-6' }} flex items-center pointer-events-none">
+                                            <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path>
+                                            </svg>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Residency Details (Conditional) -->
+                                <div x-show="nationality !== 'Saudi'" x-cloak x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 -translate-y-4" x-transition:enter-end="opacity-100 translate-y-0" class="md:col-span-2 grid grid-cols-1 md:grid-cols-3 gap-6 p-8 bg-amber-50/30 rounded-[2rem] border border-amber-100/50 mt-4">
+                                    <!-- Residency Number -->
+                                    <div class="space-y-3">
+                                        <label for="residency_number" class="block text-[10px] font-black text-amber-600 uppercase tracking-[0.2em]">{{ __('messages.residency_number') }}</label>
+                                        <input type="text" name="residency_number" id="residency_number" value="{{ old('residency_number') }}"
+                                            class="block w-full bg-white border-2 border-transparent focus:border-amber-400 rounded-xl py-3 px-4 text-secondary font-black transition-all outline-none"
+                                            :required="nationality !== 'Saudi'">
+                                    </div>
+                                    <!-- Residency Start -->
+                                    <div class="space-y-3">
+                                        <label for="residency_start_date" class="block text-[10px] font-black text-amber-600 uppercase tracking-[0.2em]">{{ __('messages.residency_start_date') }}</label>
+                                        <input type="date" name="residency_start_date" id="residency_start_date" value="{{ old('residency_start_date') }}"
+                                            class="block w-full bg-white border-2 border-transparent focus:border-amber-400 rounded-xl py-3 px-4 text-secondary font-black transition-all outline-none">
+                                    </div>
+                                    <!-- Residency End -->
+                                    <div class="space-y-3">
+                                        <label for="residency_end_date" class="block text-[10px] font-black text-amber-600 uppercase tracking-[0.2em]">{{ __('messages.residency_end_date') }}</label>
+                                        <input type="date" name="residency_end_date" id="residency_end_date" value="{{ old('residency_end_date') }}"
+                                            class="block w-full bg-white border-2 border-transparent focus:border-amber-400 rounded-xl py-3 px-4 text-secondary font-black transition-all outline-none">
                                     </div>
                                 </div>
                             </div>
@@ -347,6 +407,7 @@
                                         placeholder="21">
                                 </div>
                             </div>
+
 
 
                             <!-- Financial Breakdown Grid -->

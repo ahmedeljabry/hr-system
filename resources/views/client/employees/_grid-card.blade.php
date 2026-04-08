@@ -16,6 +16,9 @@
                     <span class="w-1.5 h-1.5 rounded-full {{ $employee->status === 'active' ? 'bg-green-500' : 'bg-red-500' }} me-1.5 animate-pulse"></span>
                     {{ $employee->status ?? 'Active' }}
                 </span>
+                <span class="inline-flex items-center px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest bg-gray-100 text-gray-600 border border-gray-200">
+                    {{ $employee->nationality ?: 'Saudi' }}
+                </span>
             </div>
         </div>
 

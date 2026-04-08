@@ -91,6 +91,10 @@ class EmployeesImport implements ToCollection, SkipsEmptyRows
                         'other_allowances'         => $this->sanitizeNumber($rowArray[12] ?? 0),
                         'date_of_birth'            => $this->parseDate($rowArray[13] ?? null),
                         'hire_date'                => $this->parseDate($rowArray[14] ?? null) ?? now(),
+                        'nationality'              => $rowArray[17] ?? 'Saudi',
+                        'residency_number'         => $rowArray[18] ?? null,
+                        'residency_start_date'     => $this->parseDate($rowArray[19] ?? null),
+                        'residency_end_date'       => $this->parseDate($rowArray[20] ?? null),
                     ]
                 );
 

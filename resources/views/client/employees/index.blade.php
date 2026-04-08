@@ -127,6 +127,7 @@
                                 <tr class="bg-gray-50/50 border-b border-gray-100">
                                     <th class="px-8 py-5 text-start text-xs font-black text-gray-400 uppercase tracking-[0.2em] {{ app()->getLocale() == 'ar' ? 'text-right' : '' }}">{{ __('messages.employee_name') }}</th>
                                     <th class="px-8 py-5 text-start text-xs font-black text-gray-400 uppercase tracking-[0.2em] {{ app()->getLocale() == 'ar' ? 'text-right' : '' }}">{{ __('messages.position') }}</th>
+                                    <th class="px-8 py-5 text-start text-xs font-black text-gray-400 uppercase tracking-[0.2em] {{ app()->getLocale() == 'ar' ? 'text-right' : '' }}">{{ __('messages.nationality') }}</th>
                                     <th class="px-8 py-5 text-start text-xs font-black text-gray-400 uppercase tracking-[0.2em] {{ app()->getLocale() == 'ar' ? 'text-right' : '' }}">{{ __('messages.national_id_number') }}</th>
                                     <th class="px-8 py-5 text-start text-xs font-black text-gray-400 uppercase tracking-[0.2em] {{ app()->getLocale() == 'ar' ? 'text-right' : '' }}">{{ __('messages.basic_salary') }}</th>
                                     <th class="px-8 py-5 text-start text-xs font-black text-gray-400 uppercase tracking-[0.2em] {{ app()->getLocale() == 'ar' ? 'text-right' : '' }}">{{ __('messages.hire_date') }}</th>

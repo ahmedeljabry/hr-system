@@ -51,7 +51,7 @@ class AnnouncementController extends Controller
 
         $this->announcementService->create($this->getClient(), $validated);
 
-        return redirect()->route('client.announcements.index')->with('success', __('messages.employee_created'));
+        return redirect()->route('client.announcements.index')->with('success', __('messages.announcement_created'));
     }
 
     public function edit(Announcement $announcement)
@@ -83,7 +83,7 @@ class AnnouncementController extends Controller
 
         $this->announcementService->update($announcement, $validated);
 
-        return redirect()->route('client.announcements.index')->with('success', __('messages.employee_updated'));
+        return redirect()->route('client.announcements.index')->with('success', __('messages.announcement_updated'));
     }
 
     public function destroy(Announcement $announcement)
@@ -93,6 +93,6 @@ class AnnouncementController extends Controller
 
         $this->announcementService->delete($announcement);
 
-        return redirect()->route('client.announcements.index')->with('success', __('Announcement deleted successfully.'));
+        return redirect()->route('client.announcements.index')->with('success', __('messages.announcement_deleted'));
     }
 }

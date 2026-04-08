@@ -55,7 +55,7 @@ class LeaveController extends Controller
 
         $this->leaveService->createLeaveType($this->getClient(), $data);
 
-        return redirect()->route('client.leaves.types')->with('success', __('Leave type created successfully.'));
+        return redirect()->route('client.leaves.types')->with('success', __('messages.leave_type_created'));
     }
 
     /**
@@ -74,7 +74,7 @@ class LeaveController extends Controller
 
         $this->leaveService->updateLeaveType($leaveType, $data);
 
-        return redirect()->route('client.leaves.types')->with('success', __('Leave type updated successfully.'));
+        return redirect()->route('client.leaves.types')->with('success', __('messages.leave_type_updated'));
     }
 
     /**
@@ -87,7 +87,7 @@ class LeaveController extends Controller
 
         $this->leaveService->deleteLeaveType($leaveType);
 
-        return redirect()->route('client.leaves.types')->with('success', __('Leave type deleted successfully.'));
+        return redirect()->route('client.leaves.types')->with('success', __('messages.leave_type_deleted'));
     }
 
     /**
@@ -100,7 +100,7 @@ class LeaveController extends Controller
 
         try {
             $this->leaveService->approve($leaveRequest, $request->input('reviewer_comment'));
-            return redirect()->back()->with('success', __('Leave request approved.'));
+            return redirect()->back()->with('success', __('messages.leave_approved'));
         } catch (\InvalidArgumentException $e) {
             return redirect()->back()->with('error', $e->getMessage());
         }
@@ -116,7 +116,7 @@ class LeaveController extends Controller
 
         try {
             $this->leaveService->reject($leaveRequest, $request->input('reviewer_comment'));
-            return redirect()->back()->with('success', __('Leave request rejected.'));
+            return redirect()->back()->with('success', __('messages.leave_rejected'));
         } catch (\InvalidArgumentException $e) {
             return redirect()->back()->with('error', $e->getMessage());
         }

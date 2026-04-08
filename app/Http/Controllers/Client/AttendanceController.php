@@ -53,6 +53,6 @@ class AttendanceController extends Controller
             ]);
         }
 
-        return redirect()->back()->with('success', __('messages.attendance_updated') ?? __('Attendance updated successfully.'));
+        return redirect()->back()->with('success', __('messages.attendance_updated'));
     }
 }

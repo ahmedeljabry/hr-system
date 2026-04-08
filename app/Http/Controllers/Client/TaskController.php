@@ -71,7 +71,7 @@ class TaskController extends Controller
 
         $this->taskService->createTask($data, $client);
 
-        return redirect()->route('client.tasks.index')->with('success', __('Task created successfully.'));
+        return redirect()->route('client.tasks.index')->with('success', __('messages.task_created'));
     }
 
     public function edit(Task $task)
@@ -116,7 +116,7 @@ class TaskController extends Controller
 
         $task->update($data);
 
-        return redirect()->route('client.tasks.index')->with('success', __('Task updated successfully.'));
+        return redirect()->route('client.tasks.index')->with('success', __('messages.task_updated'));
     }
 
     public function destroy(Task $task)
@@ -125,6 +125,6 @@ class TaskController extends Controller
         abort_unless($task->client_id === $client->id, 403, __('messages.unauthorized'));
 
         $task->delete();
-        return redirect()->route('client.tasks.index')->with('success', __('Task deleted successfully.'));
+        return redirect()->route('client.tasks.index')->with('success', __('messages.task_deleted'));
     }
 }

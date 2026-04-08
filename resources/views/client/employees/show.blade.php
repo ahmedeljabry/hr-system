@@ -165,9 +165,26 @@
                                     <dd class="text-lg font-black text-secondary font-mono">{{ $employee->national_id_number }}</dd>
                                 </div>
                                 <div class="space-y-1">
+                                    <dt class="text-[10px] font-black text-gray-400 uppercase tracking-widest">{{ __('messages.nationality') }}</dt>
+                                    <dd class="text-lg font-black text-secondary capitalize">{{ $employee->nationality ?: '—' }}</dd>
+                                </div>
+                                <div class="space-y-1">
                                     <dt class="text-[10px] font-black text-gray-400 uppercase tracking-widest">{{ __('messages.gender') }}</dt>
                                     <dd class="text-lg font-black text-secondary capitalize">{{ $employee->gender ?: '—' }}</dd>
                                 </div>
+
+                                @if($employee->nationality && strtolower($employee->nationality) !== 'saudi' && $employee->residency_number)
+                                    <div class="space-y-1">
+                                        <dt class="text-[10px] font-black text-gray-400 uppercase tracking-widest">{{ __('messages.residency_number') }}</dt>
+                                        <dd class="text-lg font-black text-secondary font-mono">{{ $employee->residency_number }}</dd>
+                                    </div>
+                                    <div class="space-y-1">
+                                        <dt class="text-[10px] font-black text-gray-400 uppercase tracking-widest">{{ __('messages.residency_end_date') }}</dt>
+                                        <dd class="text-lg font-black text-secondary">{{ $employee->residency_end_date ? $employee->residency_end_date->format('d/m/Y') : '—' }}</dd>
+                                    </div>
+                                @endif
+
+
                                 <div class="space-y-1">
                                     <dt class="text-[10px] font-black text-gray-400 uppercase tracking-widest">{{ __('messages.date_of_birth') }}</dt>
                                     <dd class="text-lg font-black text-secondary">{{ $employee->date_of_birth ? $employee->date_of_birth->format('d/m/Y') : '—' }}</dd>

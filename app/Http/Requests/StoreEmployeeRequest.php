@@ -42,6 +42,15 @@ class StoreEmployeeRequest extends FormRequest
                 Rule::unique('users')->ignore($this->getLinkedUserId(), 'id')
             ],
             'gender' => ['required', 'string', 'in:male,female'],
+            'nationality' => ['required', 'string', 'max:100'],
+            'residency_number' => [
+                Rule::requiredIf($this->input('nationality') && $this->input('nationality') !== 'Saudi'),
+                'nullable',
+                'string',
+                'max:100'
+            ],
+            'residency_start_date' => ['nullable', 'date'],
+            'residency_end_date' => ['nullable', 'date', 'after_or_equal:residency_start_date'],
             'annual_leave_days' => ['required', 'integer', 'min:0'],
             'password' => [$this->route('employee') ? 'nullable' : 'required', 'string', 'min:8'],
             'basic_salary' => ['required', 'numeric', 'min:0'],

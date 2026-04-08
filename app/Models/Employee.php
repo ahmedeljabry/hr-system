@@ -170,5 +170,18 @@ class Employee extends Model
         $locale = app()->getLocale();
         return $locale === 'ar' ? $this->name_ar : ($this->name_en ?? $this->name_ar);
     }
+
+    public function getNationalityLabelAttribute(): string
+    {
+        if (!$this->nationality) return '—';
+        
+        $key = 'messages.' . str_replace([' ', '-'], '_', strtolower($this->nationality));
+        
+        if (\Illuminate\Support\Facades\Lang::has($key)) {
+            return __($key);
+        }
+        
+        return $this->nationality;
+    }
 }
 

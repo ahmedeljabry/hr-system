@@ -166,7 +166,7 @@
                                 </div>
                                 <div class="space-y-1">
                                     <dt class="text-[10px] font-black text-gray-400 uppercase tracking-widest">{{ __('messages.nationality') }}</dt>
-                                    <dd class="text-lg font-black text-secondary capitalize">{{ $employee->nationality ?: '—' }}</dd>
+                                    <dd class="text-lg font-black text-secondary">{{ $employee->nationality_label }}</dd>
                                 </div>
                                 <div class="space-y-1">
                                     <dt class="text-[10px] font-black text-gray-400 uppercase tracking-widest">{{ __('messages.gender') }}</dt>

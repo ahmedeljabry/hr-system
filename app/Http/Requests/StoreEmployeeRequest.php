@@ -22,7 +22,8 @@ class StoreEmployeeRequest extends FormRequest
             'name_en' => ['required', 'string', 'max:255'],
             'position' => ['required', 'string', 'max:255'],
             'national_id_number' => [
-                'required',
+                Rule::requiredIf($this->input('nationality') === 'Saudi'),
+                'nullable',
                 'string',
                 'max:100',
                 Rule::unique('employees')->where('client_id', $clientId)->ignore($employeeId),

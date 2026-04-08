@@ -71,6 +71,15 @@ class EmployeesImport implements ToCollection, SkipsEmptyRows
                     ]
                 );
 
+                $nationalityRaw = trim($rowArray[17] ?? 'Saudi');
+                $nationality = $this->normalizeNationality($nationalityRaw);
+                $idNumber = trim($rowArray[5] ?? '');
+                $residencyNumFromExcel = trim($rowArray[18] ?? '');
+
+                $isSaudi = in_array(strtolower($nationality), ['saudi', 'سعودي']);
+                $nationalId = $isSaudi ? $idNumber : null;
+                $residencyNum = !$isSaudi ? ($residencyNumFromExcel ?: $idNumber) : null;
+
                 // 2. Sync Employee Data - handle NOT NULL columns with safe defaults
                 Employee::updateOrCreate(
                     ['email' => $email, 'client_id' => $this->clientId],
@@ -81,7 +90,7 @@ class EmployeesImport implements ToCollection, SkipsEmptyRows
                         'gender'                   => $gender,
                         'annual_leave_days'        => $this->sanitizeNumber($rowArray[16] ?? 21),
                         'position'                 => $rowArray[4] ?? 'N/A',
-                        'national_id_number'       => $rowArray[5] ?? 'N/A',
+                        'national_id_number'       => $nationalId ?: null,
                         'phone'                    => $rowArray[6] ?? null,
                         'emergency_phone'          => $rowArray[7] ?? null,
                         'bank_iban'                => $rowArray[8] ?? null,
@@ -91,8 +100,8 @@ class EmployeesImport implements ToCollection, SkipsEmptyRows
                         'other_allowances'         => $this->sanitizeNumber($rowArray[12] ?? 0),
                         'date_of_birth'            => $this->parseDate($rowArray[13] ?? null),
                         'hire_date'                => $this->parseDate($rowArray[14] ?? null) ?? now(),
-                        'nationality'              => $rowArray[17] ?? 'Saudi',
-                        'residency_number'         => $rowArray[18] ?? null,
+                        'nationality'              => $nationality,
+                        'residency_number'         => $residencyNum ?: null,
                         'residency_start_date'     => $this->parseDate($rowArray[19] ?? null),
                         'residency_end_date'       => $this->parseDate($rowArray[20] ?? null),
                     ]
@@ -106,6 +115,66 @@ class EmployeesImport implements ToCollection, SkipsEmptyRows
                 Log::error("Import FAIL: Row {$rowNumber} - " . $e->getMessage());
             }
         }
+    }
+
+    private function normalizeNationality($value): string
+    {
+        $v = mb_strtolower(trim($value));
+        $map = [
+            'سعودي' => 'Saudi',
+            'saudi' => 'Saudi',
+            'مصري' => 'Egyptian',
+            'مصر' => 'Egyptian',
+            'egyptian' => 'Egyptian',
+            'يمني' => 'Yemeni',
+            'yemeni' => 'Yemeni',
+            'اردني' => 'Jordanian',
+            'أردني' => 'Jordanian',
+            'jordanian' => 'Jordanian',
+            'سوري' => 'Syrian',
+            'syrian' => 'Syrian',
+            'سوداني' => 'Sudanese',
+            'sudanese' => 'Sudanese',
+            'فلسطيني' => 'Palestinian',
+            'palestinian' => 'Palestinian',
+            'لبناني' => 'Lebanese',
+            'lebanese' => 'Lebanese',
+            'مغربي' => 'Moroccan',
+            'moroccan' => 'Moroccan',
+            'تونسي' => 'Tunisian',
+            'tunisian' => 'Tunisian',
+            'جزائري' => 'Algerian',
+            'algerian' => 'Algerian',
+            'هندي' => 'Indian',
+            'indian' => 'Indian',
+            'باكستاني' => 'Pakistani',
+            'pakistani' => 'Pakistani',
+            'بنجلاديشي' => 'Bangladeshi',
+            'bangladeshi' => 'Bangladeshi',
+            'فلبيني' => 'Filipino',
+            'filipino' => 'Filipino',
+            'افغاني' => 'Afghan',
+            'أفغاني' => 'Afghan',
+            'afghan' => 'Afghan',
+            'اندونيسي' => 'Indonesian',
+            'إندونيسي' => 'Indonesian',
+            'indonesian' => 'Indonesian',
+            'نيبالي' => 'Nepalese',
+            'nepalese' => 'Nepalese',
+            'سريلانكي' => 'Sri Lankan',
+            'sri lankan' => 'Sri Lankan',
+            'اثيوبي' => 'Ethiopian',
+            'إثيوبي' => 'Ethiopian',
+            'ethiopian' => 'Ethiopian',
+        ];
+
+        foreach ($map as $key => $target) {
+            if ($v === mb_strtolower($key)) {
+                return $target;
+            }
+        }
+
+        return $value;
     }
 
     private function sanitizeNumber($value)

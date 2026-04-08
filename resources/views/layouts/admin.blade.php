@@ -51,6 +51,7 @@
             <div class="hidden md:flex items-center gap-8">
                 <a href="{{ route('admin.dashboard') }}" class="text-sm font-bold {{ request()->routeIs('admin.dashboard') ? 'text-primary border-b-2 border-primary pb-1' : 'text-secondary hover:text-primary transition-all' }}">{{ __('messages.dashboard') ?? 'Dashboard' }}</a>
                 <a href="{{ route('admin.clients.index') }}" class="text-sm font-bold {{ request()->routeIs('admin.clients.*') ? 'text-primary border-b-2 border-primary pb-1' : 'text-secondary hover:text-primary transition-all' }}">{{ __('messages.clients') ?? 'Clients' }}</a>
+                <a href="{{ route('admin.localization.index') }}" class="text-sm font-bold {{ request()->routeIs('admin.localization.*') ? 'text-primary border-b-2 border-primary pb-1' : 'text-secondary hover:text-primary transition-all' }}">{{ __('Localization Decisions') }}</a>
             </div>
 
             <!-- Mobile Menu Button -->

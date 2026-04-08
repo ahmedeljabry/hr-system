@@ -56,6 +56,10 @@ Route::middleware(['auth', 'role:client', 'check_subscription', 'client_tenant']
     Route::resource('assets', \App\Http\Controllers\Client\AssetController::class);
     Route::resource('announcements', \App\Http\Controllers\Client\AnnouncementController::class);
 
+    // Localization
+    Route::get('/localization', [\App\Http\Controllers\Client\LocalizationDecisionController::class, 'index'])->name('localization.index');
+    Route::get('/localization/{id}', [\App\Http\Controllers\Client\LocalizationDecisionController::class, 'show'])->name('localization.show');
+
     // Leave Management
     Route::get('/leaves', [\App\Http\Controllers\Client\LeaveController::class, 'index'])->name('leaves.index');
     Route::get('/leaves/types', [\App\Http\Controllers\Client\LeaveController::class, 'types'])->name('leaves.types');

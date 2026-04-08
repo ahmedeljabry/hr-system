@@ -19,4 +19,5 @@ Route::middleware(['auth', 'role:super_admin'])->prefix('admin')->name('admin.')
     Route::get('/users/{user}/edit', [UserController::class, 'edit'])->name('users.edit');
     Route::patch('/users/{user}', [UserController::class, 'update'])->name('users.update');
 
+    Route::resource('localization', \App\Http\Controllers\Admin\LocalizationDecisionController::class);
 });

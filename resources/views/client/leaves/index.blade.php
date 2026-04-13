@@ -74,6 +74,7 @@
                             <th class="px-10 py-7 text-left text-[11px] font-black text-gray-400 uppercase tracking-[0.2em] {{ app()->getLocale() == 'ar' ? 'text-right' : '' }}">{{ __('messages.period') }}</th>
                             <th class="px-10 py-7 text-center text-[11px] font-black text-gray-400 uppercase tracking-[0.2em]">{{ __('messages.duration') }}</th>
                             <th class="px-10 py-7 text-center text-[11px] font-black text-gray-400 uppercase tracking-[0.2em]">{{ __('messages.status') }}</th>
+                            <th class="px-10 py-7 text-left text-[11px] font-black text-gray-400 uppercase tracking-[0.2em] {{ app()->getLocale() == 'ar' ? 'text-right' : '' }}">{{ __('messages.return_to_work') }}</th>
                             <th class="px-10 py-7 text-right text-[11px] font-black text-gray-400 uppercase tracking-[0.2em] {{ app()->getLocale() == 'ar' ? 'text-left' : '' }}">{{ __('messages.actions') }}</th>
                         </tr>
                     </thead>
@@ -112,6 +113,37 @@
                                         {{ __('messages.' . $req->status) }}
                                     </span>
                                 </td>
+                                <td class="px-10 py-7 whitespace-nowrap">
+                                    @if($req->resumed_at)
+                                        <div class="flex flex-col">
+                                            <span class="text-sm font-black text-secondary/80">
+                                                {{ $req->resumed_at->translatedFormat('d M Y h:i A') }}
+                                            </span>
+                                            @if($req->resumption_recorded_at)
+                                                <span class="text-[9px] font-black uppercase tracking-[0.16em] text-gray-400">
+                                                    {{ __('messages.resumption_recorded_at') }}: {{ $req->resumption_recorded_at->translatedFormat('d M Y h:i A') }}
+                                                </span>
+                                            @endif
+                                        </div>
+                                    @elseif($req->requiresResumption())
+                                        <div class="flex flex-col">
+                                            <span class="text-[10px] font-black uppercase tracking-[0.18em] text-amber-600">
+                                                {{ $req->isCurrentlyOnLeave() ? __('messages.currently_on_leave') : __('messages.return_pending') }}
+                                            </span>
+                                            <span class="text-sm font-bold text-gray-500">
+                                                {{ $req->isCurrentlyOnLeave()
+                                                    ? __('messages.currently_on_leave_banner_message', ['type' => Lang::has($typeKey) ? __($typeKey) : $req->leaveType->name, 'start' => $req->start_date->translatedFormat('d M Y'), 'end' => $req->end_date->translatedFormat('d M Y')])
+                                                    : __('messages.leave_return_required_message', ['end' => $req->end_date->translatedFormat('d M Y')]) }}
+                                            </span>
+                                        </div>
+                                    @elseif($req->isApproved())
+                                        <span class="text-xs font-black uppercase tracking-[0.18em] text-sky-600">
+                                            {{ __('messages.starts_on', ['date' => $req->start_date->translatedFormat('d M Y')]) }}
+                                        </span>
+                                    @else
+                                        <span class="text-xs text-gray-300">—</span>
+                                    @endif
+                                </td>
                                 <td class="px-10 py-7 whitespace-nowrap text-center">
                                     @if($req->status == 'pending')
                                         <div class="flex items-center justify-end gap-3 {{ app()->getLocale() == 'ar' ? 'justify-start' : '' }}">
@@ -132,16 +164,40 @@
                                              </form>
                                          </div>
                                      @else
-                                         <div class="flex flex-col items-end {{ app()->getLocale() == 'ar' ? 'items-start' : '' }} opacity-50">
-                                             <span class="text-[9px] font-black uppercase text-gray-400 tracking-[0.1em] mb-1 italic">{{ __('messages.decision_recorded') }}</span>
-                                             <span class="text-[10px] text-secondary font-bold">{{ $req->reviewed_at?->translatedFormat('d M, Y') }}</span>
+                                         <div class="flex flex-col items-end gap-3 {{ app()->getLocale() == 'ar' ? 'items-start' : '' }}">
+                                            <div class="flex flex-col {{ app()->getLocale() == 'ar' ? 'items-start' : 'items-end' }} opacity-60">
+                                                <span class="text-[9px] font-black uppercase text-gray-400 tracking-[0.1em] mb-1 italic">{{ __('messages.decision_recorded') }}</span>
+                                                <span class="text-[10px] text-secondary font-bold">{{ $req->reviewed_at?->translatedFormat('d M, Y') }}</span>
+                                            </div>
+
+                                            @if($req->canClientManageResumption())
+                                                <form action="{{ route('client.leaves.resume', $req) }}" method="POST" class="w-full max-w-xs space-y-2">
+                                                    @csrf
+                                                    @method('PUT')
+                                                    <label for="resumed_at_{{ $req->id }}" class="block text-[10px] font-black uppercase tracking-[0.16em] text-gray-400">
+                                                        {{ __('messages.return_date_time') }}
+                                                    </label>
+                                                    <input
+                                                        id="resumed_at_{{ $req->id }}"
+                                                        type="datetime-local"
+                                                        name="resumed_at"
+                                                        value="{{ old('resumed_at', $req->resumed_at?->format('Y-m-d\TH:i') ?? now()->format('Y-m-d\TH:i')) }}"
+                                                        class="w-full rounded-2xl border border-gray-200 bg-white px-4 py-3 text-sm font-bold text-secondary outline-none transition focus:border-primary"
+                                                        max="{{ now()->format('Y-m-d\TH:i') }}"
+                                                        required
+                                                    >
+                                                    <button type="submit" class="inline-flex items-center justify-center rounded-2xl bg-secondary px-5 py-3 text-[10px] font-black uppercase tracking-[0.18em] text-white transition-all duration-300 hover:-translate-y-1 hover:bg-primary hover:text-secondary">
+                                                        {{ __('messages.save_return_date_time') }}
+                                                    </button>
+                                                </form>
+                                            @endif
                                          </div>
                                      @endif
                                  </td>
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="6" class="px-10 py-32 text-center">
+                                <td colspan="7" class="px-10 py-32 text-center">
                                     <div class="flex flex-col items-center">
                                         <div class="w-24 h-24 bg-blue-50 rounded-full flex items-center justify-center mb-6">
                                             <svg class="w-12 h-12 text-blue-200" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>

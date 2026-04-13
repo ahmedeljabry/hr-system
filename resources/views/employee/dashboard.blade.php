@@ -9,6 +9,48 @@
             :subtitle="__('messages.portal_summary')"
         />
 
+        @if(!empty($widgets['active_leave']))
+            @php
+                $activeLeave = $widgets['active_leave'];
+                $activeTypeKey = 'messages.' . strtolower(str_replace(' ', '_', $activeLeave->leaveType->name));
+                $activeTypeName = Lang::has($activeTypeKey) ? __($activeTypeKey) : $activeLeave->leaveType->name;
+            @endphp
+            <div class="relative overflow-hidden rounded-[2.5rem] border border-amber-200 bg-gradient-to-r from-amber-50 via-orange-50 to-white p-8 shadow-[0_20px_50px_rgba(245,158,11,0.10)]">
+                <div class="absolute inset-y-0 right-0 w-40 bg-amber-200/20 blur-3xl"></div>
+                <div class="relative flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
+                    <div class="flex items-start gap-4">
+                        <div class="flex h-14 w-14 items-center justify-center rounded-2xl bg-amber-100 text-amber-700 shadow-sm">
+                            <svg class="h-7 w-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                            </svg>
+                        </div>
+                        <div>
+                            <h2 class="text-xl font-black text-amber-900">
+                                {{ $activeLeave->isCurrentlyOnLeave() ? __('messages.currently_on_leave_banner_title') : __('messages.leave_return_required_title') }}
+                            </h2>
+                            <p class="mt-2 max-w-3xl text-sm font-bold leading-6 text-amber-800/90">
+                                @if($activeLeave->isCurrentlyOnLeave())
+                                    {{ __('messages.currently_on_leave_banner_message', [
+                                        'type' => $activeTypeName,
+                                        'start' => $activeLeave->start_date->translatedFormat('d M Y'),
+                                        'end' => $activeLeave->end_date->translatedFormat('d M Y'),
+                                    ]) }}
+                                @else
+                                    {{ __('messages.leave_return_required_message', [
+                                        'end' => $activeLeave->end_date->translatedFormat('d M Y'),
+                                    ]) }}
+                                @endif
+                            </p>
+                        </div>
+                    </div>
+                    <a href="{{ route('employee.leaves.index') }}"
+                       class="inline-flex items-center justify-center rounded-2xl bg-amber-500 px-6 py-3 text-xs font-black uppercase tracking-[0.2em] text-white transition-all duration-300 hover:-translate-y-1 hover:bg-amber-600">
+                        {{ __('messages.record_return_to_work') }}
+                    </a>
+                </div>
+            </div>
+        @endif
+
     <!-- Main Dashboard Grid -->
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
         <!-- Employee Profile Info Card -->
@@ -195,4 +237,3 @@
 </div>
 </div>
 @endsection
-

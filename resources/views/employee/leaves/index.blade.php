@@ -16,10 +16,57 @@
                 {{ __('messages.request_leave') }}
             </a>
         </x-slot>
-    </x-dashboard-sub-header>
+	    </x-dashboard-sub-header>
+
+        @if($currentLeave)
+            @php
+                $currentTypeKey = 'messages.' . strtolower(str_replace(' ', '_', $currentLeave->leaveType->name));
+                $currentTypeName = Lang::has($currentTypeKey) ? __($currentTypeKey) : $currentLeave->leaveType->name;
+            @endphp
+            <div class="mb-8 animate-in fade-in slide-in-from-top-4 duration-500">
+                <div class="rounded-[2rem] border border-amber-100 bg-gradient-to-r from-amber-50 via-orange-50 to-white p-6 shadow-sm">
+                    <div class="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+                        <div class="flex items-start gap-4">
+                            <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-amber-100 text-amber-700">
+                                <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-black text-amber-900">
+                                    {{ $currentLeave->isCurrentlyOnLeave() ? __('messages.currently_on_leave_banner_title') : __('messages.leave_return_required_title') }}
+                                </h3>
+                                <p class="mt-1 text-sm font-bold text-amber-800/90">
+                                    @if($currentLeave->isCurrentlyOnLeave())
+                                        {{ __('messages.currently_on_leave_banner_message', [
+                                            'type' => $currentTypeName,
+                                            'start' => $currentLeave->start_date->translatedFormat('d M Y'),
+                                            'end' => $currentLeave->end_date->translatedFormat('d M Y'),
+                                        ]) }}
+                                    @else
+                                        {{ __('messages.leave_return_required_message', [
+                                            'end' => $currentLeave->end_date->translatedFormat('d M Y'),
+                                        ]) }}
+                                    @endif
+                                </p>
+                            </div>
+                        </div>
+                        @if($currentLeave->canEmployeeRecordResumption())
+                            <form action="{{ route('employee.leaves.resume', $currentLeave) }}" method="POST">
+                                @csrf
+                                <button type="submit"
+                                        class="inline-flex items-center justify-center rounded-2xl bg-amber-500 px-6 py-3 text-xs font-black uppercase tracking-[0.2em] text-white transition-all duration-300 hover:-translate-y-1 hover:bg-amber-600">
+                                    {{ __('messages.record_return_to_work') }}
+                                </button>
+                            </form>
+                        @endif
+                    </div>
+                </div>
+            </div>
+        @endif
 
 
-        @if(session('success'))
+	        @if(session('success'))
             <div class="mb-8 animate-in fade-in slide-in-from-top-4 duration-500">
                 <div class="bg-emerald-50 border border-emerald-100 p-5 rounded-2xl flex items-center gap-4 shadow-sm">
                     <div class="w-10 h-10 rounded-full bg-emerald-500/10 flex items-center justify-center shrink-0">
@@ -123,7 +170,9 @@
                         <th class="px-10 py-7 text-left text-[11px] font-black text-gray-400 uppercase tracking-[0.2em] {{ app()->getLocale() == 'ar' ? 'text-right' : '' }}">{{ __('messages.dates') }}</th>
                         <th class="px-10 py-7 text-center text-[11px] font-black text-gray-400 uppercase tracking-[0.2em]">{{ __('messages.duration') }}</th>
                         <th class="px-10 py-7 text-center text-[11px] font-black text-gray-400 uppercase tracking-[0.2em]">{{ __('messages.status') }}</th>
+                        <th class="px-10 py-7 text-left text-[11px] font-black text-gray-400 uppercase tracking-[0.2em] {{ app()->getLocale() == 'ar' ? 'text-right' : '' }}">{{ __('messages.return_to_work') }}</th>
                         <th class="px-10 py-6 text-right text-[11px] font-black text-gray-400 uppercase tracking-[0.2em] {{ app()->getLocale() == 'ar' ? 'text-left' : '' }}">{{ __('messages.reviewer_comment') }}</th>
+                        <th class="px-10 py-6 text-right text-[11px] font-black text-gray-400 uppercase tracking-[0.2em] {{ app()->getLocale() == 'ar' ? 'text-left' : '' }}">{{ __('messages.actions') }}</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-50">
@@ -164,6 +213,33 @@
                                         {{ __($req->status) }}
                                     </span>
                                 </td>
+                                <td class="px-10 py-7 whitespace-nowrap">
+                                    @if($req->resumed_at)
+                                        <div class="flex flex-col">
+                                            <span class="text-sm font-black text-secondary/80">
+                                                {{ $req->resumed_at->translatedFormat('d M Y h:i A') }}
+                                            </span>
+                                            @if($req->resumption_recorded_at)
+                                                <span class="text-[10px] font-bold uppercase tracking-widest text-gray-400">
+                                                    {{ __('messages.resumption_recorded_at') }}: {{ $req->resumption_recorded_at->translatedFormat('d M Y h:i A') }}
+                                                </span>
+                                            @endif
+                                        </div>
+                                    @elseif($req->requiresResumption())
+                                        <div class="flex flex-col">
+                                            <span class="text-xs font-black uppercase tracking-[0.18em] text-amber-600">
+                                                {{ $req->isCurrentlyOnLeave() ? __('messages.currently_on_leave') : __('messages.return_pending') }}
+                                            </span>
+                                            <span class="text-sm font-bold text-gray-500">
+                                                {{ $req->isCurrentlyOnLeave()
+                                                    ? __('messages.currently_on_leave_banner_message', ['type' => $rTypeName, 'start' => $req->start_date->translatedFormat('d M Y'), 'end' => $req->end_date->translatedFormat('d M Y')])
+                                                    : __('messages.leave_return_required_message', ['end' => $req->end_date->translatedFormat('d M Y')]) }}
+                                            </span>
+                                        </div>
+                                    @else
+                                        <span class="text-xs text-gray-300">—</span>
+                                    @endif
+                                </td>
                                 <td class="px-10 py-7 text-right {{ app()->getLocale() == 'ar' ? 'text-left' : '' }}">
                                     @if($req->reviewer_comment)
                                         <span class="text-sm text-gray-500 font-medium italic">"{{ Str::limit($req->reviewer_comment, 40) }}"</span>
@@ -171,10 +247,27 @@
                                         <span class="text-xs text-gray-300">—</span>
                                     @endif
                                 </td>
+                                <td class="px-10 py-7 text-right {{ app()->getLocale() == 'ar' ? 'text-left' : '' }}">
+                                    @if($req->canEmployeeRecordResumption())
+                                        <form action="{{ route('employee.leaves.resume', $req) }}" method="POST" class="inline">
+                                            @csrf
+                                            <button type="submit"
+                                                    class="inline-flex items-center justify-center rounded-2xl bg-amber-500 px-5 py-3 text-[10px] font-black uppercase tracking-[0.18em] text-white transition-all duration-300 hover:-translate-y-1 hover:bg-amber-600">
+                                                {{ __('messages.record_return_to_work') }}
+                                            </button>
+                                        </form>
+                                    @elseif($req->resumed_at)
+                                        <span class="inline-flex items-center rounded-xl bg-emerald-50 px-4 py-2 text-[10px] font-black uppercase tracking-[0.18em] text-emerald-700">
+                                            {{ __('messages.return_recorded') }}
+                                        </span>
+                                    @else
+                                        <span class="text-xs text-gray-300">—</span>
+                                    @endif
+                                </td>
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="5" class="px-10 py-24 text-center">
+                                <td colspan="7" class="px-10 py-24 text-center">
                                     <div class="flex flex-col items-center">
                                         <div class="w-20 h-20 bg-blue-50 rounded-full flex items-center justify-center mb-6">
                                             <svg class="w-10 h-10 text-blue-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path></svg>

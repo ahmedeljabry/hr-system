@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Employee;
 
 use App\Http\Controllers\Controller;
+use App\Models\LeaveRequest;
 use App\Services\LeaveService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -26,8 +27,9 @@ class LeaveController extends Controller
         $employee = $this->getEmployee();
         $balanceSummary = $this->leaveService->getBalanceSummary($employee);
         $requests = $this->leaveService->getEmployeeRequests($employee);
+        $currentLeave = $this->leaveService->getCurrentLeave($employee);
 
-        return view('employee.leaves.index', compact('balanceSummary', 'requests'));
+        return view('employee.leaves.index', compact('balanceSummary', 'requests', 'currentLeave'));
     }
 
     /**
@@ -61,6 +63,27 @@ class LeaveController extends Controller
             return redirect()->route('employee.leaves.index')->with('success', __('Leave request submitted successfully.'));
         } catch (\InvalidArgumentException $e) {
             return redirect()->back()->withInput()->with('error', $e->getMessage());
+        }
+    }
+
+    /**
+     * Record return to work for an approved leave.
+     */
+    public function resume(LeaveRequest $leaveRequest)
+    {
+        $employee = $this->getEmployee();
+        abort_unless($leaveRequest->employee_id === $employee->id, 403, __('messages.unauthorized'));
+
+        try {
+            $this->leaveService->recordReturnToWork($employee, $leaveRequest);
+
+            return redirect()
+                ->route('employee.leaves.index')
+                ->with('success', __('messages.leave_return_recorded_success'));
+        } catch (\InvalidArgumentException $e) {
+            return redirect()
+                ->route('employee.leaves.index')
+                ->with('error', $e->getMessage());
         }
     }
 }

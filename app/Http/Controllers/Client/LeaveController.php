@@ -121,4 +121,25 @@ class LeaveController extends Controller
             return redirect()->back()->with('error', $e->getMessage());
         }
     }
+
+    /**
+     * Update the actual return to work timestamp for an approved leave.
+     */
+    public function updateResumption(Request $request, LeaveRequest $leaveRequest)
+    {
+        $client = $this->getClient();
+        abort_unless($leaveRequest->client_id === $client->id, 403, __('messages.unauthorized'));
+
+        $data = $request->validate([
+            'resumed_at' => ['required', 'date'],
+        ]);
+
+        try {
+            $this->leaveService->updateReturnToWork($leaveRequest, $data['resumed_at']);
+
+            return redirect()->back()->with('success', __('messages.leave_return_updated_success'));
+        } catch (\InvalidArgumentException $e) {
+            return redirect()->back()->with('error', $e->getMessage());
+        }
+    }
 }

@@ -19,6 +19,7 @@ Route::middleware(['auth', 'role:employee', 'check_subscription', 'client_tenant
     Route::get('/leaves', [\App\Http\Controllers\Employee\LeaveController::class, 'index'])->name('leaves.index');
     Route::get('/leaves/create', [\App\Http\Controllers\Employee\LeaveController::class, 'create'])->name('leaves.create');
     Route::post('/leaves', [\App\Http\Controllers\Employee\LeaveController::class, 'store'])->name('leaves.store');
+    Route::post('/leaves/{leaveRequest}/resume', [\App\Http\Controllers\Employee\LeaveController::class, 'resume'])->name('leaves.resume');
 
     // Deductions
     Route::get('/deductions', [\App\Http\Controllers\Employee\DeductionController::class, 'index'])->name('deductions.index');

@@ -68,6 +68,7 @@ Route::middleware(['auth', 'role:client', 'check_subscription', 'client_tenant']
     Route::delete('/leaves/types/{leaveType}', [\App\Http\Controllers\Client\LeaveController::class, 'destroyType'])->name('leaves.destroy-type');
     Route::post('/leaves/{leaveRequest}/approve', [\App\Http\Controllers\Client\LeaveController::class, 'approve'])->name('leaves.approve');
     Route::post('/leaves/{leaveRequest}/reject', [\App\Http\Controllers\Client\LeaveController::class, 'reject'])->name('leaves.reject');
+    Route::put('/leaves/{leaveRequest}/resume', [\App\Http\Controllers\Client\LeaveController::class, 'updateResumption'])->name('leaves.resume');
 
     // Action Required Management Center
     Route::get('/management/action-required', [\App\Http\Controllers\Client\ActionRequiredController::class, 'index'])->name('action-required.index');
@@ -79,4 +80,3 @@ Route::middleware(['auth', 'role:client', 'check_subscription', 'client_tenant']
     Route::get('/notifications/api', [\App\Http\Controllers\Client\NotificationController::class, 'api'])->name('notifications.api');
     Route::post('/notifications/{notification}/read', [\App\Http\Controllers\Client\NotificationController::class, 'read'])->name('notifications.read');
 });
-

@@ -218,6 +218,106 @@ class LeaveService
     }
 
     /**
+     * Get the employee's current approved leave that still requires return confirmation.
+     */
+    public function getCurrentLeave(Employee $employee): ?LeaveRequest
+    {
+        return LeaveRequest::where('employee_id', $employee->id)
+            ->with('leaveType')
+            ->approved()
+            ->awaitingResumption()
+            ->started()
+            ->orderByDesc('start_date')
+            ->orderByDesc('created_at')
+            ->first();
+    }
+
+    /**
+     * Record the employee return from leave using the current timestamp.
+     */
+    public function recordReturnToWork(Employee $employee, LeaveRequest $leaveRequest): LeaveRequest
+    {
+        if ($leaveRequest->employee_id !== $employee->id) {
+            throw new \InvalidArgumentException(__('messages.unauthorized'));
+        }
+
+        $recordedAt = now();
+
+        if (! $leaveRequest->canEmployeeRecordResumption($recordedAt)) {
+            throw new \InvalidArgumentException(__('messages.leave_return_invalid_state'));
+        }
+
+        return DB::transaction(function () use ($leaveRequest, $employee, $recordedAt) {
+            $leaveRequest->update([
+                'resumed_at' => $recordedAt,
+                'resumption_recorded_at' => $leaveRequest->resumption_recorded_at ?? $recordedAt,
+            ]);
+
+            $this->notificationService->createNotification([
+                'client_id' => $leaveRequest->client_id,
+                'type' => 'leave_return_recorded',
+                'title' => 'messages.leave_return_recorded',
+                'message' => json_encode([
+                    'key' => 'messages.leave_return_recorded_msg',
+                    'params' => [
+                        'name' => $employee->name,
+                        'date' => $recordedAt->format('d M Y h:i A'),
+                    ],
+                ]),
+                'related_type' => LeaveRequest::class,
+                'related_id' => $leaveRequest->id,
+            ]);
+
+            return $leaveRequest->fresh(['employee', 'leaveType']);
+        });
+    }
+
+    /**
+     * Allow the client to adjust or set the return timestamp.
+     */
+    public function updateReturnToWork(LeaveRequest $leaveRequest, string $resumedAt): LeaveRequest
+    {
+        if (! $leaveRequest->canClientManageResumption()) {
+            throw new \InvalidArgumentException(__('messages.leave_return_invalid_state'));
+        }
+
+        $returnAt = Carbon::parse($resumedAt);
+        $leaveStart = $leaveRequest->start_date->copy()->startOfDay();
+
+        if ($returnAt->lt($leaveStart) || $returnAt->gt(now())) {
+            throw new \InvalidArgumentException(__('messages.leave_return_invalid_date'));
+        }
+
+        return DB::transaction(function () use ($leaveRequest, $returnAt) {
+            $originalReturnAt = $leaveRequest->resumed_at?->copy();
+            $recordedAt = $leaveRequest->resumption_recorded_at ?? now();
+
+            $leaveRequest->update([
+                'resumed_at' => $returnAt,
+                'resumption_recorded_at' => $recordedAt,
+            ]);
+
+            if (! $originalReturnAt || ! $originalReturnAt->equalTo($returnAt)) {
+                $this->notificationService->createNotification([
+                    'employee_id' => $leaveRequest->employee_id,
+                    'type' => 'leave_return_updated',
+                    'title' => 'messages.leave_return_updated',
+                    'message' => json_encode([
+                        'key' => 'messages.leave_return_updated_msg',
+                        'params' => [
+                            'date' => $returnAt->format('d M Y h:i A'),
+                        ],
+                    ]),
+                    'related_type' => LeaveRequest::class,
+                    'related_id' => $leaveRequest->id,
+                ]);
+            }
+
+            return $leaveRequest->fresh(['employee', 'leaveType']);
+        });
+    }
+
+    /**
      * Get leave balance summary for an employee.
      */
     public function getBalanceSummary(Employee $employee): array

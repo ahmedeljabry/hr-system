@@ -8,6 +8,7 @@ use App\Models\Asset;
 use App\Models\Payslip;
 use App\Models\Announcement;
 use App\Models\LeaveBalance;
+use App\Models\LeaveRequest;
 use App\Models\LeaveType;
 
 class DashboardService
@@ -44,6 +45,15 @@ class DashboardService
             }
         }
 
+        $activeLeave = LeaveRequest::where('employee_id', $employee->id)
+            ->with('leaveType')
+            ->approved()
+            ->awaitingResumption()
+            ->started()
+            ->orderByDesc('start_date')
+            ->orderByDesc('created_at')
+            ->first();
+
         return [
             'pending_tasks_count' => Task::where('employee_id', $employee->id)->whereIn('status', ['todo', 'in_progress'])->count(),
             'recent_tasks' => Task::where('employee_id', $employee->id)->whereIn('status', ['todo', 'in_progress'])->latest()->take(5)->get(),
@@ -51,6 +61,7 @@ class DashboardService
             'latest_payslip' => Payslip::where('employee_id', $employee->id)->latest()->first(),
             'recent_announcements' => Announcement::where('client_id', $employee->client_id)->latest('published_at')->take(3)->get(),
             'leave_balance' => $totalLeaveRemaining,
+            'active_leave' => $activeLeave,
         ];
     }
 

@@ -11,7 +11,11 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        if (app()->environment('production')) {
+            $this->app->bind('path.public', function () {
+                return base_path();
+            });
+        }
     }
 
     /**
@@ -19,9 +23,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        \Illuminate\Support\Facades\RateLimiter::for('login', function (\Illuminate\Http\Request $request) {
-            return \Illuminate\Cache\RateLimiting\Limit::perMinute(5)->by($request->ip());
-        });
+        \Illuminate\Support\Facades\Vite::useBuildDirectory('build');
 
         \Illuminate\Support\Facades\View::composer('layouts.admin', function ($view) {
             $view->with('admin_badges', [

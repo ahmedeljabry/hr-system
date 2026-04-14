@@ -161,6 +161,14 @@
 
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-y-10 gap-x-8">
                                 <div class="space-y-1">
+                                    <dt class="text-[10px] font-black text-gray-400 uppercase tracking-widest">{{ __('messages.position') }}</dt>
+                                    <dd class="text-lg font-black text-secondary">{{ $employee->position }}</dd>
+                                </div>
+                                <div class="space-y-1">
+                                    <dt class="text-[10px] font-black text-gray-400 uppercase tracking-widest">{{ __('messages.official_job_title') }}</dt>
+                                    <dd class="text-lg font-black text-secondary">{{ $employee->official_job_title ?: '—' }}</dd>
+                                </div>
+                                <div class="space-y-1">
                                     <dt class="text-[10px] font-black text-gray-400 uppercase tracking-widest">{{ __('messages.national_id_number') }}</dt>
                                     <dd class="text-lg font-black text-secondary font-mono">{{ $employee->national_id_number }}</dd>
                                 </div>
@@ -171,6 +179,21 @@
                                 <div class="space-y-1">
                                     <dt class="text-[10px] font-black text-gray-400 uppercase tracking-widest">{{ __('messages.gender') }}</dt>
                                     <dd class="text-lg font-black text-secondary capitalize">{{ $employee->gender ?: '—' }}</dd>
+                                </div>
+
+                                <div class="space-y-1">
+                                    <dt class="text-[10px] font-black text-gray-400 uppercase tracking-widest">{{ __('messages.work_type') }}</dt>
+                                    <dd class="text-lg font-black text-secondary capitalize">{{ $employee->work_type ? __('messages.' . str_replace('-', '_', $employee->work_type)) : '—' }}</dd>
+                                </div>
+                                <div class="space-y-1">
+                                    <dt class="text-[10px] font-black text-gray-400 uppercase tracking-widest">{{ __('messages.working_hours') }}</dt>
+                                    <dd class="text-lg font-black text-secondary">
+                                        @if($employee->shift_start_time && $employee->shift_end_time)
+                                            {{ \Carbon\Carbon::parse($employee->shift_start_time)->format('g:i A') }} - {{ \Carbon\Carbon::parse($employee->shift_end_time)->format('g:i A') }}
+                                        @else
+                                            —
+                                        @endif
+                                    </dd>
                                 </div>
 
                                 @if($employee->nationality && strtolower($employee->nationality) !== 'saudi' && $employee->residency_number)

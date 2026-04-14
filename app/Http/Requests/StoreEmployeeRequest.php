@@ -21,6 +21,7 @@ class StoreEmployeeRequest extends FormRequest
             'name_ar' => ['required', 'string', 'max:255'],
             'name_en' => ['required', 'string', 'max:255'],
             'position' => ['required', 'string', 'max:255'],
+            'official_job_title' => ['required', 'string', 'max:255'],
             'national_id_number' => [
                 Rule::requiredIf($this->input('nationality') === 'Saudi'),
                 'nullable',
@@ -60,6 +61,9 @@ class StoreEmployeeRequest extends FormRequest
             'other_allowances' => ['nullable', 'numeric', 'min:0'],
             'hire_date' => ['required', 'date'],
             'date_of_birth' => ['required', 'date', 'before:today'],
+            'shift_start_time' => ['nullable', 'string'],
+            'shift_end_time' => ['nullable', 'string'],
+            'work_type' => ['required', 'string', 'in:full-time,part-time,remote,temporary,casual,seasonal'],
         ];
     }
 

@@ -81,6 +81,7 @@ class Employee extends Model
         'name_ar',
         'name_en',
         'position',
+        'official_job_title',
         'national_id_number',
         'national_id_image',
         'contract_image',
@@ -104,6 +105,9 @@ class Employee extends Model
         'hire_date',
         'status',
         'date_of_birth',
+        'shift_start_time',
+        'shift_end_time',
+        'work_type',
     ];
 
     protected $casts = [
@@ -182,6 +186,18 @@ class Employee extends Model
         }
         
         return $this->nationality;
+    }
+
+    public function medicalInsurances()
+    {
+        return $this->hasMany(EmployeeMedicalInsurance::class);
+    }
+
+    public function insurancePolicies()
+    {
+        return $this->belongsToMany(InsurancePolicy::class, 'employee_medical_insurances', 'employee_id', 'insurance_policy_id')
+            ->withPivot(['insurance_class', 'cost'])
+            ->withTimestamps();
     }
 }
 

@@ -43,6 +43,23 @@
     </style>
 </head>
 <body class="bg-gray-50 text-gray-900 antialiased min-h-screen flex flex-col" x-data="{ mobileMenu: false }">
+    @if(Session::has('impersonated_by_admin'))
+        <div class="bg-secondary text-white py-3 px-6 shadow-xl relative z-[60] flex items-center justify-between border-b border-white/10">
+            <div class="flex items-center gap-4">
+                <div class="w-2 h-2 rounded-full bg-primary animate-ping"></div>
+                <span class="text-xs font-black uppercase tracking-widest">{{ __('messages.impersonating_mode') ?? 'وضع المحاكاة' }}</span>
+                <span class="hidden md:inline-block h-4 w-px bg-white/20 mx-2"></span>
+                <p class="text-[10px] font-bold text-white/70">{{ __('messages.session_as') ?? 'دخول كمسؤول لـ' }} <span class="text-primary font-black">{{ Auth::user()->name }}</span></p>
+            </div>
+            
+            <form action="{{ route('impersonate.leave') }}" method="POST">
+                @csrf
+                <button type="submit" class="bg-primary text-secondary px-6 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-white transition-all shadow-lg active:scale-95">
+                    {{ __('messages.return_to_admin') ?? 'العودة للوحة التحكم' }}
+                </button>
+            </form>
+        </div>
+    @endif
 
     <nav class="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-100 py-3 px-6 shadow-sm">
         <div class="max-w-full mx-auto px-4 sm:px-6 lg:px-10 flex justify-between items-center h-16">
@@ -127,8 +144,8 @@
     </footer>
 
     <x-notification-panel 
-        :apiUrl="route('employee.notifications.api', ['client_slug' => auth()->user()->client->slug, 'employee_slug' => auth()->user()->employee->slug])" 
-        :readUrl="url('/' . auth()->user()->client->slug . '/' . auth()->user()->employee->slug . '/notifications')" 
+        :apiUrl="route('employee.notifications.api')" 
+        :readUrl="url(request()->path() . '/notifications')" 
     />
     @stack('scripts')
 </body>

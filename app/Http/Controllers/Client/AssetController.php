@@ -43,7 +43,10 @@ class AssetController extends Controller
         $client = $this->getClient();
 
         $data = $request->validate([
-            'employee_id' => 'nullable|exists:employees,id',
+            'employee_id' => [
+                'nullable',
+                \Illuminate\Validation\Rule::exists('employees', 'id')->where('client_id', $client->id)
+            ],
             'type' => 'required|string|max:255',
             'serial_number' => 'nullable|string|max:255|unique:assets,serial_number,NULL,id,client_id,' . $client->id,
             'description' => 'nullable|string',
@@ -92,7 +95,10 @@ class AssetController extends Controller
         abort_unless($asset->client_id === $client->id, 403, __('messages.unauthorized'));
 
         $data = $request->validate([
-            'employee_id' => 'nullable|exists:employees,id',
+            'employee_id' => [
+                'nullable',
+                \Illuminate\Validation\Rule::exists('employees', 'id')->where('client_id', $client->id)
+            ],
             'type' => 'required|string|max:255',
             'serial_number' => 'nullable|string|max:255|unique:assets,serial_number,' . $asset->id . ',id,client_id,' . $client->id,
             'description' => 'nullable|string',

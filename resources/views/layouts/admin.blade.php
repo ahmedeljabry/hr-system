@@ -51,7 +51,9 @@
             <div class="hidden md:flex items-center gap-8">
                 <a href="{{ route('admin.dashboard') }}" class="text-sm font-bold {{ request()->routeIs('admin.dashboard') ? 'text-primary border-b-2 border-primary pb-1' : 'text-secondary hover:text-primary transition-all' }}">{{ __('messages.dashboard') ?? 'Dashboard' }}</a>
                 <a href="{{ route('admin.clients.index') }}" class="text-sm font-bold {{ request()->routeIs('admin.clients.*') ? 'text-primary border-b-2 border-primary pb-1' : 'text-secondary hover:text-primary transition-all' }}">{{ __('messages.clients') ?? 'Clients' }}</a>
-                <a href="{{ route('admin.localization.index') }}" class="text-sm font-bold {{ request()->routeIs('admin.localization.*') ? 'text-primary border-b-2 border-primary pb-1' : 'text-secondary hover:text-primary transition-all' }}">{{ __('Localization Decisions') }}</a>
+                <a href="{{ route('admin.employees.index') }}" class="text-sm font-bold {{ request()->routeIs('admin.employees.*') ? 'text-primary border-b-2 border-primary pb-1' : 'text-secondary hover:text-primary transition-all' }}">{{ __('messages.all_employees') ?? 'All Employees' }}</a>
+                <a href="{{ route('admin.insurance-companies.index') }}" class="text-sm font-bold {{ request()->routeIs('admin.insurance-companies.*') ? 'text-primary border-b-2 border-primary pb-1' : 'text-secondary hover:text-primary transition-all' }}">{{ __('messages.insurance_companies') ?? 'Insurance Companies' }}</a>
+                <a href="{{ route('admin.localization.index') }}" class="text-sm font-bold {{ request()->routeIs('admin.localization.*') ? 'text-primary border-b-2 border-primary pb-1' : 'text-secondary hover:text-primary transition-all' }}">{{ __('messages.localization_decisions') ?? 'Localization Decisions' }}</a>
             </div>
 
             <!-- Mobile Menu Button -->
@@ -91,6 +93,9 @@
              x-cloak>
             <a href="{{ route('admin.dashboard') }}" class="block text-sm font-bold {{ request()->routeIs('admin.dashboard') ? 'text-primary' : 'text-secondary' }}">{{ __('messages.dashboard') ?? 'Dashboard' }}</a>
             <a href="{{ route('admin.clients.index') }}" class="block text-sm font-bold {{ request()->routeIs('admin.clients.*') ? 'text-primary' : 'text-secondary' }}">{{ __('messages.clients') ?? 'Clients' }}</a>
+            <a href="{{ route('admin.employees.index') }}" class="block text-sm font-bold {{ request()->routeIs('admin.employees.*') ? 'text-primary' : 'text-secondary' }}">{{ __('messages.all_employees') ?? 'All Employees' }}</a>
+            <a href="{{ route('admin.insurance-companies.index') }}" class="block text-sm font-bold {{ request()->routeIs('admin.insurance-companies.*') ? 'text-primary' : 'text-secondary' }}">{{ __('messages.insurance_companies') ?? 'Insurance Companies' }}</a>
+            <a href="{{ route('admin.localization.index') }}" class="block text-sm font-bold {{ request()->routeIs('admin.localization.*') ? 'text-primary' : 'text-secondary' }}">{{ __('messages.localization_decisions') ?? 'Localization Decisions' }}</a>
         </div>
     </nav>
 

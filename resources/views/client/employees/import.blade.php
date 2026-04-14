@@ -94,6 +94,14 @@
                             ['col' => 'O', 'key' => 'Hire Date', 'label' => __('messages.hire_date')],
                             ['col' => 'P', 'key' => 'Gender', 'label' => __('messages.gender')],
                             ['col' => 'Q', 'key' => 'Annual Leave Days', 'label' => __('messages.annual_leave_days')],
+                            ['col' => 'R', 'key' => 'Nationality', 'label' => __('messages.nationality')],
+                            ['col' => 'S', 'key' => 'Residency Number (Non-Saudi)', 'label' => __('messages.residency_number')],
+                            ['col' => 'T', 'key' => 'Residency Start Date', 'label' => __('messages.residency_start_date')],
+                            ['col' => 'U', 'key' => 'Residency End Date', 'label' => __('messages.residency_end_date')],
+                            ['col' => 'V', 'key' => 'Official Job Title', 'label' => __('messages.official_job_title')],
+                            ['col' => 'W', 'key' => 'Work Type', 'label' => __('messages.work_type')],
+                            ['col' => 'X', 'key' => 'Shift Start Time', 'label' => __('messages.shift_start_time')],
+                            ['col' => 'Y', 'key' => 'Shift End Time', 'label' => __('messages.shift_end_time')],
                         ];
                     @endphp
                     @foreach($cols as $col)

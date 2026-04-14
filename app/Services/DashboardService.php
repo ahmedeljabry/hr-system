@@ -8,6 +8,7 @@ use App\Models\Asset;
 use App\Models\Payslip;
 use App\Models\Announcement;
 use App\Models\LeaveBalance;
+use App\Models\LeaveRequest;
 use App\Models\LeaveType;
 
 class DashboardService
@@ -44,6 +45,23 @@ class DashboardService
             }
         }
 
+        $activeLeave = LeaveRequest::where('employee_id', $employee->id)
+            ->where('status', 'approved')
+            ->whereNull('resumption_at')
+            ->whereDate('start_date', '<=', now()->toDateString())
+            ->whereDate('end_date', '>=', now()->toDateString())
+            ->with('leaveType')
+            ->orderBy('start_date')
+            ->first();
+
+        $pendingResumptionLeave = LeaveRequest::where('employee_id', $employee->id)
+            ->where('status', 'approved')
+            ->whereNull('resumption_at')
+            ->whereDate('end_date', '<', now()->toDateString())
+            ->with('leaveType')
+            ->orderByDesc('end_date')
+            ->first();
+
         return [
             'pending_tasks_count' => Task::where('employee_id', $employee->id)->whereIn('status', ['todo', 'in_progress'])->count(),
             'recent_tasks' => Task::where('employee_id', $employee->id)->whereIn('status', ['todo', 'in_progress'])->latest()->take(5)->get(),
@@ -51,6 +69,8 @@ class DashboardService
             'latest_payslip' => Payslip::where('employee_id', $employee->id)->latest()->first(),
             'recent_announcements' => Announcement::where('client_id', $employee->client_id)->latest('published_at')->take(3)->get(),
             'leave_balance' => $totalLeaveRemaining,
+            'active_leave' => $activeLeave,
+            'pending_resumption_leave' => $pendingResumptionLeave,
         ];
     }
 
@@ -65,7 +85,12 @@ class DashboardService
             } elseif ($metric === 'clients') {
                 $count = \App\Models\Client::whereDate('created_at', '<=', $date)->count();
             } elseif ($metric === 'employees') {
-                $count = Employee::whereDate('created_at', '<=', $date)->count();
+                $count = Employee::where('status', 'active')
+                    ->whereHas('client', function ($query) {
+                        $query->where('status', 'active');
+                    })
+                    ->whereDate('created_at', '<=', $date)
+                    ->count();
             }
             $data[] = $count;
         }

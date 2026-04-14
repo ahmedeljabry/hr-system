@@ -59,6 +59,20 @@ class HandleClientTenant
             URL::defaults(['employee_slug' => $employeeSlug]);
         }
 
+        // Resolve and share client
+        $clientModel = \App\Models\Client::where('slug', $slug)->first();
+        if ($clientModel) {
+            $request->attributes->add(['current_client' => $clientModel]);
+        }
+
+        // Resolve and share employee
+        if ($employeeSlug) {
+            $employeeModel = \App\Models\Employee::where('slug', $employeeSlug)->first();
+            if ($employeeModel) {
+                $request->attributes->add(['current_employee' => $employeeModel]);
+            }
+        }
+
         // 5. THE MAGIC: Remove parameters from route so controllers don't see them
         if ($request->route()) {
             $request->route()->forgetParameter('client_slug');

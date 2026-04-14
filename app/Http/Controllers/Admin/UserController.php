@@ -16,7 +16,15 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
-        return view('admin.users.edit', compact('user'));
+        if ($user->employee) {
+            return redirect()->route('admin.employees.edit', $user->employee->id);
+        }
+
+        if ($user->client) {
+            return redirect()->route('admin.clients.show', $user->client_id);
+        }
+
+        return redirect()->route('admin.dashboard');
     }
 
     /**
@@ -27,10 +35,11 @@ class UserController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|max:255|unique:users,email,' . $user->id,
+            'password' => 'nullable|string|min:8',
         ]);
 
-        $this->adminUserService->updateBasicInfo($user, $validated);
+        $this->adminUserService->updateProfile($user, $validated);
 
-        return back()->with('success', __('User updated successfully.'));
+        return back()->with('success', __('messages.user_updated') ?? 'User updated successfully.');
     }
 }

@@ -18,7 +18,8 @@ class ClientFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => fake()->company(),
+            'name' => fake()->unique()->company(),
+            'slug' => fake()->unique()->slug(),
             'subscription_start' => now(),
             'subscription_end' => now()->addYear(),
             'status' => 'active',

@@ -391,6 +391,28 @@
                                 </div>
                             </div>
 
+                            <!-- Official Job Title -->
+                            <div class="space-y-3">
+                                <label for="official_job_title"
+                                    class="block text-xs font-black text-gray-400 uppercase tracking-[0.2em]">{{ __('messages.official_job_title') }}
+                                    <span class="text-primary">*</span></label>
+                                <div class="relative group">
+                                    <div
+                                        class="absolute inset-y-0 {{ app()->getLocale() == 'ar' ? 'right-3' : 'left-3' }} flex items-center pointer-events-none transition-all duration-300">
+                                        <div class="w-8 h-8 rounded-xl bg-primary/10 group-focus-within:bg-primary/20 flex items-center justify-center transition-all duration-300 group-focus-within:scale-110">
+                                            <svg class="w-4 h-4 text-primary/60 group-focus-within:text-primary transition-colors duration-300" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M11.35 3.836c-.065.21-.1.433-.1.664 0 .407.11.785.3 1.115l-5.826 5.826a2.99 2.99 0 00-1.115-.3c-.231 0-.454.035-.664.1L3.836 11.35c.21-.065.433-.1.664-.1.407 0 .785.11 1.115.3l5.826-5.826a2.99 2.99 0 00-.3-1.115c0-.231.035-.454.1-.664L11.35 3.836z"></path>
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M9 13.5l3 3 6-6"></path>
+                                            </svg>
+                                        </div>
+                                    </div>
+                                    <input type="text" name="official_job_title" id="official_job_title" 
+                                        value="{{ old('official_job_title', $employee->official_job_title) }}" required
+                                        class="block w-full bg-gray-50 border-2 border-transparent focus:border-primary focus:bg-white rounded-2xl py-4 {{ app()->getLocale() == 'ar' ? 'pr-14 pl-6' : 'pl-14 pr-6' }} text-secondary font-bold transition-all duration-300 outline-none"
+                                        placeholder="{{ __('messages.official_job_title_placeholder') }}">
+                                </div>
+                            </div>
+
                             <!-- Date of Birth -->
                             <div class="space-y-3">
                                 <label for="date_of_birth"
@@ -504,6 +526,89 @@
                                             class="block w-full bg-white border-2 border-transparent focus:border-primary rounded-xl py-3 px-4 text-secondary font-black transition-all duration-300 outline-none shadow-sm"
                                             placeholder="0.00">
                                     </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Section: Working Hours & Type -->
+                    <div class="space-y-10">
+                        <div class="flex items-center gap-4 pb-4 border-b border-gray-50">
+                            <div class="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center">
+                                <svg class="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                            </div>
+                            <h2 class="text-xl font-black text-secondary tracking-tight">
+                                {{ __('messages.working_hours') }}</h2>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
+                            <!-- Work Type -->
+                            <div class="space-y-3">
+                                <label for="work_type"
+                                    class="block text-xs font-black text-gray-400 uppercase tracking-[0.2em]">{{ __('messages.work_type') }}
+                                    <span class="text-primary">*</span></label>
+                                <div class="relative group">
+                                    <div
+                                        class="absolute inset-y-0 {{ app()->getLocale() == 'ar' ? 'right-3' : 'left-3' }} flex items-center pointer-events-none transition-all duration-300">
+                                        <div class="w-8 h-8 rounded-xl bg-primary/10 group-focus-within:bg-primary/20 flex items-center justify-center transition-all duration-300 group-focus-within:scale-110">
+                                            <svg class="w-4 h-4 text-primary/60 group-focus-within:text-primary transition-colors duration-300" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                                            </svg>
+                                        </div>
+                                    </div>
+                                    <select name="work_type" id="work_type" required
+                                        class="block w-full bg-gray-50 border-2 border-transparent focus:border-primary focus:bg-white rounded-2xl py-4 {{ app()->getLocale() == 'ar' ? 'pr-14 pl-6' : 'pl-14 pr-6' }} text-secondary font-bold transition-all duration-300 outline-none appearance-none">
+                                        <option value="full-time" {{ old('work_type', $employee->work_type) == 'full-time' ? 'selected' : '' }}>{{ __('messages.full_time') }}</option>
+                                        <option value="part-time" {{ old('work_type', $employee->work_type) == 'part-time' ? 'selected' : '' }}>{{ __('messages.part_time') }}</option>
+                                        <option value="remote" {{ old('work_type', $employee->work_type) == 'remote' ? 'selected' : '' }}>{{ __('messages.remote') }}</option>
+                                        <option value="temporary" {{ old('work_type', $employee->work_type) == 'temporary' ? 'selected' : '' }}>{{ __('messages.temporary') }}</option>
+                                        <option value="casual" {{ old('work_type', $employee->work_type) == 'casual' ? 'selected' : '' }}>{{ __('messages.casual') }}</option>
+                                        <option value="seasonal" {{ old('work_type', $employee->work_type) == 'seasonal' ? 'selected' : '' }}>{{ __('messages.seasonal') }}</option>
+                                    </select>
+                                    <div class="absolute inset-y-0 {{ app()->getLocale() == 'ar' ? 'left-6' : 'right-6' }} flex items-center pointer-events-none">
+                                        <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path>
+                                        </svg>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Shift Start -->
+                            <div class="space-y-3">
+                                <label for="shift_start_time"
+                                    class="block text-xs font-black text-gray-400 uppercase tracking-[0.2em]">{{ __('messages.shift_start_time') }}</label>
+                                <div class="relative group">
+                                    <div
+                                        class="absolute inset-y-0 {{ app()->getLocale() == 'ar' ? 'right-3' : 'left-3' }} flex items-center pointer-events-none transition-all duration-300">
+                                        <div class="w-8 h-8 rounded-xl bg-primary/10 group-focus-within:bg-primary/20 flex items-center justify-center transition-all duration-300 group-focus-within:scale-110">
+                                            <svg class="w-4 h-4 text-primary/60 group-focus-within:text-primary transition-colors duration-300" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                            </svg>
+                                        </div>
+                                    </div>
+                                    <input type="time" name="shift_start_time" id="shift_start_time" value="{{ old('shift_start_time', $employee->shift_start_time ? Carbon\Carbon::parse($employee->shift_start_time)->format('H:i') : '08:00') }}"
+                                        class="block w-full bg-gray-50 border-2 border-transparent focus:border-primary focus:bg-white rounded-2xl py-4 {{ app()->getLocale() == 'ar' ? 'pr-14 pl-6' : 'pl-14 pr-6' }} text-secondary font-bold transition-all duration-300 outline-none">
+                                </div>
+                            </div>
+
+                            <!-- Shift End -->
+                            <div class="space-y-3">
+                                <label for="shift_end_time"
+                                    class="block text-xs font-black text-gray-400 uppercase tracking-[0.2em]">{{ __('messages.shift_end_time') }}</label>
+                                <div class="relative group">
+                                    <div
+                                        class="absolute inset-y-0 {{ app()->getLocale() == 'ar' ? 'right-3' : 'left-3' }} flex items-center pointer-events-none transition-all duration-300">
+                                        <div class="w-8 h-8 rounded-xl bg-rose-50 group-focus-within:bg-rose-100 flex items-center justify-center transition-all duration-300 group-focus-within:scale-110">
+                                            <svg class="w-4 h-4 text-rose-400 group-focus-within:text-rose-600 transition-colors duration-300" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                            </svg>
+                                        </div>
+                                    </div>
+                                    <input type="time" name="shift_end_time" id="shift_end_time" value="{{ old('shift_end_time', $employee->shift_end_time ? Carbon\Carbon::parse($employee->shift_end_time)->format('H:i') : '17:00') }}"
+                                        class="block w-full bg-gray-50 border-2 border-transparent focus:border-primary focus:bg-white rounded-2xl py-4 {{ app()->getLocale() == 'ar' ? 'pr-14 pl-6' : 'pl-14 pr-6' }} text-secondary font-bold transition-all duration-300 outline-none">
                                 </div>
                             </div>
                         </div>

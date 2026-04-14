@@ -195,6 +195,44 @@
                 </div>
             </div>
 
+            <!-- Nationality Distribution Card (Census) -->
+            <div class="bg-white p-10 rounded-[2.5rem] shadow-[0_20px_50px_rgba(0,0,0,0.04)] border border-gray-100/50">
+                <div class="flex items-center gap-4 mb-8">
+                    <div class="w-1.5 h-6 bg-emerald-500 rounded-full"></div>
+                    <h3 class="text-xl font-black text-secondary tracking-tight">{{ __('messages.nationality_census') }}</h3>
+                </div>
+                
+                <div class="grid grid-cols-2 gap-8">
+                    <!-- Saudi -->
+                    <div class="p-8 rounded-3xl bg-emerald-50 border border-emerald-100 flex flex-col items-center text-center group relative overflow-hidden">
+                        <div class="absolute top-0 right-0 p-2 opacity-10">
+                            <svg class="w-12 h-12 text-emerald-600" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12 2L4.5 20.29L5.21 21L12 18L18.79 21L19.5 20.29L12 2Z" />
+                            </svg>
+                        </div>
+                        <div class="w-14 h-14 bg-emerald-100 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                            <svg class="w-8 h-8 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                        </div>
+                        <span class="text-3xl font-black text-emerald-900 mb-1">{{ $nationalityStats['saudi_percentage'] }}%</span>
+                        <span class="text-[10px] font-bold text-emerald-600 uppercase tracking-widest">{{ __('messages.saudi_nationality') }}</span>
+                        <div class="mt-2 text-xs font-bold text-emerald-400">{{ $nationalityStats['saudi'] }} {{ __('messages.employees_count') }}</div>
+                    </div>
+                    <!-- Others -->
+                    <div class="p-8 rounded-3xl bg-gray-50 border border-gray-100 flex flex-col items-center text-center group">
+                        <div class="w-14 h-14 bg-gray-100 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                            <svg class="w-8 h-8 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                            </svg>
+                        </div>
+                        <span class="text-3xl font-black text-gray-900 mb-1">{{ $nationalityStats['other_percentage'] }}%</span>
+                        <span class="text-[10px] font-bold text-gray-500 uppercase tracking-widest">{{ __('messages.other_nationalities') }}</span>
+                        <div class="mt-2 text-xs font-bold text-gray-400">{{ $nationalityStats['other'] }} {{ __('messages.employees_count') }}</div>
+                    </div>
+                </div>
+            </div>
+
             <!-- Age Distribution Card -->
             <div class="bg-white p-10 rounded-[2.5rem] shadow-[0_20px_50px_rgba(0,0,0,0.04)] border border-gray-100/50">
                 <div class="flex items-center gap-4 mb-8">

@@ -16,6 +16,23 @@
                     <span class="text-xs uppercase tracking-widest">{{ __('messages.back_to_clients') ?? 'Back' }}</span>
                 </a>
                 
+                <a href="{{ route('admin.clients.edit', $client->id) }}" class="group relative inline-flex items-center gap-3 px-8 py-4 bg-primary text-secondary font-black rounded-2xl shadow-[0_10px_30px_rgba(255,214,0,0.2)] border border-primary/50 hover:translate-y-[-2px] transition-all duration-300">
+                    <svg class="w-5 h-5 group-hover:rotate-12 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                    </svg>
+                    <span class="text-xs uppercase tracking-widest">{{ __('messages.edit_client') ?? 'Edit Details' }}</span>
+                </a>
+
+                <form action="{{ route('admin.impersonate.client', $client->id) }}" method="POST">
+                    @csrf
+                    <button type="submit" class="group relative inline-flex items-center gap-3 px-8 py-4 bg-secondary text-white font-black rounded-2xl shadow-[0_10px_30px_rgba(20,37,51,0.2)] border border-gray-700 hover:translate-y-[-2px] transition-all duration-300">
+                        <svg class="w-5 h-5 group-hover:scale-110 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"></path>
+                        </svg>
+                        <span class="text-xs uppercase tracking-widest">{{ __('messages.login_as_client') ?? 'Login as Client' }}</span>
+                    </button>
+                </form>
+
                 <form action="{{ route('admin.clients.destroy', $client->id) }}" method="POST">
                     @csrf
                     @method('DELETE')
@@ -144,12 +161,10 @@
                                 @endif
                             </td>
                             <td class="px-10 py-8 text-end">
-                                @if($employee->user)
-                                    <a href="{{ route('admin.users.edit', $employee->user->id) }}" class="group/btn inline-flex items-center gap-3 px-6 py-2.5 bg-secondary text-white font-black rounded-xl shadow-[0_4px_15px_rgba(20,37,51,0.1)] hover:translate-y-[-2px] transition-all duration-300">
-                                        <span class="text-[10px] uppercase tracking-widest">{{ __('messages.edit_user') ?? 'Edit User' }}</span>
+                                    <a href="{{ route('admin.employees.edit', $employee->id) }}" class="group/btn inline-flex items-center gap-3 px-6 py-2.5 bg-secondary text-white font-black rounded-xl shadow-[0_4px_15px_rgba(20,37,51,0.1)] hover:translate-y-[-2px] transition-all duration-300">
+                                        <span class="text-[10px] uppercase tracking-widest">{{ __('messages.edit_account') ?? 'تعديل الحساب' }}</span>
                                         <svg class="w-3.5 h-3.5 group-hover/btn:translate-x-1 rtl:group-hover/btn:translate-x-[-4px] transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M9 5l7 7-7 7"></path></svg>
                                     </a>
-                                @endif
                             </td>
                         </tr>
                         @empty

@@ -9,23 +9,26 @@ use Illuminate\Support\Facades\Auth;
 class AdminUserService
 {
     /**
-     * Update basic user information (name and email only).
-     *
-     * @param User $user
-     * @param array $data
-     * @return void
+     * Update user account information.
      */
-    public function updateBasicInfo(User $user, array $data): void
+    public function updateProfile(User $user, array $data): void
     {
         $old = ['name' => $user->name, 'email' => $user->email];
-        $user->update(['name' => $data['name'], 'email' => $data['email']]);
+        $updateData = ['name' => $data['name'], 'email' => $data['email']];
+        
+        if (!empty($data['password'])) {
+            $updateData['password'] = \Illuminate\Support\Facades\Hash::make($data['password']);
+        }
+
+        $user->update($updateData);
+
         Log::channel('daily')->info('ADMIN_ACTION', [
             'admin_id' => Auth::id(),
             'action' => 'user_edit',
             'target' => 'users',
             'record_id' => $user->id,
             'old' => $old,
-            'new' => ['name' => $data['name'], 'email' => $data['email']],
+            'updated_password' => !empty($data['password']),
         ]);
     }
 }

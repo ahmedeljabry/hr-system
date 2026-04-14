@@ -28,7 +28,7 @@ class LocalizationDecisionController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
+        $validated = $request->validate([
             'saudi_percentage' => 'required|numeric|min:0|max:100',
             'jobs' => 'required|array|min:1',
             'jobs.*.occupation_code' => 'required|string',
@@ -37,7 +37,7 @@ class LocalizationDecisionController extends Controller
             'files.*' => 'file|mimes:jpeg,png,pdf,doc,docx|max:10240',
         ]);
 
-        $this->localizationService->create($request->all(), $request->file('files', []));
+        $this->localizationService->create($validated, $request->file('files', []));
 
         return redirect()->route('admin.localization.index')->with('success', __('Localization decision created successfully.'));
     }
@@ -50,7 +50,7 @@ class LocalizationDecisionController extends Controller
 
     public function update(Request $request, $id)
     {
-        $request->validate([
+        $validated = $request->validate([
             'saudi_percentage' => 'required|numeric|min:0|max:100',
             'jobs' => 'required|array|min:1',
             'jobs.*.occupation_code' => 'required|string',
@@ -59,7 +59,7 @@ class LocalizationDecisionController extends Controller
             'files.*' => 'file|mimes:jpeg,png,pdf,doc,docx|max:10240',
         ]);
 
-        $this->localizationService->update($id, $request->all(), $request->file('files', []));
+        $this->localizationService->update($id, $validated, $request->file('files', []));
 
         return redirect()->route('admin.localization.index')->with('success', __('Localization decision updated successfully.'));
     }

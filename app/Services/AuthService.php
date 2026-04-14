@@ -19,7 +19,7 @@ class AuthService
                 'name' => $data['company_name'],
                 'subscription_start' => now(),
                 'subscription_end' => null,
-                'status' => 'active',
+                'status' => 'suspended', // Pending approval
             ]);
 
             $user = User::create([

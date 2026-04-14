@@ -10,6 +10,10 @@ Route::middleware(['auth', 'role:employee', 'check_subscription', 'client_tenant
 
     Route::get('/profile', [\App\Http\Controllers\Employee\ProfileController::class, 'index'])->name('profile.index');
     Route::get('/profile/documents/{type}', [\App\Http\Controllers\Employee\ProfileController::class, 'document'])->name('profile.document')->where('type', 'national_id|contract');
+    
+    // Secure Files
+    Route::get('/files/tasks/{task}/attachments/{index}', [\App\Http\Controllers\Employee\SecureFileController::class, 'taskAttachment'])->name('files.task.attachment');
+    Route::get('/files/announcements/{announcement}/attachments/{index}', [\App\Http\Controllers\Employee\SecureFileController::class, 'announcementAttachment'])->name('files.announcement.attachment');
 
     // Read-Only Portals
     Route::get('/tasks', [\App\Http\Controllers\Employee\TaskController::class, 'index'])->name('tasks.index');
@@ -19,6 +23,7 @@ Route::middleware(['auth', 'role:employee', 'check_subscription', 'client_tenant
     Route::get('/leaves', [\App\Http\Controllers\Employee\LeaveController::class, 'index'])->name('leaves.index');
     Route::get('/leaves/create', [\App\Http\Controllers\Employee\LeaveController::class, 'create'])->name('leaves.create');
     Route::post('/leaves', [\App\Http\Controllers\Employee\LeaveController::class, 'store'])->name('leaves.store');
+    Route::post('/leaves/{leaveRequest}/resume', [\App\Http\Controllers\Employee\LeaveController::class, 'resume'])->name('leaves.resume');
 
     // Deductions
     Route::get('/deductions', [\App\Http\Controllers\Employee\DeductionController::class, 'index'])->name('deductions.index');

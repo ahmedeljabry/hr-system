@@ -38,8 +38,8 @@
 
                         @if($announcement->attachments && count($announcement->attachments) > 0)
                             <div class="flex flex-wrap gap-3 mt-2">
-                                @foreach($announcement->attachments as $path)
-                                    <a href="{{ Storage::url($path) }}" target="_blank" 
+                                @foreach($announcement->attachments as $index => $path)
+                                    <a href="{{ route('employee.files.announcement.attachment', ['client_slug' => request()->route('client_slug'), 'employee_slug' => request()->route('employee_slug'), 'announcement' => $announcement->id, 'index' => $index]) }}" target="_blank" 
                                        class="flex items-center gap-3 px-6 py-3 bg-primary hover:bg-primary/90 text-secondary text-[10px] font-black uppercase tracking-[0.2em] rounded-xl shadow-lg transition-all duration-300 hover:-translate-y-1 active:translate-y-0 group/dl">
                                         <svg class="w-4 h-4 transition-transform group-hover/dl:scale-110" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
                                         {{ basename($path) }}

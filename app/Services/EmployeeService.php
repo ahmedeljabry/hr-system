@@ -18,6 +18,7 @@ class EmployeeService
                 $q->where('name_ar', 'like', "%{$search}%")
                   ->orWhere('name_en', 'like', "%{$search}%")
                   ->orWhere('position', 'like', "%{$search}%")
+                  ->orWhere('official_job_title', 'like', "%{$search}%")
                   ->orWhere('national_id_number', 'like', "%{$search}%");
             });
         }

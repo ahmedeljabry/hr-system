@@ -67,13 +67,13 @@
                             <div class="mt-8">
                                 <h4 class="text-[10px] font-black uppercase tracking-widest text-gray-400 mb-4">{{ __('messages.existing_attachments') }}</h4>
                                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                                    @foreach($announcement->attachments as $path)
+                                    @foreach($announcement->attachments as $index => $path)
                                         <div class="flex items-center justify-between bg-gray-50/50 rounded-xl px-5 py-3 border border-gray-100/50 group/file">
                                             <div class="flex items-center gap-3">
                                                 <svg class="w-4 h-4 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
                                                 <span class="text-xs font-bold text-secondary truncate max-w-[150px]">{{ basename($path) }}</span>
                                             </div>
-                                            <a href="{{ Storage::url($path) }}" target="_blank" class="text-[10px] font-black text-primary uppercase tracking-widest hover:text-secondary whitespace-nowrap">{{ __('messages.view') }}</a>
+                                            <a href="{{ route('client.files.announcement.attachment', ['client_slug' => request()->route('client_slug'), 'announcement' => $announcement->id, 'index' => $index]) }}" target="_blank" class="text-[10px] font-black text-primary uppercase tracking-widest hover:text-secondary whitespace-nowrap">{{ __('messages.view') }}</a>
                                         </div>
                                     @endforeach
                                 </div>

@@ -112,7 +112,7 @@
                                                 $path = is_array($attachment) ? ($attachment['path'] ?? $attachment) : $attachment;
                                                 $fileName = is_array($attachment) ? ($attachment['name'] ?? null) : null;
                                             @endphp
-                                            <a href="{{ Storage::url($path) }}" 
+                                            <a href="{{ route('client.files.task.attachment', ['client_slug' => request()->route('client_slug'), 'task' => $task->id, 'index' => 0]) }}" 
                                                @if($fileName) download="{{ $fileName }}" @else target="_blank" @endif
                                                class="w-10 h-10 rounded-2xl bg-primary/10 text-primary-dark hover:bg-primary transition-all duration-300 flex items-center justify-center hover:scale-110 active:scale-95 group/file shadow-sm"
                                                title="{{ count($task->attachments) > 1 ? __('messages.view_all_attachments') ?? __('View all attachments') : __('messages.view_attachment') }}">

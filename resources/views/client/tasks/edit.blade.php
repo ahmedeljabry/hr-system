@@ -170,7 +170,7 @@
                                                     <p class="text-xs font-black text-secondary truncate">{{ $fileName }}</p>
                                                     <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">{{ __('File') }} #{{ $index + 1 }}</p>
                                                 </div>
-                                                <a href="{{ Storage::url($path) }}" target="_blank"
+                                                <a href="{{ route('client.files.task.attachment', ['client_slug' => request()->route('client_slug'), 'task' => $task->id, 'index' => $index]) }}" target="_blank"
                                                     class="inline-flex items-center px-4 py-2 bg-white hover:bg-primary hover:text-white border border-primary/20 rounded-xl text-[10px] font-black uppercase transition-all duration-300">
                                                     <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />

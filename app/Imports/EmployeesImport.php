@@ -90,6 +90,7 @@ class EmployeesImport implements ToCollection, SkipsEmptyRows
                         'gender'                   => $gender,
                         'annual_leave_days'        => $this->sanitizeNumber($rowArray[16] ?? 21),
                         'position'                 => $rowArray[4] ?? 'N/A',
+                        'official_job_title'       => $rowArray[21] ?? ($rowArray[4] ?? 'N/A'),
                         'national_id_number'       => $nationalId ?: null,
                         'phone'                    => $rowArray[6] ?? null,
                         'emergency_phone'          => $rowArray[7] ?? null,
@@ -104,6 +105,9 @@ class EmployeesImport implements ToCollection, SkipsEmptyRows
                         'residency_number'         => $residencyNum ?: null,
                         'residency_start_date'     => $this->parseDate($rowArray[19] ?? null),
                         'residency_end_date'       => $this->parseDate($rowArray[20] ?? null),
+                        'shift_start_time'         => trim($rowArray[22] ?? null),
+                        'shift_end_time'           => trim($rowArray[23] ?? null),
+                        'work_type'                => $this->normalizeWorkType($rowArray[24] ?? 'full-time'),
                     ]
                 );
 
@@ -175,6 +179,41 @@ class EmployeesImport implements ToCollection, SkipsEmptyRows
         }
 
         return $value;
+    }
+
+    private function normalizeWorkType($value): string
+    {
+        $v = mb_strtolower(trim($value));
+        $map = [
+            'دوام كامل' => 'full-time',
+            'full-time' => 'full-time',
+            'full time' => 'full-time',
+            'دوام جزئي' => 'part-time',
+            'part-time' => 'part-time',
+            'part time' => 'part-time',
+            'عمل عن بعد' => 'remote',
+            'remote' => 'remote',
+            'مؤقت' => 'temporary',
+            'temporary' => 'temporary',
+            'بالقطعة' => 'casual',
+            'casual' => 'casual',
+            'موسمي' => 'seasonal',
+            'seasonal' => 'seasonal',
+        ];
+
+        foreach ($map as $key => $target) {
+            if ($v === mb_strtolower($key)) {
+                return $target;
+            }
+        }
+
+        // Check if value contains special phrases (no more than 90 days etc)
+        if (str_contains($v, '90')) {
+            if (str_contains($v, 'مؤقت') || str_contains($v, 'temp')) return 'temporary';
+            if (str_contains($v, 'قطعة') || str_contains($v, 'casual')) return 'casual';
+        }
+
+        return in_array($v, ['full-time', 'part-time', 'remote', 'temporary', 'casual', 'seasonal']) ? $v : 'full-time';
     }
 
     private function sanitizeNumber($value)

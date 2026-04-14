@@ -5,9 +5,67 @@
     <div class="space-y-10">
         <!-- Standard Header -->
         <x-dashboard-sub-header 
-            :title="__('messages.welcome_back_with_name', ['name' => Auth::user()->employee ? Auth::user()->employee->name : Auth::user()->name])" 
+            :title="__('messages.welcome_back_with_name', ['name' => $employee ? $employee->name : Auth::user()->name])" 
             :subtitle="__('messages.portal_summary')"
         />
+
+        @if($widgets['pending_resumption_leave'] ?? null)
+            <div class="bg-amber-50 border border-amber-100 rounded-[2rem] p-6 shadow-sm">
+                <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+                    <div class="flex items-start gap-4">
+                        <div class="w-12 h-12 rounded-2xl bg-amber-500/10 flex items-center justify-center shrink-0">
+                            <svg class="w-6 h-6 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-black text-amber-900 mb-1">{{ __('messages.leave_pending_resumption') }}</h3>
+                            <p class="text-sm text-amber-800">
+                                {{ __('messages.leave_pending_resumption_desc', [
+                                    'type' => $widgets['pending_resumption_leave']->leaveType->name,
+                                    'start' => $widgets['pending_resumption_leave']->start_date->format('d M Y'),
+                                    'end' => $widgets['pending_resumption_leave']->end_date->format('d M Y'),
+                                    'days' => $widgets['pending_resumption_leave']->days_count,
+                                ]) }}
+                            </p>
+                        </div>
+                    </div>
+                    <form action="{{ route('employee.leaves.resume', $widgets['pending_resumption_leave']) }}" method="POST" class="shrink-0">
+                        @csrf
+                        <button type="submit" class="inline-flex items-center px-6 py-3 bg-amber-500 hover:bg-amber-600 text-white text-xs font-black rounded-xl shadow-lg transition-all duration-300 hover:-translate-y-1 active:translate-y-0">
+                            {{ __('messages.end_leave') }}
+                        </button>
+                    </form>
+                </div>
+            </div>
+        @elseif($widgets['active_leave'] ?? null)
+            <div class="bg-emerald-50 border border-emerald-100 rounded-[2rem] p-6 shadow-sm">
+                <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+                    <div class="flex items-start gap-4">
+                        <div class="w-12 h-12 rounded-2xl bg-emerald-500/10 flex items-center justify-center shrink-0">
+                            <svg class="w-6 h-6 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-black text-emerald-900 mb-1">{{ __('messages.leave_currently_active') }}</h3>
+                            <p class="text-sm text-emerald-800">
+                                {{ __('messages.leave_currently_active_desc', [
+                                    'type' => $widgets['active_leave']->leaveType->name,
+                                    'start' => $widgets['active_leave']->start_date->format('d M Y'),
+                                    'end' => $widgets['active_leave']->end_date->format('d M Y'),
+                                    'days' => $widgets['active_leave']->days_count,
+                                    'remaining' => $widgets['active_leave']->remainingLeaveDays(),
+                                ]) }}
+                            </p>
+                        </div>
+                    </div>
+                    <a href="{{ route('employee.leaves.index') }}" class="inline-flex items-center px-6 py-3 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-black rounded-xl shadow-lg transition-all duration-300 hover:-translate-y-1 active:translate-y-0">
+                        {{ __('messages.manage_request') }}
+                    </a>
+                </div>
+            </div>
+        @endif
 
     <!-- Main Dashboard Grid -->
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
@@ -21,11 +79,11 @@
                 <div class="flex items-center justify-between mb-10">
                     <div class="flex items-center gap-8">
                         <div class="bg-primary/10 p-4 rounded-2xl border border-primary/20 shadow-inner group-hover:bg-primary/20 transition-colors duration-500">
-                             <x-avatar :name="Auth::user()->employee ? Auth::user()->employee->name : Auth::user()->name" size="lg" class="rounded-xl" />
+                             <x-avatar :name="$employee ? $employee->name : Auth::user()->name" size="lg" class="rounded-xl" />
                         </div>
                         <div>
                             <h3 class="text-xs font-bold text-gray-400 uppercase tracking-[0.2em] mb-1">{{ __('messages.my_profile') }}</h3>
-                            <p class="text-3xl font-black text-secondary leading-none">{{ Auth::user()->employee ? Auth::user()->employee->name : Auth::user()->name }}</p>
+                            <p class="text-3xl font-black text-secondary leading-none">{{ $employee ? $employee->name : Auth::user()->name }}</p>
                         </div>
                     </div>
                 </div>
@@ -33,11 +91,11 @@
                 <div class="grid grid-cols-2 gap-4">
                     <div class="p-6 bg-gray-50/50 rounded-3xl border border-gray-100 flex flex-col justify-center">
                         <span class="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">{{ __('messages.position') }}</span>
-                        <span class="text-sm font-bold text-secondary">{{ Auth::user()->employee->position ?? __('messages.not_applicable') }}</span>
+                        <span class="text-sm font-bold text-secondary">{{ $employee->position ?? __('messages.not_applicable') }}</span>
                     </div>
                     <div class="p-6 bg-gray-50/50 rounded-3xl border border-gray-100 flex flex-col justify-center">
                         <span class="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">{{ __('messages.employee_id') }}</span>
-                        <span class="text-sm font-bold text-secondary">#{{ Auth::user()->employee->id ?? Auth::id() }}</span>
+                        <span class="text-sm font-bold text-secondary">#{{ $employee->id ?? Auth::id() }}</span>
                     </div>
                 </div>
 
@@ -195,4 +253,3 @@
 </div>
 </div>
 @endsection
-

@@ -92,6 +92,35 @@ class ClientController extends Controller
     }
 
     /**
+     * Show form to edit general client details.
+     */
+    public function edit(Client $client)
+    {
+        return view('admin.clients.edit', compact('client'));
+    }
+
+    /**
+     * Update general client details.
+     *
+     * NOTE: Slug is intentionally excluded from updates. Changing a client's slug
+     * would instantly break all external bookmarks, active sessions, and hardcoded
+     * links for that client's employees. The slug is set once during creation and
+     * remains read-only thereafter.
+     */
+    public function update(Request $request, Client $client)
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'subscription_start' => 'nullable|date',
+            'subscription_end' => 'nullable|date',
+        ]);
+
+        $client->update($validated);
+
+        return redirect()->route('admin.clients.show', $client->id)->with('success', __('messages.client_updated') ?? 'Client details updated successfully.');
+    }
+
+    /**
      * Remove the specified client from storage.
      */
     public function destroy(Request $request, Client $client)

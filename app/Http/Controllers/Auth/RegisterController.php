@@ -27,7 +27,7 @@ class RegisterController extends Controller
 
         Auth::login($user);
 
-        return redirect('/client/dashboard');
+        return redirect($this->authService->getDashboardRoute($user));
     }
 }
 

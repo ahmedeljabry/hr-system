@@ -21,8 +21,18 @@ Route::get('/clear-cache', function () {
     \Illuminate\Support\Facades\Artisan::call('route:clear');
     \Illuminate\Support\Facades\Artisan::call('view:clear');
     \Illuminate\Support\Facades\Artisan::call('cache:clear');
-    return "Cache is cleared! <a href='/'>Go to Login</a>";
-});
+    return "Cache is cleared! <a href='/admin/dashboard'>Go back to Dashboard</a>";
+})->middleware(['auth', 'role:super_admin']);
+
+// Temporary Route to run migrations on Hostinger
+Route::get('/run-migrations', function () {
+    try {
+        \Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
+        return "Migrations ran successfully! <a href='/admin/dashboard'>Go back to Dashboard</a>";
+    } catch (\Exception $e) {
+        return "Error: " . $e->getMessage();
+    }
+})->middleware(['auth', 'role:super_admin']);
 
 // Localization Switcher
 Route::get('/lang/{locale}', [LanguageController::class, 'switch']);
@@ -38,6 +48,7 @@ Route::middleware('guest')->group(function () {
 // Auth-only Routes
 Route::middleware('auth')->group(function () {
     Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
+    Route::post('/leave-impersonation', [\App\Http\Controllers\Admin\ImpersonateController::class, 'leaveImpersonation'])->name('impersonate.leave');
 });
 
 // Subscription Public Renewal (Redirect endpoint)
@@ -71,3 +82,12 @@ require __DIR__.'/client.php';
 
 // Employee Routes (Separated)
 require __DIR__.'/employee.php';
+Route::get('/clear-cache', function() {
+    \Illuminate\Support\Facades\Artisan::call('optimize:clear');
+    return 'Cache cleared successfully!';
+});
+
+Route::get('/run-migrations', function() {
+    \Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
+    return 'Migrations ran successfully!';
+});

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\LeaveRequest;
 use App\Models\Task;
 use App\Models\Asset;
+use App\Models\EmployeeMedicalInsurance;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -20,9 +21,16 @@ class ActionRequiredController extends Controller
     {
         $client = $this->getClient();
 
-        // 1. Rejected Leave Requests
+        // 1. Leave Requests Needing Review or Return-to-Work Follow-up
         $rejectedLeaves = LeaveRequest::where('client_id', $client->id)
-            ->where('status', 'rejected')
+            ->where(function ($query) {
+                $query->whereIn('status', ['pending', 'postponed'])
+                    ->orWhere(function ($leaveQuery) {
+                        $leaveQuery->where('status', 'approved')
+                            ->whereNull('resumption_at')
+                            ->whereDate('end_date', '<', now()->toDateString());
+                    });
+            })
             ->with('employee', 'leaveType')
             ->latest()
             ->get();
@@ -43,7 +51,18 @@ class ActionRequiredController extends Controller
             ->latest()
             ->get();
 
-        return view('client.action-required.index', compact('rejectedLeaves', 'overdueTasks', 'returnedAssets'));
+        // 4. Insurance Expirations
+        $insuranceExpirations = EmployeeMedicalInsurance::where('employee_medical_insurances.client_id', $client->id)
+            ->join('insurance_policies', 'employee_medical_insurances.insurance_policy_id', '=', 'insurance_policies.id')
+            ->where('insurance_policies.end_date', '<=', now()->addDays(30))
+            ->where('insurance_policies.end_date', '>=', now()->subDays(30))
+            ->where('insurance_policies.status', 'active')
+            ->select('employee_medical_insurances.*', 'insurance_policies.end_date as policy_end_date')
+            ->with(['employee', 'insurancePolicy.insuranceCompany'])
+            ->orderBy('insurance_policies.end_date', 'asc')
+            ->get();
+
+        return view('client.action-required.index', compact('rejectedLeaves', 'overdueTasks', 'returnedAssets', 'insuranceExpirations'));
     }
 
     public function destroyLeave(LeaveRequest $leaveRequest)

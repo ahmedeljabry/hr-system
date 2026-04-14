@@ -37,13 +37,16 @@ class DeductionController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'employee_id' => 'required|exists:employees,id',
+            'employee_id' => [
+                'required',
+                \Illuminate\Validation\Rule::exists('employees', 'id')->where('client_id', Auth::user()->client_id),
+            ],
             'amount' => 'required|numeric|min:0.01',
             'reason' => 'nullable|string|max:255',
             'deduction_date' => 'required|date',
         ]);
 
-        $employee = Employee::findOrFail($request->employee_id);
+        $employee = Employee::where('client_id', Auth::user()->client_id)->findOrFail($request->employee_id);
         $deductionDate = Carbon::parse($request->deduction_date)->startOfMonth();
 
         // Check cumulative total for the month

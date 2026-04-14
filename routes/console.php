@@ -36,3 +36,5 @@ Artisan::command('speckit:create-super-admin {email?} {password?}', function ($e
 
     $this->info('Super admin created successfully.');
 })->describe('Create initial super admin user');
+
+\Illuminate\Support\Facades\Schedule::command('insurance:update-status')->daily();

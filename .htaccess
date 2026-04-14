@@ -1,15 +1,11 @@
 <IfModule mod_rewrite.c>
     RewriteEngine On
-    
-    # Redirect all traffic to the public directory
-    RewriteRule ^(.*)$ public/$1 [L]
+
+    # هذا السطر الجديد يحل مشكلة مجلد اللغة
+    RewriteRule ^lang/(.*)$ index.php [L]
+
+    # القواعد الطبيعية لموقع لارافيل
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteRule ^ index.php [L]
 </IfModule>
-
-# Prevent directory listing
-Options -Indexes
-
-# Protect sensitive files in the root
-<FilesMatch "^\.env|composer\.json|composer\.lock|package\.json|package-lock\.json|Procfile|nixpacks\.toml|Plan\.md|artisan$">
-    Order allow,deny
-    Deny from all
-</FilesMatch>

@@ -43,11 +43,14 @@ class TaskController extends Controller
         $client = $this->getClient();
 
         $data = $request->validate([
-            'employee_id' => 'nullable|exists:employees,id',
+            'employee_id' => [
+                'nullable',
+                \Illuminate\Validation\Rule::exists('employees', 'id')->where('client_id', $client->id)
+            ],
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
             'due_date' => 'nullable|date',
-            'attachments.*' => 'nullable|file|max:10240',
+            'attachments.*' => 'nullable|file|mimes:jpeg,png,pdf,doc,docx,xlsx,xls|max:10240',
         ]);
 
         $data['status'] = 'todo';
@@ -56,7 +59,7 @@ class TaskController extends Controller
             $paths = [];
             foreach ($request->file('attachments') as $file) {
                 $paths[] = [
-                    'path' => $file->store('task_attachments', 'public'),
+                    'path' => $file->store('task_attachments', 'private'),
                     'name' => $file->getClientOriginalName()
                 ];
             }
@@ -89,11 +92,14 @@ class TaskController extends Controller
         abort_unless($task->client_id === $client->id, 403, __('messages.unauthorized'));
 
         $data = $request->validate([
-            'employee_id' => 'nullable|exists:employees,id',
+            'employee_id' => [
+                'nullable',
+                \Illuminate\Validation\Rule::exists('employees', 'id')->where('client_id', $client->id)
+            ],
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
             'due_date' => 'nullable|date',
-            'attachments.*' => 'nullable|file|max:10240', // 10MB max per file
+            'attachments.*' => 'nullable|file|mimes:jpeg,png,pdf,doc,docx,xlsx,xls|max:10240', // 10MB max per file
         ]);
 
         if ($request->hasFile('attachments')) {
@@ -101,7 +107,7 @@ class TaskController extends Controller
             $newPaths = [];
             foreach ($request->file('attachments') as $file) {
                 $newPaths[] = [
-                    'path' => $file->store('task_attachments', 'public'),
+                    'path' => $file->store('task_attachments', 'private'),
                     'name' => $file->getClientOriginalName()
                 ];
             }

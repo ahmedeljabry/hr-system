@@ -50,8 +50,8 @@
                                     <span class="text-[11px] text-gray-400 font-medium line-clamp-1">{{ Str::limit(strip_tags($announcement->body), 100) }}</span>
                                     @if($announcement->attachments && count($announcement->attachments) > 0)
                                         <div class="flex flex-wrap gap-2">
-                                            @foreach($announcement->attachments as $path)
-                                                <a href="{{ Storage::url($path) }}" target="_blank" class="flex items-center gap-1.5 px-2 py-1 rounded-md bg-primary/10 text-primary text-[9px] font-black uppercase tracking-widest hover:bg-primary hover:text-secondary transition-all" title="{{ basename($path) }}">
+                                            @foreach($announcement->attachments as $index => $path)
+                                                <a href="{{ route('client.files.announcement.attachment', ['client_slug' => request()->route('client_slug'), 'announcement' => $announcement->id, 'index' => $index]) }}" target="_blank" class="flex items-center gap-1.5 px-2 py-1 rounded-md bg-primary/10 text-primary text-[9px] font-black uppercase tracking-widest hover:bg-primary hover:text-secondary transition-all" title="{{ basename($path) }}">
                                                     <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
                                                     {{ count($announcement->attachments) > 1 ? basename($path) : __('messages.download') }}
                                                 </a>
@@ -74,42 +74,74 @@
                                 <a href="{{ route('client.announcements.edit', $announcement) }}" class="w-10 h-10 rounded-xl bg-gray-50 flex items-center justify-center text-gray-400 hover:bg-secondary hover:text-white transition-all duration-300 shadow-sm hover:shadow-lg hover:-translate-y-0.5">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
                                 </a>
-                                <form action="{{ route('client.announcements.destroy', $announcement) }}" method="POST" class="inline" onsubmit="return confirm('{{ __('messages.confirm_delete') }}');">
+                                <form id="delete-form-{{ $announcement->id }}" action="{{ route('client.announcements.destroy', ['client_slug' => request('client_slug'), 'announcement' => $announcement->id]) }}" method="POST" class="inline">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="w-10 h-10 rounded-xl bg-red-50 flex items-center justify-center text-red-400 hover:bg-red-500 hover:text-white transition-all duration-300 shadow-sm hover:shadow-lg hover:-translate-y-0.5">
-                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
-                                    </button>
-                                </form>
-                            </div>
-                        </td>
-                    </tr>
-                @empty
-                    <tr>
-                        <td colspan="3" class="px-10 py-32 text-center">
-                            <div class="flex flex-col items-center justify-center">
-                                <div class="w-24 h-24 bg-gray-50 rounded-full flex items-center justify-center mb-6">
-                                    <svg class="w-12 h-12 text-gray-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z"></path></svg>
-                                </div>
-                                <h3 class="text-xl font-black text-secondary tracking-tight mb-2">{{ __('messages.no_announcements_yet') }}</h3>
-                                <p class="text-gray-400 font-bold uppercase tracking-widest text-[10px] mb-8">{{ __('messages.no_announcements') }}</p>
-                                <a href="{{ route('client.announcements.create') }}" class="inline-flex items-center gap-2 text-secondary font-black text-xs uppercase tracking-widest hover:text-secondary/80 transition-colors">
-                                    + {{ __('messages.create_announcement') }}
-                                </a>
-                            </div>
-                        </td>
-                    </tr>
-                @endforelse
-            </tbody>
-        </table>
-    </div>
-    
-    @if($announcements->hasPages())
-        <div class="px-10 py-6 border-t border-gray-50 bg-gray-50/30">
-            {{ $announcements->links() }}
-        </div>
-    @endif
-</div>
-    </div>
-</div>
-@endsection
+                                    <button type="button" 
+                                            onclick="confirmDelete('{{ $announcement->id }}', '{{ addslashes($announcement->title) }}')"
+                                            class="w-10 h-10 rounded-xl bg-red-50 flex items-center justify-center text-red-400 hover:bg-red-500 hover:text-white transition-all duration-300 shadow-sm hover:shadow-lg hover:-translate-y-0.5">
+                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                                     </button>
+                                 </form>
+                             </div>
+                         </td>
+                     </tr>
+                 @empty
+                     <tr>
+                         <td colspan="3" class="px-10 py-32 text-center">
+                             <div class="flex flex-col items-center justify-center">
+                                 <div class="w-24 h-24 bg-gray-50 rounded-full flex items-center justify-center mb-6">
+                                     <svg class="w-12 h-12 text-gray-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z"></path></svg>
+                                 </div>
+                                 <h3 class="text-xl font-black text-secondary tracking-tight mb-2">{{ __('messages.no_announcements_yet') }}</h3>
+                                 <p class="text-gray-400 font-bold uppercase tracking-widest text-[10px] mb-8">{{ __('messages.no_announcements') }}</p>
+                                 <a href="{{ route('client.announcements.create', ['client_slug' => request('client_slug')]) }}" class="inline-flex items-center gap-2 text-secondary font-black text-xs uppercase tracking-widest hover:text-secondary/80 transition-colors">
+                                     + {{ __('messages.create_announcement') }}
+                                 </a>
+                             </div>
+                         </td>
+                     </tr>
+                 @endforelse
+             </tbody>
+         </table>
+     </div>
+     
+     @if($announcements->hasPages())
+         <div class="px-10 py-6 border-t border-gray-50 bg-gray-50/30">
+             {{ $announcements->links() }}
+         </div>
+     @endif
+ </div>
+     </div>
+ </div>
+ @endsection
+ 
+ @push('scripts')
+ <script>
+ function confirmDelete(id, title) {
+     const isAr = "{{ app()->getLocale() }}" === 'ar';
+     
+     Swal.fire({
+         title: isAr ? 'هل أنت متأكد؟' : 'Are you sure?',
+         text: (isAr ? 'سيتم حذف الإعلان "' : 'The announcement "') + title + (isAr ? '" بشكل نهائي.' : '" will be permanently deleted.'),
+         icon: 'warning',
+         showCancelButton: true,
+         confirmButtonColor: '#f43f5e',
+         cancelButtonColor: '#6b7280',
+         confirmButtonText: isAr ? 'نعم، احذف' : 'Yes, delete it',
+         cancelButtonText: isAr ? 'إلغاء' : 'Cancel',
+         reverseButtons: isAr,
+         borderRadius: '1.5rem',
+         customClass: {
+             popup: 'rounded-[2rem] border-none shadow-2xl',
+             confirmButton: 'rounded-xl font-black px-6 py-3',
+             cancelButton: 'rounded-xl font-bold px-6 py-3'
+         }
+     }).then((result) => {
+         if (result.isConfirmed) {
+             document.getElementById('delete-form-' + id).submit();
+         }
+     })
+ }
+ </script>
+ @endpush

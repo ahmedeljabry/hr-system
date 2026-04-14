@@ -8,6 +8,7 @@ use App\Models\LeaveType;
 use App\Services\LeaveService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 
 class LeaveController extends Controller
 {
@@ -24,11 +25,67 @@ class LeaveController extends Controller
     public function index(Request $request)
     {
         $client = $this->getClient();
-        $status = $request->get('status');
-        $requests = $this->leaveService->getAllRequests($client, $status);
-        $pendingCount = LeaveRequest::where('client_id', $client->id)->where('status', 'pending')->count();
+        $filters = $request->only(['status', 'sort', 'direction', 'search']);
+        if ($request->boolean('needs_resumption')) {
+            $filters['needs_resumption'] = true;
+        }
 
-        return view('client.leaves.index', compact('requests', 'status', 'pendingCount'));
+        $requests = $this->leaveService->getAllRequests($client, $filters);
+        $pendingCount = LeaveRequest::where('client_id', $client->id)
+            ->whereIn('status', ['pending', 'postponed'])
+            ->count();
+        $resumptionCount = LeaveRequest::where('client_id', $client->id)
+            ->where('status', 'approved')
+            ->whereNull('resumption_at')
+            ->whereDate('end_date', '<', now()->toDateString())
+            ->count();
+
+        return view('client.leaves.index', compact('requests', 'filters', 'pendingCount', 'resumptionCount'));
+    }
+
+    /**
+     * Edit/manage a leave request.
+     */
+    public function edit(LeaveRequest $leaveRequest)
+    {
+        $client = $this->getClient();
+        abort_unless($leaveRequest->client_id === $client->id, 403, __('messages.unauthorized'));
+
+        $leaveRequest->load(['employee', 'leaveType', 'actions.user', 'actions.employee']);
+        $leaveTypes = $this->leaveService->getLeaveTypes($client);
+
+        return view('client.leaves.edit', compact('leaveRequest', 'leaveTypes'));
+    }
+
+    /**
+     * Update/manage a leave request.
+     */
+    public function update(Request $request, LeaveRequest $leaveRequest)
+    {
+        $client = $this->getClient();
+        abort_unless($leaveRequest->client_id === $client->id, 403, __('messages.unauthorized'));
+
+        $data = $request->validate([
+            'leave_type_id' => ['required', 'exists:leave_types,id'],
+            'start_date' => ['required', 'date'],
+            'end_date' => ['required', 'date', 'after_or_equal:start_date'],
+            'reason' => ['nullable', 'string', 'max:1000'],
+            'status_action' => ['required', Rule::in(['keep', 'approve', 'reject', 'postpone'])],
+            'reviewer_comment' => ['nullable', 'string', 'max:1000', 'required_if:status_action,reject,postpone'],
+            'resumption_at' => ['nullable', 'date'],
+            'resumption_notes' => ['nullable', 'string', 'max:1000'],
+            'clear_resumption' => ['nullable', 'boolean'],
+        ]);
+
+        try {
+            $this->leaveService->updateByCompany($leaveRequest, $data, Auth::user());
+
+            return redirect()
+                ->route('client.leaves.edit', $leaveRequest)
+                ->with('success', __('messages.leave_request_updated_successfully'));
+        } catch (\InvalidArgumentException $e) {
+            return redirect()->back()->withInput()->with('error', $e->getMessage());
+        }
     }
 
     /**
@@ -99,7 +156,11 @@ class LeaveController extends Controller
         abort_unless($leaveRequest->client_id === $client->id, 403, __('messages.unauthorized'));
 
         try {
-            $this->leaveService->approve($leaveRequest, $request->input('reviewer_comment'));
+            $data = $request->validate([
+                'reviewer_comment' => ['nullable', 'string', 'max:1000'],
+            ]);
+
+            $this->leaveService->approve($leaveRequest, $data['reviewer_comment'] ?? null, Auth::user());
             return redirect()->back()->with('success', __('messages.leave_approved'));
         } catch (\InvalidArgumentException $e) {
             return redirect()->back()->with('error', $e->getMessage());
@@ -115,8 +176,32 @@ class LeaveController extends Controller
         abort_unless($leaveRequest->client_id === $client->id, 403, __('messages.unauthorized'));
 
         try {
-            $this->leaveService->reject($leaveRequest, $request->input('reviewer_comment'));
+            $data = $request->validate([
+                'reviewer_comment' => ['required', 'string', 'max:1000'],
+            ]);
+
+            $this->leaveService->reject($leaveRequest, $data['reviewer_comment'], Auth::user());
             return redirect()->back()->with('success', __('messages.leave_rejected'));
+        } catch (\InvalidArgumentException $e) {
+            return redirect()->back()->with('error', $e->getMessage());
+        }
+    }
+
+    /**
+     * Postpone a leave request.
+     */
+    public function postpone(Request $request, LeaveRequest $leaveRequest)
+    {
+        $client = $this->getClient();
+        abort_unless($leaveRequest->client_id === $client->id, 403, __('messages.unauthorized'));
+
+        $data = $request->validate([
+            'reviewer_comment' => ['required', 'string', 'max:1000'],
+        ]);
+
+        try {
+            $this->leaveService->postpone($leaveRequest, $data['reviewer_comment'], Auth::user());
+            return redirect()->back()->with('success', __('messages.leave_postponed'));
         } catch (\InvalidArgumentException $e) {
             return redirect()->back()->with('error', $e->getMessage());
         }

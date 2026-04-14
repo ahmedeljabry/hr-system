@@ -33,9 +33,10 @@ return Application::configure(basePath: dirname(__DIR__))
 
         $middleware->web(append: [
             \App\Http\Middleware\SetLocale::class,
+            \App\Http\Middleware\SecurityHeaders::class,
         ]);
 
-        $middleware->trustProxies(at: '*');
+        $middleware->trustProxies(at: ['127.0.0.1']);
  
         $middleware->alias([
             'role' => \App\Http\Middleware\RoleMiddleware::class,

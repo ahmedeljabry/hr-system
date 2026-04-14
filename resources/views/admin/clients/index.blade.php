@@ -59,10 +59,20 @@
             </td>
             <td class="px-6 py-6 whitespace-nowrap text-sm text-gray-900 font-bold" x-text="item.employees_count"></td>
             <td class="px-6 py-6 whitespace-nowrap text-end text-sm font-medium">
-                <a :href="`/admin/clients/${item.id}`" class="text-secondary hover:text-secondary/80 font-black uppercase text-xs tracking-widest flex items-center justify-end group gap-2">
-                    <span>{{ __('messages.view_details') ?? 'View Details' }}</span>
-                    <svg class="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M9 5l7 7-7 7"></path></svg>
-                </a>
+                <div class="flex items-center justify-end gap-3">
+                    <form :action="`/admin/impersonate/client/${item.id}`" method="POST" class="inline">
+                        @csrf
+                        <button type="submit" class="p-2 text-gray-400 hover:text-secondary hover:bg-gray-100 rounded-lg transition-all" :title="'{{ __('messages.login_as_client') }}'">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"></path></svg>
+                        </button>
+                    </form>
+                    <a :href="`/admin/clients/${item.id}/edit`" class="p-2 text-gray-400 hover:text-primary hover:bg-primary/10 rounded-lg transition-all" :title="'{{ __('messages.edit_client') }}'">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+                    </a>
+                    <a :href="`/admin/clients/${item.id}`" class="p-2 text-gray-400 hover:text-secondary hover:bg-gray-100 rounded-lg transition-all" :title="'{{ __('messages.view_details') }}'">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+                    </a>
+                </div>
             </td>
         </x-slot>
     </x-data-table>

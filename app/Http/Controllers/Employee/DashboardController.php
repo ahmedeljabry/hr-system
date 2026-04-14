@@ -15,15 +15,15 @@ class DashboardController extends Controller
         $this->dashboardService = $dashboardService;
     }
 
-    public function index()
+    public function index(\Illuminate\Http\Request $request)
     {
-        $employee = Auth::user()->employee;
+        $employee = $request->get('current_employee') ?? auth()->user()->employee;
         if (!$employee) {
             return redirect('/')->with('error', __('Employee profile not found.'));
         }
         
         $widgets = $this->dashboardService->getWidgetData($employee);
         
-        return view('employee.dashboard', compact('widgets'));
+        return view('employee.dashboard', compact('widgets', 'employee'));
     }
 }

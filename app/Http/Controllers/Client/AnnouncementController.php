@@ -38,13 +38,13 @@ class AnnouncementController extends Controller
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'body' => 'required|string|max:5000',
-            'attachments.*' => 'nullable|file|max:10240', // 10MB max per file
+            'attachments.*' => 'nullable|file|mimes:jpeg,png,pdf,doc,docx,xlsx,xls|max:10240', // 10MB max per file
         ]);
 
         $attachments = [];
         if ($request->hasFile('attachments')) {
             foreach ($request->file('attachments') as $file) {
-                $attachments[] = $file->store('announcements', 'public');
+                $attachments[] = $file->store('announcements', 'private');
             }
         }
         $validated['attachments'] = $attachments;
@@ -70,13 +70,13 @@ class AnnouncementController extends Controller
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'body' => 'required|string|max:5000',
-            'attachments.*' => 'nullable|file|max:10240',
+            'attachments.*' => 'nullable|file|mimes:jpeg,png,pdf,doc,docx,xlsx,xls|max:10240',
         ]);
 
         $attachments = $announcement->attachments ?? [];
         if ($request->hasFile('attachments')) {
             foreach ($request->file('attachments') as $file) {
-                $attachments[] = $file->store('announcements', 'public');
+                $attachments[] = $file->store('announcements', 'private');
             }
         }
         $validated['attachments'] = $attachments;

@@ -48,6 +48,8 @@ Route::middleware(['auth', 'role:client', 'check_subscription', 'client_tenant']
 
     // Secure file serving (tenant-scoped)
     Route::get('/files/employees/{employee}/{type}', [EmployeeFileController::class, 'show'])->name('files.employee');
+    Route::get('/files/tasks/{task}/attachments/{index}', [\App\Http\Controllers\Client\SecureFileController::class, 'taskAttachment'])->name('files.task.attachment');
+    Route::get('/files/announcements/{announcement}/attachments/{index}', [\App\Http\Controllers\Client\SecureFileController::class, 'announcementAttachment'])->name('files.announcement.attachment');
 
     // Operational Management (Attendance, Tasks, Assets)
     Route::get('/attendance', [\App\Http\Controllers\Client\AttendanceController::class, 'index'])->name('attendance.index');
@@ -62,12 +64,15 @@ Route::middleware(['auth', 'role:client', 'check_subscription', 'client_tenant']
 
     // Leave Management
     Route::get('/leaves', [\App\Http\Controllers\Client\LeaveController::class, 'index'])->name('leaves.index');
+    Route::get('/leaves/{leaveRequest}/edit', [\App\Http\Controllers\Client\LeaveController::class, 'edit'])->name('leaves.edit');
+    Route::put('/leaves/{leaveRequest}', [\App\Http\Controllers\Client\LeaveController::class, 'update'])->name('leaves.update');
     Route::get('/leaves/types', [\App\Http\Controllers\Client\LeaveController::class, 'types'])->name('leaves.types');
     Route::post('/leaves/types', [\App\Http\Controllers\Client\LeaveController::class, 'storeType'])->name('leaves.store-type');
     Route::put('/leaves/types/{leaveType}', [\App\Http\Controllers\Client\LeaveController::class, 'updateType'])->name('leaves.update-type');
     Route::delete('/leaves/types/{leaveType}', [\App\Http\Controllers\Client\LeaveController::class, 'destroyType'])->name('leaves.destroy-type');
     Route::post('/leaves/{leaveRequest}/approve', [\App\Http\Controllers\Client\LeaveController::class, 'approve'])->name('leaves.approve');
     Route::post('/leaves/{leaveRequest}/reject', [\App\Http\Controllers\Client\LeaveController::class, 'reject'])->name('leaves.reject');
+    Route::post('/leaves/{leaveRequest}/postpone', [\App\Http\Controllers\Client\LeaveController::class, 'postpone'])->name('leaves.postpone');
 
     // Action Required Management Center
     Route::get('/management/action-required', [\App\Http\Controllers\Client\ActionRequiredController::class, 'index'])->name('action-required.index');
@@ -75,8 +80,25 @@ Route::middleware(['auth', 'role:client', 'check_subscription', 'client_tenant']
     Route::delete('/management/action-required/tasks/{task}', [\App\Http\Controllers\Client\ActionRequiredController::class, 'destroyTask'])->name('action-required.tasks.destroy');
     Route::delete('/management/action-required/assets/{asset}', [\App\Http\Controllers\Client\ActionRequiredController::class, 'destroyAsset'])->name('action-required.assets.destroy');
 
+    // Medical Insurance - Redirect old system to new Policies system
+    Route::get('/medical-insurance', function() {
+        return redirect()->route('client.medical-insurance.policies.index', ['client_slug' => request()->route('client_slug')]);
+    })->name('medical-insurance.index');
+
+    // Medical Insurance Policies (New System)
+    Route::resource('medical-insurance-policies', \App\Http\Controllers\Client\MedicalInsurancePolicyController::class)->names([
+        'index'   => 'medical-insurance.policies.index',
+        'create'  => 'medical-insurance.policies.create',
+        'store'   => 'medical-insurance.policies.store',
+        'show'    => 'medical-insurance.policies.show',
+        'edit'    => 'medical-insurance.policies.edit',
+        'update'  => 'medical-insurance.policies.update',
+        'destroy' => 'medical-insurance.policies.destroy',
+    ]);
+    Route::post('/medical-insurance-policies/bulk-import', [\App\Http\Controllers\Client\MedicalInsurancePolicyController::class, 'bulkImport'])->name('medical-insurance.policies.bulk-import');
+    Route::post('/medical-insurance-policies/{policy}/import', [\App\Http\Controllers\Client\MedicalInsurancePolicyController::class, 'import'])->name('medical-insurance.policies.import');
+
     // Notifications API
     Route::get('/notifications/api', [\App\Http\Controllers\Client\NotificationController::class, 'api'])->name('notifications.api');
     Route::post('/notifications/{notification}/read', [\App\Http\Controllers\Client\NotificationController::class, 'read'])->name('notifications.read');
 });
-

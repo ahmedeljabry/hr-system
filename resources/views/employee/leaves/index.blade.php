@@ -83,13 +83,18 @@
         </div>
     @endif
 
-    @if(count($balanceSummary) > 0)
+    @php
+        $balanceColors = ['blue', 'purple', 'emerald', 'amber', 'rose', 'indigo'];
+    @endphp
+
+    @if(!empty($balanceSummary))
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
-            @php($colors = ['blue', 'purple', 'emerald', 'amber', 'rose', 'indigo'])
             @foreach($balanceSummary as $index => $balance)
                 @php
-                    $color = $colors[$index % count($colors)];
+                    $color = $balanceColors[$index % count($balanceColors)];
                     $pct = $balance['max_days'] > 0 ? min(100, ($balance['used_days'] / $balance['max_days']) * 100) : 0;
+                    $typeKey = 'messages.' . strtolower(str_replace(' ', '_', $balance['type']->name));
+                    $typeName = \Illuminate\Support\Facades\Lang::has($typeKey) ? __($typeKey) : $balance['type']->name;
                 @endphp
                 <div class="group bg-white rounded-[2rem] shadow-[0_10px_40px_rgba(0,0,0,0.03)] border border-gray-100 p-6 hover:shadow-[0_20px_50px_rgba(0,0,0,0.06)] hover:translate-y-[-4px] transition-all duration-500">
                     <div class="flex items-start justify-between mb-6">
@@ -106,10 +111,6 @@
 
                     <div class="space-y-4">
                         <div class="flex items-center justify-between text-xs font-bold">
-                            @php
-                                $typeKey = 'messages.' . strtolower(str_replace(' ', '_', $balance['type']->name));
-                                $typeName = Lang::has($typeKey) ? __($typeKey) : $balance['type']->name;
-                            @endphp
                             <span class="text-secondary tracking-tight">{{ $typeName }}</span>
                             <span class="text-{{ $color }}-600 bg-{{ $color }}-50 px-3 py-1 rounded-full outline outline-1 outline-{{ $color }}-100">
                                 {{ $balance['used_days'] }} / {{ $balance['max_days'] > 0 ? $balance['max_days'] : '∞' }}

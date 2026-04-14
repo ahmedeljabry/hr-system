@@ -57,9 +57,12 @@
                         ]) }}
                     </p>
                 </div>
-                <form action="{{ route('employee.leaves.resume', $pendingResumptionLeave) }}" method="POST">
+                <form action="{{ route('employee.leaves.resume', $pendingResumptionLeave) }}" method="POST" class="w-full sm:w-auto">
                     @csrf
-                    <button type="submit" class="inline-flex items-center px-6 py-3 bg-amber-500 hover:bg-amber-600 text-white text-xs font-black rounded-xl shadow-lg transition-all duration-300 hover:-translate-y-1 active:translate-y-0">
+                    <button type="submit" class="inline-flex w-full sm:w-auto items-center justify-center gap-2 px-6 py-3 bg-amber-500 hover:bg-amber-600 text-white text-xs font-black rounded-xl shadow-lg transition-all duration-300 hover:-translate-y-1 active:translate-y-0">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path>
+                        </svg>
                         {{ __('messages.end_leave') }}
                     </button>
                 </form>

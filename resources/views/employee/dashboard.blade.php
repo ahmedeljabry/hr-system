@@ -30,9 +30,12 @@
                             </p>
                         </div>
                     </div>
-                    <form action="{{ route('employee.leaves.resume', $widgets['pending_resumption_leave']) }}" method="POST" class="shrink-0">
+                    <form action="{{ route('employee.leaves.resume', $widgets['pending_resumption_leave']) }}" method="POST" class="w-full sm:w-auto shrink-0">
                         @csrf
-                        <button type="submit" class="inline-flex items-center px-6 py-3 bg-amber-500 hover:bg-amber-600 text-white text-xs font-black rounded-xl shadow-lg transition-all duration-300 hover:-translate-y-1 active:translate-y-0">
+                        <button type="submit" class="inline-flex w-full sm:w-auto items-center justify-center gap-2 px-6 py-3 bg-amber-500 hover:bg-amber-600 text-white text-xs font-black rounded-xl shadow-lg transition-all duration-300 hover:-translate-y-1 active:translate-y-0">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path>
+                            </svg>
                             {{ __('messages.end_leave') }}
                         </button>
                     </form>
@@ -60,7 +63,10 @@
                             </p>
                         </div>
                     </div>
-                    <a href="{{ route('employee.leaves.index') }}" class="inline-flex items-center px-6 py-3 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-black rounded-xl shadow-lg transition-all duration-300 hover:-translate-y-1 active:translate-y-0">
+                    <a href="{{ route('employee.leaves.index') }}" class="inline-flex w-full sm:w-auto items-center justify-center gap-2 px-6 py-3 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-black rounded-xl shadow-lg transition-all duration-300 hover:-translate-y-1 active:translate-y-0 shrink-0">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                        </svg>
                         {{ __('messages.manage_request') }}
                     </a>
                 </div>

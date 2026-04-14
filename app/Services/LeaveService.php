@@ -472,8 +472,9 @@ class LeaveService
      */
     public function getEmployeeRequests(Employee $employee, array $filters = []): LengthAwarePaginator
     {
-        $sort = in_array($filters['sort'] ?? 'created_at', self::EMPLOYEE_SORTS, true)
-            ? $filters['sort']
+        $requestedSort = $filters['sort'] ?? 'created_at';
+        $sort = in_array($requestedSort, self::EMPLOYEE_SORTS, true)
+            ? $requestedSort
             : 'created_at';
 
         $direction = strtolower($filters['direction'] ?? 'desc') === 'asc' ? 'asc' : 'desc';
@@ -495,8 +496,9 @@ class LeaveService
      */
     public function getAllRequests(Client $client, array $filters = []): LengthAwarePaginator
     {
-        $sort = in_array($filters['sort'] ?? 'created_at', self::CLIENT_SORTS, true)
-            ? $filters['sort']
+        $requestedSort = $filters['sort'] ?? 'created_at';
+        $sort = in_array($requestedSort, self::CLIENT_SORTS, true)
+            ? $requestedSort
             : 'created_at';
 
         $direction = strtolower($filters['direction'] ?? 'desc') === 'asc' ? 'asc' : 'desc';

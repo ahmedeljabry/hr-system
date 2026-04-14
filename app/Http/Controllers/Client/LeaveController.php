@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
+use App\Models\Client;
 use App\Models\LeaveRequest;
 use App\Models\LeaveType;
 use App\Services\LeaveService;
@@ -14,9 +15,23 @@ class LeaveController extends Controller
 {
     public function __construct(protected LeaveService $leaveService) {}
 
-    private function getClient()
+    private function getClient(): Client
     {
-        return Auth::user()->client;
+        $tenantClient = request()->attributes->get('current_client');
+        if ($tenantClient instanceof Client) {
+            return $tenantClient;
+        }
+
+        $user = Auth::user();
+        $client = $user?->client;
+
+        if (!$client && $user?->client_id) {
+            $client = Client::find($user->client_id);
+        }
+
+        abort_unless((bool) $client, 403, __('messages.client_not_found') ?: 'Could not determine your company. Please log in again.');
+
+        return $client;
     }
 
     /**
